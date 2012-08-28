@@ -1,0 +1,8 @@
+deps/
+ebin/
+include/FunnelAsn.hrl
+include/JustAsn.hrl
+src/FunnelAsn.asn1db
+src/FunnelAsn.erl
+src/JustAsn.asn1db
+src/JustAsn.erl

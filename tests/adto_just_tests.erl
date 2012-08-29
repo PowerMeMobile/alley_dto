@@ -79,13 +79,20 @@ just_incoming_sms_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#just_incoming_sms_dto{}, Bin).
 
-%% %% ===================================================================
-%% %% Just Delivery Receipt Tests
-%% %% ===================================================================
+%% ===================================================================
+%% Just Delivery Receipt Tests
+%% ===================================================================
 
-%% just_delivery_receipt_encode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% just_delivery_receipt_decode_test() ->
-%% 	erlang:error(error).
-
+just_delivery_receipt_test() ->
+	ReceiptDTO = #just_receipt_dto{
+		message_id = <<"614">>,
+		message_state = delivered,
+		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1}
+	},
+	DTO = #just_delivery_receipt_dto{
+		gateway_id = adto_uuid:newid(),
+		receipts = [ReceiptDTO],
+		timestamp = 1346067785681000
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#just_delivery_receipt_dto{}, Bin).

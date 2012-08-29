@@ -241,11 +241,29 @@
 	timestamp :: binary() %% <<"120827114305">>
 }).
 
-%% -record(just_delivery_receipt_dto, {
-%% 	gateway_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
-%% 	receipts :: [#just_delivery_receipt_dto{}],
-%% 	timestamp :: binary() %% <<"120827114305">>
-%% }).
+%% ===================================================================
+%% Just Delivery Receipt
+%% ===================================================================
+
+-record(just_receipt_dto, {
+	message_id :: binary(), %% <<"614">>
+	message_state ::
+		enroute |
+		delivered |
+		deleted |
+		undeliverable |
+		accepted |
+		unknown |
+		rejected |
+		unrecognized,
+	source :: #addr_dto{}
+}).
+
+-record(just_delivery_receipt_dto, {
+	gateway_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	receipts :: [#just_receipt_dto{}],
+	timestamp :: integer() %% 1346067785681000
+}).
 
 %% ===================================================================
 %% Misc
@@ -262,7 +280,7 @@
 	#just_sms_response_dto{} |
 	#just_incoming_sms_dto{} |
 	#funnel_incoming_sms_dto{} |
-	%% #just_delivery_receipt_dto{} |
+	#just_delivery_receipt_dto{} |
 	%% #funnel_delivery_receipt_dto{} |
 	#funnel_ack_dto{}.
 

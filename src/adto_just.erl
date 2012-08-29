@@ -92,6 +92,22 @@ encode(DTO = #just_incoming_sms_dto{}) ->
 		{error, Error} -> {error, Error}
 	end;
 
+encode(DTO = #just_delivery_receipt_dto{}) ->
+	#just_delivery_receipt_dto{
+		gateway_id = GtwID,
+		receipts = Receipts,
+		timestamp = Timestamp
+	} = DTO,
+	Asn = #'ReceiptBatch'{
+		gatewayId = adto_uuid:to_string(GtwID),
+		receipts = just_receipt_to_asn(Receipts),
+		timestamp = Timestamp
+	},
+	case 'JustAsn':encode('ReceiptBatch', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
 encode(_) ->
 	erlang:error(badarg).
 
@@ -175,6 +191,23 @@ decode(#just_incoming_sms_dto{}, Bin) ->
 				parts_count = from_optional_asn(PartsCount),
 				part_index = from_optional_asn(PartIndex),
 				timestamp = list_to_binary(Timestamp)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#just_delivery_receipt_dto{}, Bin) ->
+	case 'JustAsn':decode('ReceiptBatch', Bin) of
+		{ok, Asn} ->
+			#'ReceiptBatch'{
+				gatewayId = GtwID,
+				receipts = Receipts,
+				timestamp = Timestamp
+			} = Asn,
+			DTO = #just_delivery_receipt_dto{
+				gateway_id = adto_uuid:to_binary(GtwID),
+				receipts = just_receipt_to_dto(Receipts),
+				timestamp = Timestamp
 			},
 			{ok, DTO};
 		{error, Error} -> {error, Error}
@@ -346,4 +379,34 @@ from_optional_asn(OptionalValue, Fun) ->
 				Fun(Value)
 	end.
 
-	%% io:format("~p:~p", [filename:basename(?FILE), ?LINE]),
+
+%% Just Delivery Receipts
+
+just_receipt_to_asn(DTO = #just_receipt_dto{}) ->
+	#just_receipt_dto{
+		message_id = MessageID,
+		message_state = MessageState,
+		source = Source
+	} = DTO,
+	#'DeliveryReceipt'{
+		messageId = binary_to_list(MessageID),
+		messageState = MessageState,
+		source = full_addr_to_asn(Source)
+	};
+just_receipt_to_asn(Receipts) ->
+	[just_receipt_to_asn(Receipt) || Receipt <- Receipts].
+
+
+just_receipt_to_dto(Asn = #'DeliveryReceipt'{}) ->
+	#'DeliveryReceipt'{
+		messageId = MessageID,
+		messageState = MessageState,
+		source = Source
+	} = Asn,
+	#just_receipt_dto{
+		message_id = list_to_binary(MessageID),
+		message_state = MessageState,
+		source = full_addr_to_dto(Source)
+	};
+just_receipt_to_dto(Receipts) ->
+	[just_receipt_to_dto(Receipt) || Receipt <- Receipts].

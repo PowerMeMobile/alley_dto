@@ -48,8 +48,8 @@ module(#just_sms_response_dto{}) ->
 	just();
 module(#just_incoming_sms_dto{}) ->
 	just();
-%% module(#just_delivery_receipt_dto{}) ->
-%% 	just();
+module(#just_delivery_receipt_dto{}) ->
+	just();
 
 module(_) ->
 	erlang:error(badtype).

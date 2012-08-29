@@ -16,63 +16,39 @@
 -spec decode(message_type_dto(), binary()) ->
 	{ok, message_type_dto()} |
 	{error, Reason :: any()}.
-decode(#funnel_client_offline_event_dto{}, Message) ->
-	case 'FunnelAsn':decode('ConnectionDownEvent', Message) of
-		{ok, #'ConnectionDownEvent'{
-			connectionId = ConnectionID,
-			customerId = CustomerID,
-			userId = UserID }} ->
-			DTO = #funnel_client_offline_event_dto{
-				connection_id = adto_uuid:to_binary(ConnectionID),
-				customer_id = list_to_binary(CustomerID),
-				user_id = list_to_binary(UserID)
-			},
-			{ok, DTO};
-		{error, Error} ->
-			{error, Error}
-	end;
 
-decode(#funnel_client_online_event_dto{}, Message) ->
-	case 'FunnelAsn':decode('ConnectionUpEvent', Message) of
-		{ok, #'ConnectionUpEvent'{
-			connectionId = ConnectionID,
-			customerId = CustomerID,
-			userId = UserID,
-			type = Type }} ->
-			DTO = #funnel_client_online_event_dto{
-				connection_id = adto_uuid:to_binary(ConnectionID),
-				customer_id = list_to_binary(CustomerID),
-				user_id = list_to_binary(UserID),
-				type = Type
-			},
-			{ok, DTO};
-		{error, Error} ->
-			{error, Error}
-	end;
-
-decode(#funnel_auth_request_dto{}, Message) ->
-	case 'FunnelAsn':decode('BindRequest', Message) of
-		{ok,#'BindRequest'{
-			connectionId = ConnectionID,
-			customerId = CustomerID,
-			userId = UserID,
-			password = Password,
-			type = Type }} ->
+decode(#funnel_auth_request_dto{}, Bin) ->
+	case 'FunnelAsn':decode('BindRequest', Bin) of
+		{ok, Asn} ->
+			#'BindRequest'{
+				connectionId = ConnectionID,
+				remoteIp = IP,
+				customerId = CustomerID,
+				userId = UserID,
+				password = Password,
+				type = Type,
+				isCached = IsCached,
+				timestamp = Timestamp,
+				expiration = Expiration
+			} = Asn,
 			DTO = #funnel_auth_request_dto{
 				connection_id = adto_uuid:to_binary(ConnectionID),
+				ip = list_to_binary(IP),
 				customer_id = list_to_binary(CustomerID),
 				user_id = list_to_binary(UserID),
 				password = list_to_binary(Password),
-				type = Type
+				type = Type,
+				is_cached = IsCached,
+				timestamp = precise_time_to_dto(Timestamp),
+				expiration = precise_time_to_dto(Expiration)
 			},
 			{ok, DTO};
-		{error, Error} ->
-			{error, Error}
+		{error, Error} -> {error, Error}
 	end;
 
-decode(_Type, _Message) ->
-	%% ?log_fatal("HALT. Unexpected decode message type: ~p", [Type]),
-	erlang:halt().
+
+decode(Type, _Message) ->
+	erlang:error({funnel_decode_not_supported, Type}).
 
 %% ===================================================================
 %% Encode Functions
@@ -81,141 +57,102 @@ decode(_Type, _Message) ->
 -spec encode(message_type_dto()) ->
 	{ok, Payload :: binary()} |
 	{error, Reason :: any()}.
-encode(DTO = #funnel_auth_response_dto{result = {error, Error}}) ->
-	#funnel_auth_response_dto{
+
+encode(DTO = #funnel_auth_request_dto{}) ->
+	#funnel_auth_request_dto{
 		connection_id = ConnectionID,
-		result = Result
+		ip = IP,
+		customer_id = CustomerID,
+		user_id = UserID,
+		password = Password,
+		type = Type,
+		is_cached = IsCached,
+		timestamp = Timestamp,
+		expiration = Expiration
 	} = DTO,
-	Asn = #'BindResponse'{
+	Asn = #'BindRequest'{
 		connectionId = adto_uuid:to_string(ConnectionID),
-		result = Result
+		remoteIp = binary_to_list(IP),
+		customerId = binary_to_list(CustomerID),
+		userId = binary_to_list(UserID),
+		password = binary_to_list(Password),
+		type = Type,
+		isCached = IsCached,
+		timestamp = precise_time_to_asn(Timestamp),
+		expiration = precise_time_to_asn(Expiration)
 	},
-	case 'FunnelAsn':encode('BindResponse', Asn) of
-		{ok, List} ->
-			{ok, list_to_binary(List)};
-		{error, Error} ->
-			{error, Error}
+	case 'FunnelAsn':encode('BindRequest', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
 	end;
 
-encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
-	#funnel_auth_response_dto{
-		connection_id = ConnectionID,
-		result = {customer, CustomerDTO}
-	} = DTO,
-	#funnel_auth_response_customer_dto{
-		  id = ID,
-		  uuid = UUID,
-		  priority = Priority,
-		  rps = RPS,
-		  allowed_sources = AllowedSources,
-		  default_source = DefaultSource,
-		  networks = Networks,
-		  providers = Providers,
-		  default_provider_id = DefaultProvideID,
-		  receipts_allowed  = ReceiptsAllowed,
-		  no_retry  = NoRetry,
-		  default_validity  = DefaultValidity,
-		  max_validity = MaxValidity
-	} = CustomerDTO,
-
-	CustomerASN = #'Customer'{
-		id = ?bin_to_str(ID),
-		uuid = ?bin_uuid_to_str(UUID),
-		priority = Priority,
-		rps = validate_optional_asn_value(RPS),
-		allowedSources = ?msisdn_addrs_to_str(AllowedSources),
-		defaultSource = validate_optional_asn_value(?msisdn_addr_to_str(DefaultSource)),
-		networks = convert_network_fields(Networks),
-		providers = convert_provider_fields(Providers),
-		defaultProviderId = validate_optional_asn_value(DefaultProvideID),
-		receiptsAllowed = ReceiptsAllowed,
-		noRetry = NoRetry,
-		defaultValidity = ?bin_to_str(DefaultValidity),
-		maxValidity = MaxValidity
-	},
-	Asn = #'BindResponse'{
-		connectionId = ConnectionID,
-		result = {customer, CustomerASN}
-	},
-	case 'FunnelAsn':encode('BindResponse', Asn) of
-		{ok, List} ->
-			{ok, list_to_binary(List)};
-		{error, Error} ->
-			{error, Error}
-	end;
-
-encode(DTO = #funnel_incoming_sms_dto{}) ->
-	#funnel_incoming_sms_dto{
-		id = ID,
-		source = SourceAddr,
-		dest = DestAddr,
-		message = MessageBody,
-		datacoding = DataCoding
-	} = DTO,
-	Msg = #'OutgoingMessage'{
-		source = ?msisdn_addr_to_str(SourceAddr),
-		dest = ?msisdn_addr_to_str(DestAddr),
-		dataCoding = DataCoding,
-		message = MessageBody
-	},
-	Batch = #'OutgoingBatch'{
-		id = ID,
-		messages = [Msg]
-	},
-	case 'FunnelAsn':encode('OutgoingBatch', Batch) of
-		{ok, List} ->
-			{ok, list_to_binary(List)};
-		{error, Error} ->
-			{error, Error}
-	end;
-
-
-encode(_Message) ->
-	%% ?log_fatal("HALT. Unexpected encode message type: ~p", [Message]),
-	erlang:halt().
+encode(Message) ->
+	erlang:error({funnel_encode_not_supported, Message}).
 
 %% ===================================================================
 %% Local Functions
 %% ===================================================================
 
-validate_optional_asn_value(OptionValue) ->
-	case OptionValue of
-			undefined ->
-				asn1_NOVALUE;
-			Value ->
-				Value
-	end.
+%% PreciseTime
 
-convert_network_fields(Networks) when is_list(Networks) ->
-	[convert_network_fields(Network) || Network <- Networks];
-convert_network_fields(Network = #network_dto{}) ->
-	#network_dto{
-		id = ID,
-		country_code = CC,
-		numbers_len = NL,
-		prefixes = Pref,
-		provider_id = ProviderId
-		} = Network,
-	#'Network'{
-		id = ?bin_uuid_to_str(ID),
-		countryCode = ?bin_to_str(CC),
-		numbersLen = NL,
-		prefixes = ?bins_to_strs(Pref),
-		providerId = ?bin_uuid_to_str(ProviderId)
+precise_time_to_asn(DTO = #precise_time_dto{}) ->
+	#precise_time_dto{
+		time = Time,
+		milliseconds = Milliseconds
+	} = DTO,
+	#'PreciseTime'{
+		time = binary_to_list(Time),
+		milliseconds = Milliseconds
 	}.
 
-convert_provider_fields(Providers) when is_list(Providers) ->
-	[convert_provider_fields(Provider) || Provider <- Providers];
-convert_provider_fields(Provider = #provider_dto{}) ->
-	#provider_dto{
-		id = ID,
-		gateway = Gateway,
-		bulk_gateway = BGateway,
-		receipts_supported = RS
-	} = Provider,
-	#'Provider'{
-		id = ?bin_uuid_to_str(ID),
-		gateway = ?bin_uuid_to_str(Gateway),
-		bulkGateway = ?bin_uuid_to_str(BGateway),
-		receiptsSupported = RS
+precise_time_to_dto(Asn = #'PreciseTime'{}) ->
+	#'PreciseTime'{
+		time = Time,
+		milliseconds = Milliseconds
+	} = Asn,
+	#precise_time_dto{
+		time = list_to_binary(Time),
+		milliseconds = Milliseconds
 	}.
+
+%% validate_optional_asn_value(OptionValue) ->
+%% 	case OptionValue of
+%% 			undefined ->
+%% 				asn1_NOVALUE;
+%% 			Value ->
+%% 				Value
+%% 	end.
+
+%% convert_network_fields(Networks) when is_list(Networks) ->
+%% 	[convert_network_fields(Network) || Network <- Networks];
+%% convert_network_fields(Network = #network_dto{}) ->
+%% 	#network_dto{
+%% 		id = ID,
+%% 		country_code = CC,
+%% 		numbers_len = NL,
+%% 		prefixes = Pref,
+%% 		provider_id = ProviderId
+%% 		} = Network,
+%% 	#'Network'{
+%% 		id = ?bin_uuid_to_str(ID),
+%% 		countryCode = ?bin_to_str(CC),
+%% 		numbersLen = NL,
+%% 		prefixes = ?bins_to_strs(Pref),
+%% 		providerId = ?bin_uuid_to_str(ProviderId)
+%% 	}.
+
+%% convert_provider_fields(Providers) when is_list(Providers) ->
+%% 	[convert_provider_fields(Provider) || Provider <- Providers];
+%% convert_provider_fields(Provider = #provider_dto{}) ->
+%% 	#provider_dto{
+%% 		id = ID,
+%% 		gateway = Gateway,
+%% 		bulk_gateway = BGateway,
+%% 		receipts_supported = RS
+%% 	} = Provider,
+%% 	#'Provider'{
+%% 		id = ?bin_uuid_to_str(ID),
+%% 		gateway = ?bin_uuid_to_str(Gateway),
+%% 		bulkGateway = ?bin_uuid_to_str(BGateway),
+%% 		receiptsSupported = RS
+%% 	}.

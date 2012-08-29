@@ -48,6 +48,21 @@ provider_dto() ->
 %% Funnel Auth Tests
 %% ===================================================================
 
+funnel_auth_request_test() ->
+	DTO = #funnel_auth_request_dto{
+		connection_id = adto_uuid:newid(),
+		ip = <<"127.0.0.1">>,
+		customer_id = <<"test-sys-id">>,
+		user_id = <<"user">>,
+		password = <<"password">>,
+		type = transmitter,
+		is_cached = true,
+		timestamp = #precise_time_dto{time = <<"120827114232">>, milliseconds = 1},
+		expiration = #precise_time_dto{time = <<"120827114232">>, milliseconds = 1}
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Bin).
+
 %% funnel_auth_request_encode_test() ->
 %% 	erlang:error(not_implemented).
 

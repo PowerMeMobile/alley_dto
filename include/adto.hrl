@@ -19,29 +19,28 @@
 
 
 -record(precise_time_dto, {
-	time :: string(),
+	time :: binary(), %% <<"120827114232">>
 	milliseconds :: integer()
 }).
 
 -type bin_uuid() :: binary(). %% <<"12fd794d-9e32-4cf6-b421-b797196b60e3">>
 -type utc_time_dto() :: string().
 -type smpp_type_dto() :: receiver | transciever | transmitter.
--type precise_time_dto() :: #precise_time_dto{}.
 
 %% ===================================================================
 %% Funnel Authentification entities
 %% ===================================================================
 
 -record(funnel_auth_request_dto, {
-	connection_id :: string(),
-	%% ip :: string(),
-	customer_id :: string(),
-	user_id :: string(),
-	password :: string(),
-	type :: smpp_type_dto()
-	%% is_cached :: boolean(),
-	%% timestamp :: precise_time_dto(),
-	%% expiration :: precise_time_dto()
+	connection_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	ip :: binary(), %% <<"127.0.0.1">>
+	customer_id :: binary(), %% <<"system-id">>
+	user_id :: binary(), %% <<"user">>
+	password :: binary(), %% <<"password">>
+	type :: smpp_type_dto(), %% atom()
+	is_cached :: boolean(),
+	timestamp :: #precise_time_dto{},
+	expiration :: #precise_time_dto{}
 }).
 
 -record(network_dto, {

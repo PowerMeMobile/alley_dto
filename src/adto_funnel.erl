@@ -46,6 +46,21 @@ decode(#funnel_auth_request_dto{}, Bin) ->
 		{error, Error} -> {error, Error}
 	end;
 
+decode(#funnel_auth_response_dto{}, Bin) ->
+	case 'FunnelAsn':decode('BindResponse', Bin) of
+		{ok, Asn} ->
+			#'BindResponse'{
+				connectionId = ID,
+				result = ResultAsn
+			} = Asn,
+			DTO = #funnel_auth_response_dto{
+				connection_id = adto_uuid:to_binary(ID),
+				result = funnel_auth_response_result_to_dto(ResultAsn)
+			},
+			{ok, DTO};
+		{error, Error} ->
+			{error, Error}
+	end;
 
 decode(Type, _Message) ->
 	erlang:error({funnel_decode_not_supported, Type}).
@@ -86,8 +101,56 @@ encode(DTO = #funnel_auth_request_dto{}) ->
 		{error, Error} -> {error, Error}
 	end;
 
+encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
+	#funnel_auth_response_dto{
+		connection_id = ConnectionID,
+		result = {customer, CustomerDTO}
+	} = DTO,
+	#funnel_auth_response_customer_dto{
+		id = SystemID,
+		uuid = UUID,
+		priority = Priority,
+		rps = RPS,
+		allowed_sources = AllowedSources,
+		default_source = DefaultSource,
+		networks = Networks,
+		providers = Providers,
+		default_provider_id = DefaultProviderID,
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = DefaultValidity,
+		max_validity = MaxValidity
+	} = CustomerDTO,
+	CustomerAsn = #'Customer'{
+		id = binary_to_list(SystemID),
+		uuid = adto_uuid:to_string(UUID),
+		priority = Priority,
+		rps = to_optional_asn(RPS),
+		allowedSources = [addr_to_asn(Source) || Source <- AllowedSources],
+		defaultSource = to_optional_asn(DefaultSource, fun addr_to_asn/1),
+		networks = networks_to_asn(Networks),
+		providers = providers_to_asn(Providers),
+		defaultProviderId = to_optional_asn(DefaultProviderID, fun adto_uuid:to_string/1),
+		receiptsAllowed = ReceiptsAllowed,
+		noRetry = NoRetry,
+		defaultValidity = binary_to_list(DefaultValidity),
+		maxValidity = MaxValidity
+	},
+	Asn = #'BindResponse'{
+		connectionId = adto_uuid:to_string(ConnectionID),
+		result = {customer, CustomerAsn}
+	},
+	case 'FunnelAsn':encode('BindResponse', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(#funnel_auth_response_dto{result = {error, _}}) ->
+	erlang:error({funnel_encode_not_implemented, funnel_auth_response_dto});
+
 encode(Message) ->
 	erlang:error({funnel_encode_not_supported, Message}).
+
 
 %% ===================================================================
 %% Local Functions
@@ -115,44 +178,161 @@ precise_time_to_dto(Asn = #'PreciseTime'{}) ->
 		milliseconds = Milliseconds
 	}.
 
-%% validate_optional_asn_value(OptionValue) ->
-%% 	case OptionValue of
-%% 			undefined ->
-%% 				asn1_NOVALUE;
-%% 			Value ->
-%% 				Value
-%% 	end.
+%% Optional Asn Values
 
-%% convert_network_fields(Networks) when is_list(Networks) ->
-%% 	[convert_network_fields(Network) || Network <- Networks];
-%% convert_network_fields(Network = #network_dto{}) ->
-%% 	#network_dto{
-%% 		id = ID,
-%% 		country_code = CC,
-%% 		numbers_len = NL,
-%% 		prefixes = Pref,
-%% 		provider_id = ProviderId
-%% 		} = Network,
-%% 	#'Network'{
-%% 		id = ?bin_uuid_to_str(ID),
-%% 		countryCode = ?bin_to_str(CC),
-%% 		numbersLen = NL,
-%% 		prefixes = ?bins_to_strs(Pref),
-%% 		providerId = ?bin_uuid_to_str(ProviderId)
-%% 	}.
+to_optional_asn(OptionalValue) ->
+	to_optional_asn(OptionalValue, fun(Value) -> Value end).
+to_optional_asn(OptionalValue, Fun) ->
+	case OptionalValue of
+			undefined ->
+				asn1_NOVALUE;
+			Value ->
+				Fun(Value)
+	end.
 
-%% convert_provider_fields(Providers) when is_list(Providers) ->
-%% 	[convert_provider_fields(Provider) || Provider <- Providers];
-%% convert_provider_fields(Provider = #provider_dto{}) ->
-%% 	#provider_dto{
-%% 		id = ID,
-%% 		gateway = Gateway,
-%% 		bulk_gateway = BGateway,
-%% 		receipts_supported = RS
-%% 	} = Provider,
-%% 	#'Provider'{
-%% 		id = ?bin_uuid_to_str(ID),
-%% 		gateway = ?bin_uuid_to_str(Gateway),
-%% 		bulkGateway = ?bin_uuid_to_str(BGateway),
-%% 		receiptsSupported = RS
-%% 	}.
+
+from_optional_asn(OptionalValue) ->
+	from_optional_asn(OptionalValue, fun(Value) -> Value end).
+from_optional_asn(OptionalValue, Fun) ->
+	case OptionalValue of
+			asn1_NOVALUE ->
+				undefined;
+			Value ->
+				Fun(Value)
+	end.
+
+%% Addr
+
+addr_to_asn(FullAddr = #addr_dto{}) ->
+	#addr_dto{
+		addr = Addr,
+		ton = TON,
+		npi = NPI
+	} = FullAddr,
+	#'Addr'{
+		addr = binary_to_list(Addr),
+		ton = TON,
+		npi = NPI
+	}.
+
+addr_to_dto(FullAddr = #'Addr'{}) ->
+	#'Addr'{
+		addr = Addr,
+		ton = TON,
+		npi = NPI
+	} = FullAddr,
+	#addr_dto{
+		addr = list_to_binary(Addr),
+		ton = TON,
+		npi = NPI
+	}.
+
+%% Networks
+
+networks_to_asn(Network = #network_dto{}) ->
+	#network_dto{
+		id = ID,
+		country_code = CountryCode,
+		numbers_len = NumbersLength,
+		prefixes = Prefixes,
+		provider_id = ProviderID
+	} = Network,
+	#'Network'{
+		id = adto_uuid:to_string(ID),
+		countryCode = binary_to_list(CountryCode),
+		numbersLen = NumbersLength,
+		prefixes = [binary_to_list(Prefix) || Prefix <- Prefixes],
+		providerId = adto_uuid:to_string(ProviderID)
+	};
+networks_to_asn(Networks) ->
+	[networks_to_asn(Network) || Network <- Networks].
+
+networks_to_dto(Network = #'Network'{}) ->
+	#'Network'{
+		id = ID,
+		countryCode = CountryCode,
+		numbersLen = NumbersLength,
+		prefixes = Prefixes,
+		providerId = ProviderID
+	} = Network,
+	#network_dto{
+		id = adto_uuid:to_binary(ID),
+		country_code = list_to_binary(CountryCode),
+		numbers_len = NumbersLength,
+		prefixes = [list_to_binary(Prefix) || Prefix <- Prefixes],
+		provider_id = adto_uuid:to_binary(ProviderID)
+	};
+networks_to_dto(Networks) ->
+	[networks_to_dto(Network) || Network <- Networks].
+
+%% Providers
+
+providers_to_asn(Provider = #provider_dto{}) ->
+	#provider_dto{
+		id = ID,
+		gateway = GtwID,
+		bulk_gateway = BulkGtwID,
+		receipts_supported = ReceiptsSupported
+	} = Provider,
+	#'Provider'{
+		id = adto_uuid:to_string(ID),
+		gateway = adto_uuid:to_string(GtwID),
+		bulkGateway = adto_uuid:to_string(BulkGtwID),
+		receiptsSupported = ReceiptsSupported
+	};
+providers_to_asn(Providers) ->
+	[providers_to_asn(Provider) || Provider <- Providers].
+
+providers_to_dto(Provider = #'Provider'{}) ->
+	#'Provider'{
+		id = ID,
+		gateway = GtwID,
+		bulkGateway = BulkGtwID,
+		receiptsSupported = ReceiptsSupported
+	} = Provider,
+	#provider_dto{
+		id = adto_uuid:to_binary(ID),
+		gateway = adto_uuid:to_binary(GtwID),
+		bulk_gateway = adto_uuid:to_binary(BulkGtwID),
+		receipts_supported = ReceiptsSupported
+	};
+providers_to_dto(Providers) ->
+	[providers_to_dto(Provider) || Provider <- Providers].
+
+%% Funnel Auth Result
+
+funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
+	#'Customer'{
+		id = SystemID,
+		uuid = UUID,
+		priority = Priority,
+		rps = RPS,
+		allowedSources = AllowedSources,
+		defaultSource = DefaultSource,
+		networks = Networks,
+		providers = Providers,
+		defaultProviderId = DefaultProviderID,
+		receiptsAllowed = ReceiptsAllowed,
+		noRetry = NoRetry,
+		defaultValidity = DefaultValidity,
+		maxValidity = MaxValidity
+	} = CustomerAsn,
+	CustomerDTO = #funnel_auth_response_customer_dto{
+		id = list_to_binary(SystemID),
+		uuid = adto_uuid:to_binary(UUID),
+		priority = Priority,
+		rps = from_optional_asn(RPS),
+		allowed_sources = [addr_to_dto(Source) || Source <- AllowedSources],
+		default_source = from_optional_asn(DefaultSource, fun addr_to_dto/1),
+		networks = networks_to_dto(Networks),
+		providers = providers_to_dto(Providers),
+		default_provider_id = from_optional_asn(DefaultProviderID, fun adto_uuid:to_binary/1),
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = list_to_binary(DefaultValidity),
+		max_validity = MaxValidity
+	},
+	{customer, CustomerDTO};
+
+funnel_auth_response_result_to_dto({error, Error}) ->
+	{error, list_to_binary(Error)}.

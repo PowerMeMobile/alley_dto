@@ -63,6 +63,43 @@ funnel_auth_request_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Bin).
 
+funnel_auth_response_test() ->
+	Provider = #provider_dto{
+		id = adto_uuid:newid(),
+		gateway = adto_uuid:newid(),
+		bulk_gateway = adto_uuid:newid(),
+		receipts_supported = true
+	},
+	Network = #network_dto{
+		id = adto_uuid:newid(),
+		country_code = <<"375">>,
+		numbers_len = 12,
+		prefixes = [<<"33">>, <<"44">>],
+		provider_id = adto_uuid:newid()
+	},
+	CustomerDTO = #funnel_auth_response_customer_dto{
+		id = <<"system-id">>,
+		uuid = adto_uuid:newid(),
+		priority = 0,
+		rps = 100,
+		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
+		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		networks = [Network],
+		providers = [Provider],
+		default_provider_id = adto_uuid:newid(),
+		receipts_allowed = true,
+		no_retry = true,
+		default_validity = <<"000003000000000R">>,
+		max_validity = 1234567
+	},
+	DTO = #funnel_auth_response_dto{
+		connection_id = adto_uuid:newid(),
+		result = {customer, CustomerDTO}
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_auth_response_dto{}, Bin).
+
+
 %% funnel_auth_request_encode_test() ->
 %% 	erlang:error(not_implemented).
 

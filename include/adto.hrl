@@ -28,7 +28,7 @@
 -type smpp_type_dto() :: receiver | transciever | transmitter.
 
 %% ===================================================================
-%% Funnel Authentification entities
+%% Funnel Auth Request
 %% ===================================================================
 
 -record(funnel_auth_request_dto, {
@@ -43,47 +43,47 @@
 	expiration :: #precise_time_dto{}
 }).
 
+%% ===================================================================
+%% Funnel Auth Response
+%% ===================================================================
+
 -record(network_dto, {
-	id :: string(),
-	country_code :: string(),
-	numbers_len :: integer(),
-	prefixes :: [string()],
-	provider_id :: string()
+	id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	country_code :: binary(), %% <<"375">>
+	numbers_len :: integer(), %%
+	prefixes :: [binary()], %% [<<"44">>, <<"33">>]
+	provider_id :: binary() %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 }).
 
 -record(provider_dto, {
-	id :: string(),
-	gateway :: string(),
-	bulk_gateway :: string(),
+	id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	gateway :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	bulk_gateway :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	receipts_supported :: boolean()
 }).
 
 -record(funnel_auth_response_customer_dto, {
-	id :: string(),
-	uuid :: string(),
+	id :: binary(), %% <<"system-id">>
+	uuid :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	priority :: integer(),
 	rps :: integer() | undefined,
 	allowed_sources :: [#addr_dto{}],
 	default_source :: #addr_dto{} | undefined,
 	networks :: [#network_dto{}],
 	providers :: [#provider_dto{}],
-	default_provider_id :: string() | undefined,
+	default_provider_id :: binary() | undefined, %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	receipts_allowed :: boolean(),
 	no_retry :: boolean(),
-	default_validity :: string(),
+	default_validity :: binary(), %% <<"000003000000000R">>
 	max_validity :: integer()
 }).
 
--type funnel_auth_response_error_dto() :: string().
--type funnel_auth_response_customer_dto() :: #funnel_auth_response_customer_dto{}.
-
--type funnel_auth_response_result_dto() ::
-	{error, funnel_auth_response_error_dto()} |
-	{customer, funnel_auth_response_customer_dto()}.
-
 -record(funnel_auth_response_dto, {
-	connection_id :: string(),
-	result :: funnel_auth_response_result_dto()
+	connection_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	result ::
+		{error, binary()} | %% <<"error">>
+		{customer, #funnel_auth_response_customer_dto{}}
+
 }).
 
 %% ===================================================================

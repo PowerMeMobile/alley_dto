@@ -19,40 +19,40 @@ PreciseTime ::= SEQUENCE {
 }
 
 BindResponse ::= SEQUENCE {
-    connectionId [0] IA5String,
+    connectionId [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
     result       [1] CHOICE { customer [0] Customer,
                               error    [1] IA5String }
 }
 
 Customer ::= SEQUENCE {
-    id                [0]  IA5String,
-    uuid              [1]  IA5String,
+    id                [0]  IA5String, -- "test-sys-id"
+    uuid              [1]  IA5String, -- "feda5822-5271-11e1-bd27-001d0947ec73"
     priority          [2]  INTEGER,
     rps               [3]  INTEGER OPTIONAL,
-    allowedSources    [4]  SEQUENCE OF Addr,
-    defaultSource     [5]  Addr OPTIONAL,
+    allowedSources    [4]  SEQUENCE OF Addr, -- [{'Addr',"375296662323",1,0}]
+    defaultSource     [5]  Addr OPTIONAL, -- {'Addr',"375296662323",1,0}
     networks          [6]  SEQUENCE OF Network,
     providers         [7]  SEQUENCE OF Provider,
-    defaultProviderId [8]  IA5String OPTIONAL,
+    defaultProviderId [8]  IA5String OPTIONAL, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
     receiptsAllowed   [9]  BOOLEAN,
     noRetry           [10] BOOLEAN,
-    defaultValidity   [11] IA5String,
+    defaultValidity   [11] IA5String, -- "000003000000000R"
     maxValidity       [12] INTEGER -- in seconds (relative)
 }
 
 Provider ::= SEQUENCE {
-    id                [0] IA5String,
-    gateway           [1] IA5String,
-    bulkGateway       [2] IA5String,
+    id                [0] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    gateway           [1] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    bulkGateway       [2] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
     receiptsSupported [3] BOOLEAN
 }
 
 Network ::= SEQUENCE {
-    id          [0] IA5String,
-    countryCode [1] IA5String,
+    id          [0] IA5String, -- "920a009a-5270-11e1-b961-001d0947ec73"
+    countryCode [1] IA5String, -- "375"
     numbersLen  [2] INTEGER, -- including country code and prefixes.
-    prefixes    [3] SEQUENCE OF IA5String,
-    providerId  [4] IA5String
+    prefixes    [3] SEQUENCE OF IA5String, -- ["44","33","29"]
+    providerId  [4] IA5String -- "0a89542c-5270-11e1-bf27-001d0947ec73"
 }
 
 DisconnectRequest ::= SEQUENCE {

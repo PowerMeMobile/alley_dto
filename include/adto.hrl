@@ -91,39 +91,38 @@
 %% ===================================================================
 
 -record(funnel_started_event_dto, {
-	timestamp :: utc_time_dto()
+	timestamp :: binary() %% <<"120827114232">>
 }).
 
 -record(funnel_stopped_event_dto, {
-	timestamp :: utc_time_dto()
+	timestamp :: binary() %% <<"120827114232">>
 }).
 
 -record(funnel_client_online_event_dto, {
-	connection_id :: string(),
-	customer_id :: string(),
-	user_id :: string(),
-	type :: smpp_type_dto()
-	%% connected_at :: utc_time_dto(),
-	%% timestamp :: utc_time_dto()
+	connection_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	customer_id :: binary(), %% <<"system_id">>
+	user_id :: binary(), %% <<"user_id>>
+	type :: smpp_type_dto(),
+	connected_at :: binary(), %% <<"120827114232">>
+	timestamp :: binary() %% <<"120827114232">>
 }).
 
 -record(error_dto, {
 	error_code :: integer(),
-	timestamp :: utc_time_dto()
+	timestamp :: binary() %% <<"120827114232">>
 }).
--type error_dto() :: #error_dto{}.
 
 -record(funnel_client_offline_event_dto, {
-	connection_id :: string(),
-	customer_id :: string(),
-	user_id :: string()
-	%% type :: smpp_type_dto(),
-	%% connected_at :: utc_time_dto(),
-	%% msgs_received :: integer(),
-	%% msgs_sent :: integer(),
-	%% errors :: [error_dto()],
-	%% reason :: normal | closed | unbound | other,
-	%% timestamp :: utc_time_dto()
+	connection_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	customer_id :: binary(), %% <<"system_id">>
+	user_id :: binary(), %% <<"user_id">>
+	type :: smpp_type_dto(),
+	connected_at :: binary(), %% <<"120827114232">>
+	msgs_received :: integer(),
+	msgs_sent :: integer(),
+	errors :: [#error_dto{}],
+	reason :: normal | closed | unbound | other,
+	timestamp :: binary() %% <<"120827114232">>
 }).
 
 %% ===================================================================
@@ -275,13 +274,15 @@
  	#funnel_stopped_event_dto{} |
 	#funnel_client_online_event_dto{} |
 	#funnel_client_offline_event_dto{} |
+
+	#funnel_incoming_sms_dto{} |
+	%% #funnel_delivery_receipt_dto{} |
+
+	#funnel_ack_dto{} |
 	#just_sms_request_dto{} |
 	#just_sms_response_dto{} |
 	#just_incoming_sms_dto{} |
-	#funnel_incoming_sms_dto{} |
-	#just_delivery_receipt_dto{} |
-	%% #funnel_delivery_receipt_dto{} |
-	#funnel_ack_dto{}.
+	#just_delivery_receipt_dto{}.
 
 -endif. % adto_hrl
 

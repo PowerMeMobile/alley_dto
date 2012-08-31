@@ -102,38 +102,38 @@ Connection ::= SEQUENCE {
 }
 
 ServerUpEvent ::= SEQUENCE {
-    timestamp [0] UTCTime
+    timestamp [0] UTCTime -- "120827114232"
 }
 
 ServerDownEvent ::= SEQUENCE {
-    timestamp [0] UTCTime
+    timestamp [0] UTCTime -- "120827114232"
 }
 
 ConnectionUpEvent ::= SEQUENCE {
-    connectionId [0] IA5String,
-    customerId   [1] IA5String,
-    userId       [2] IA5String,
+    connectionId [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
+    customerId   [1] IA5String, -- "system_id"
+    userId       [2] IA5String, -- "user_id"
     type         [3] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
-    connectedAt  [4] UTCTime,
-    timestamp    [5] UTCTime
+    connectedAt  [4] UTCTime, -- "120827114232"
+    timestamp    [5] UTCTime -- "120827114232"
 }
 
 ConnectionDownEvent ::= SEQUENCE {
-    connectionId     [0] IA5String,
-    customerId       [1] IA5String,
-    userId           [2] IA5String,
+    connectionId     [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
+    customerId       [1] IA5String, -- "system_id"
+    userId           [2] IA5String, -- "user_id"
     type             [3] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
-    connectedAt      [4] UTCTime,
+    connectedAt      [4] UTCTime, -- "120827114232"
     msgsReceived     [5] INTEGER,
     msgsSent         [6] INTEGER,
     errors           [7] SEQUENCE OF Error,
     reason           [8] ENUMERATED { normal(0), closed(1), unbound(2), other(3) },
-    timestamp        [9] UTCTime
+    timestamp        [9] UTCTime -- "120827114232"
 }
 
 Error ::= SEQUENCE {
     errorCode [0] INTEGER,
-    timestamp [1] UTCTime
+    timestamp [1] UTCTime -- "120827114232"
 }
 
 OutgoingBatch ::= SEQUENCE {

@@ -63,7 +63,7 @@ funnel_auth_request_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Bin).
 
-funnel_auth_response_test() ->
+funnel_success_auth_response_test() ->
 	Provider = #provider_dto{
 		id = adto_uuid:newid(),
 		gateway = adto_uuid:newid(),
@@ -99,144 +99,59 @@ funnel_auth_response_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_response_dto{}, Bin).
 
+funnel_error_auth_response_test() ->
+	DTO = #funnel_auth_response_dto{
+		connection_id = adto_uuid:newid(),
+		result = {error, <<"test error">>}
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_auth_response_dto{}, Bin).
 
-%% funnel_auth_request_encode_test() ->
-%% 	erlang:error(not_implemented).
+%% ===================================================================
+%% Funnel Events Test
+%% ===================================================================
 
-%% funnel_auth_request_decode_test() ->
-%% 	%% create test asn bin message
-%%    	AsnReq = #'BindRequest'{
-%% 		connectionId = str_uuid(),
-%% 		remoteIp = "127.0.0.1",
-%% 		customerId = "system_id",
-%% 		userId = "user_id",
-%% 		password = "password",
-%% 		type = transmitter,
-%% 		isCached = true,
-%% 		timestamp = {'PreciseTime',"120823124152",573},
-%% 		expiration =  {'PreciseTime',"120823124152",573}
-%% 	},
-%% 	{ok, List} = 'FunnelAsn':encode('BindRequest', AsnReq),
-%% 	Binary = list_to_binary(List),
-%% 	io:format("Binary: ~p", [Binary]),
+funnel_started_event_test() ->
+	DTO = #funnel_started_event_dto{
+		timestamp = <<"120827114232">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_started_event_dto{}, Bin).
 
-%% 	%% try to decode test asn bin message
-%% 	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Binary),
-%% 	io:format("DTO: ~p", [DTO]),
-%% 	#funnel_auth_request_dto{
-%% 		connection_id = ConnectionID,
-%% 		customer_id = CustomerID,
-%% 		user_id = UserID,
-%% 		password = Password,
-%% 		type = SMPPType
-%% 	} = DTO,
-%% 	io:format("ConnectionID: ~p", [ConnectionID]),
-%% 	true = adto_uuid:is_valid(ConnectionID),
-%% 	true = is_binary(ConnectionID),
-%% 	true = is_binary(CustomerID),
-%% 	true = is_binary(UserID),
-%% 	true = is_binary(Password),
-%% 	true = is_atom(SMPPType).
+funnel_stopped_event_test() ->
+	DTO = #funnel_stopped_event_dto{
+		timestamp = <<"120827114232">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_stopped_event_dto{}, Bin).
 
-%% funnel_auth_response_encode_test() ->
-%% 	CustomerDTO = #funnel_auth_response_customer_dto{
-%% 		  id = <<"customer_system_id">>,
-%% 		  uuid = bin_uuid(),
-%% 		  priority = 1,
-%% 		  rps = undefined,
-%% 		  allowed_sources = [addr_dto()],
-%% 		  default_source = undefined,
-%% 		  networks = [network_dto()],
-%% 		  providers = [provider_dto()],
-%% 		  default_provider_id = undefined,
-%% 		  receipts_allowed  = true,
-%% 		  no_retry  = true,
-%% 		  default_validity  = <<"string">>,
-%% 		  max_validity = 12345
-%% 	},
-%% 	DTO = #funnel_auth_response_dto{
-%% 		connection_id = bin_uuid(),
-%% 		result = {customer, CustomerDTO}
-%% 	},
-%% 	{ok, Bin} = adto:encode(DTO),
-%% 	true = is_binary(Bin).
+funnel_client_online_event_test() ->
+	DTO = #funnel_client_online_event_dto{
+		connection_id = adto_uuid:newid(),
+		customer_id = <<"system_id">>,
+		user_id = <<"user_id">>,
+		type = transmitter,
+		connected_at = <<"120827114232">>,
+		timestamp = <<"120827114232">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_client_online_event_dto{}, Bin).
 
-%% funnel_auth_error_response_encode_test() ->
-%% 	DTO = #funnel_auth_response_dto{
-%% 		connection_id = bin_uuid(),
-%% 		result = {error, "test"}
-%% 	},
-%% 	{ok, Bin} = adto:encode(DTO),
-%% 	true = is_binary(Bin).
-
-%% funnel_auth_response_decode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% %% ===================================================================
-%% %% Funnel Events Test
-%% %% ===================================================================
-
-%% funnel_client_offline_event_encode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% funnel_client_offline_event_decode_test() ->
-%% 	%% create test asn binary message
-%% 	Asn = #'ConnectionDownEvent'{
-%% 		connectionId = str_uuid(),
-%% 		customerId = "system_id",
-%% 		userId = "user",
-%% 		type = transmitter,
-%% 		connectedAt = utc_time(),
-%% 		msgsReceived = 1,
-%% 		msgsSent = 1,
-%% 		errors = [],
-%% 		reason = normal,
-%% 		timestamp = utc_time()
-%% 	},
-%% 	{ok, List} = 'FunnelAsn':encode('ConnectionDownEvent', Asn),
-%% 	Message = list_to_binary(List),
-
-%% 	%% try to decode test message
-%% 	{ok, DTO} = adto:decode(#funnel_client_offline_event_dto{}, Message),
-%% 	#funnel_client_offline_event_dto{
-%% 		connection_id = ConnectionID,
-%% 		customer_id = CustomerID,
-%% 		user_id = UserID
-%% 	} = DTO,
-%% 	true = adto_uuid:is_valid(ConnectionID),
-%% 	true = is_binary(ConnectionID),
-%% 	true = is_binary(CustomerID),
-%% 	true = is_binary(UserID).
-
-%% funnel_client_online_event_encode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% funnel_client_online_event_decode_test() ->
-%% 	%% create test message
-%% 	Asn = #'ConnectionUpEvent'{
-%% 		connectionId = str_uuid(),
-%% 		customerId = "system_id",
-%% 		userId = "user",
-%% 		type = transmitter,
-%% 		connectedAt = utc_time(),
-%% 		timestamp = utc_time()
-%% 	},
-%% 	{ok, List} = 'FunnelAsn':encode('ConnectionUpEvent', Asn),
-%% 	Message = list_to_binary(List),
-
-%% 	%% try to debcode test message
-%% 	{ok, DTO} = adto:decode(#funnel_client_online_event_dto{}, Message),
-%% 	#funnel_client_online_event_dto{
-%% 		connection_id = ConnectionID,
-%% 		customer_id = CustomerID,
-%% 		user_id = UserID,
-%% 		type = Type
-%% 	} = DTO,
-%% 	true = adto_uuid:is_valid(ConnectionID),
-%% 	true = is_binary(ConnectionID),
-%% 	true = is_binary(CustomerID),
-%% 	true = is_binary(UserID),
-%% 	true = is_atom(Type).
+funnel_client_offline_event_test() ->
+	DTO = #funnel_client_offline_event_dto{
+		connection_id = adto_uuid:newid(),
+		customer_id = <<"system_id">>,
+		user_id = <<"user_id">>,
+		type = transmitter,
+		connected_at = <<"120827114232">>,
+		msgs_received = 1,
+		msgs_sent = 1,
+		errors = [#error_dto{error_code = 1, timestamp = <<"120827114232">>}],
+		reason = normal,
+		timestamp = <<"120827114232">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_client_offline_event_dto{}, Bin).
 
 %% %% ===================================================================
 %% %% Funnel Incoming Sms Test

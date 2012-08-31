@@ -62,6 +62,86 @@ decode(#funnel_auth_response_dto{}, Bin) ->
 			{error, Error}
 	end;
 
+decode(#funnel_started_event_dto{}, Bin) ->
+	case 'FunnelAsn':decode('ServerUpEvent', Bin) of
+		{ok, Asn} ->
+			#'ServerUpEvent'{
+			   	timestamp = Timestamp
+			} = Asn,
+			DTO = #funnel_started_event_dto{
+				timestamp = list_to_binary(Timestamp)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#funnel_stopped_event_dto{}, Bin) ->
+	case 'FunnelAsn':decode('ServerDownEvent', Bin) of
+		{ok, Asn} ->
+			#'ServerDownEvent'{
+			   	timestamp = Timestamp
+			} = Asn,
+			DTO = #funnel_stopped_event_dto{
+				timestamp = list_to_binary(Timestamp)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#funnel_client_online_event_dto{}, Bin) ->
+	case 'FunnelAsn':decode('ConnectionUpEvent', Bin) of
+		{ok, Asn} ->
+			#'ConnectionUpEvent'{
+				connectionId = ConnectionID,
+				customerId = CustomerID,
+				userId = UserID,
+				type = Type,
+				connectedAt = ConnectedAt,
+				timestamp = Timestamp
+			} = Asn,
+			DTO = #funnel_client_online_event_dto{
+				connection_id = adto_uuid:to_binary(ConnectionID),
+				customer_id = list_to_binary(CustomerID),
+				user_id = list_to_binary(UserID),
+				type = Type,
+				connected_at = list_to_binary(ConnectedAt),
+				timestamp = list_to_binary(Timestamp)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#funnel_client_offline_event_dto{}, Bin) ->
+	case 'FunnelAsn':decode('ConnectionDownEvent', Bin) of
+		{ok, Asn} ->
+			#'ConnectionDownEvent'{
+				connectionId = ConnectionID,
+				customerId = CustomerID,
+				userId = UserID,
+				type = Type,
+				connectedAt = ConnectedAt,
+				msgsReceived = MsgsReceived,
+				msgsSent = MsgsSent,
+				errors = Errors,
+				reason = Reason,
+				timestamp = Timestamp
+			} = Asn,
+			DTO = #funnel_client_offline_event_dto{
+				connection_id = adto_uuid:to_binary(ConnectionID),
+				customer_id = list_to_binary(CustomerID),
+				user_id = list_to_binary(UserID),
+				type = Type,
+				connected_at = list_to_binary(ConnectedAt),
+				msgs_received = MsgsReceived,
+				msgs_sent = MsgsSent,
+				errors = [errors_to_dto(Error) || Error <- Errors],
+				reason = Reason,
+				timestamp = list_to_binary(Timestamp)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
 decode(Type, _Message) ->
 	erlang:error({funnel_decode_not_supported, Type}).
 
@@ -145,8 +225,95 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
 		{error, Error} -> {error, Error}
 	end;
 
-encode(#funnel_auth_response_dto{result = {error, _}}) ->
-	erlang:error({funnel_encode_not_implemented, funnel_auth_response_dto});
+encode(DTO = #funnel_auth_response_dto{result = {error, _}}) ->
+	#funnel_auth_response_dto{
+		connection_id = ConnectionID,
+		result = {error, Error}
+	} = DTO,
+	Asn = #'BindResponse'{
+		connectionId = adto_uuid:to_string(ConnectionID),
+		result = {error, binary_to_list(Error)}
+	},
+	case 'FunnelAsn':encode('BindResponse', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_started_event_dto{}) ->
+	#funnel_started_event_dto{
+		timestamp = Timestamp
+	} = DTO,
+	Asn = #'ServerUpEvent'{
+		timestamp = binary_to_list(Timestamp)
+	},
+	case 'FunnelAsn':encode('ServerUpEvent', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_stopped_event_dto{}) ->
+	#funnel_stopped_event_dto{
+		timestamp = Timestamp
+	} = DTO,
+	Asn = #'ServerDownEvent'{
+		timestamp = binary_to_list(Timestamp)
+	},
+	case 'FunnelAsn':encode('ServerDownEvent', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_client_online_event_dto{}) ->
+	#funnel_client_online_event_dto{
+		connection_id = ConnectionID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		type = Type,
+		connected_at = ConnectedAt,
+		timestamp = Timestamp
+	} = DTO,
+	Asn = #'ConnectionUpEvent'{
+		connectionId = adto_uuid:to_string(ConnectionID),
+		customerId = binary_to_list(CustomerID),
+		userId = binary_to_list(UserID),
+		type = Type,
+		connectedAt = binary_to_list(ConnectedAt),
+		timestamp = binary_to_list(Timestamp)
+	},
+	case 'FunnelAsn':encode('ConnectionUpEvent', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_client_offline_event_dto{}) ->
+	#funnel_client_offline_event_dto{
+		connection_id = ConnectionID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		type = Type,
+		connected_at = ConnectedAt,
+		msgs_received = MsgsReceived,
+		msgs_sent = MsgsSent,
+		errors = Errors,
+		reason = Reason,
+		timestamp = Timestamp
+	} = DTO,
+	Asn = #'ConnectionDownEvent'{
+		connectionId = adto_uuid:to_string(ConnectionID),
+		customerId = binary_to_list(CustomerID),
+		userId = binary_to_list(UserID),
+		type = Type,
+		connectedAt = binary_to_list(ConnectedAt),
+		msgsReceived = MsgsReceived,
+		msgsSent = MsgsSent,
+		errors = [errors_to_asn(Error) || Error <- Errors],
+		reason = Reason,
+		timestamp = binary_to_list(Timestamp)
+	},
+	case 'FunnelAsn':encode('ConnectionDownEvent', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
 
 encode(Message) ->
 	erlang:error({funnel_encode_not_supported, Message}).
@@ -336,3 +503,25 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
 
 funnel_auth_response_result_to_dto({error, Error}) ->
 	{error, list_to_binary(Error)}.
+
+%% Client Errors
+
+errors_to_asn(Error = #error_dto{}) ->
+	#error_dto{
+		error_code = ErrorCode,
+		timestamp = Timestamp
+	} = Error,
+	#'Error'{
+		errorCode = ErrorCode,
+		timestamp = binary_to_list(Timestamp)
+	}.
+
+errors_to_dto(Error = #'Error'{}) ->
+	#'Error'{
+		errorCode = ErrorCode,
+		timestamp = Timestamp
+	} = Error,
+	#error_dto{
+		error_code = ErrorCode,
+		timestamp = list_to_binary(Timestamp)
+	}.

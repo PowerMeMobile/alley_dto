@@ -153,42 +153,51 @@ funnel_client_offline_event_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_client_offline_event_dto{}, Bin).
 
-%% %% ===================================================================
-%% %% Funnel Incoming Sms Test
-%% %% ===================================================================
+%% ===================================================================
+%% Funnel Incoming Sms Test
+%% ===================================================================
 
-%% funnel_incoming_sms_encode_test() ->
-%% 	DTO = #funnel_incoming_sms_dto{
-%% 		id = "id",
-%% 		source = #addr_dto{addr= <<"addr">>, ton=0, npi=0},
-%% 		dest = #addr_dto{addr= <<"addr">>, ton=0, npi=0},
-%% 		message = "message",
-%% 		datacoding = {text, 'gsm0338'}
-%% 	},
-%% 	{ok, Bin} = adto:encode(DTO),
-%% 	true = is_binary(Bin),
-%% 	erlang:error(error).
+funnel_incoming_sms_test() ->
+	MessageDTO = #funnel_incoming_sms_message_dto{
+		source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+	 	message = <<"message">>,
+		data_coding = {text, gsm0338}
+	},
+	DTO = #funnel_incoming_sms_dto{
+		id = adto_uuid:newid(),
+		messages = [MessageDTO]
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_incoming_sms_dto{}, Bin).
 
+%% ===================================================================
+%% Funnel Delivery Receipt Test
+%% ===================================================================
 
-%% funnel_incoming_sms_decode_test() ->
-%% 	erlang:error(not_implemented).
+funnel_delivery_receipt_test() ->
+	ReceiptDTO = #funnel_delivery_receipt_container_dto{
+		message_id = <<"614">>,
+		submit_date = <<"20827114232">>,
+		done_date = <<"20827114232">>,
+		message_state = delivered,
+		source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}
+	},
+	DTO = #funnel_delivery_receipt_dto{
+		id = adto_uuid:newid(),
+		receipts = [ReceiptDTO]
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_delivery_receipt_dto{}, Bin).
 
-%% %% ===================================================================
-%% %% Funnel Delivery Receipt Test
-%% %% ===================================================================
+%% ===================================================================
+%% Funnel Ack Test
+%% ===================================================================
 
-%% funnel_delivery_receipt_encode_test() ->
-%% 	erlang:error(error).
-
-%% funnel_delivery_receipt_decode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% %% ===================================================================
-%% %% Funnel Ack Test
-%% %% ===================================================================
-
-%% funnel_ack_encode_test() ->
-%% 	erlang:error(not_implemented).
-
-%% funnel_ack_decode_test() ->
-%% 	erlang:error(error).
+funnel_ack_test() ->
+	DTO = #funnel_ack_dto{
+		id = adto_uuid:newid()
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_ack_dto{}, Bin).

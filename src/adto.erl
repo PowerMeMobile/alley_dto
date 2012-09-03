@@ -36,8 +36,8 @@ module(#funnel_client_offline_event_dto{}) ->
 	funnel();
 module(#funnel_incoming_sms_dto{}) ->
 	funnel();
-%% module(#funnel_delivery_receipt_dto{}) ->
-%% 	funnel();
+module(#funnel_delivery_receipt_dto{}) ->
+	funnel();
 module(#funnel_ack_dto{}) ->
 	funnel();
 
@@ -51,8 +51,8 @@ module(#just_incoming_sms_dto{}) ->
 module(#just_delivery_receipt_dto{}) ->
 	just();
 
-module(_) ->
-	erlang:error(badtype).
+module(Type) ->
+	erlang:error({adto_unsupported_type, Type}).
 
 funnel() ->
 	adto_funnel.

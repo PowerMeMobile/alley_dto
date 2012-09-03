@@ -150,13 +150,13 @@ OutgoingMessage ::= SEQUENCE {
 }
 
 ReceiptBatch ::= SEQUENCE {
-    id       [0] IA5String,
+    id       [0] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
     receipts [1] SEQUENCE OF DeliveryReceipt
 }
 
 DeliveryReceipt ::= SEQUENCE {
-    messageId    [0] IA5String,
-    submitDate   [1] UTCTime,
+    messageId    [0] IA5String, -- "614"
+    submitDate   [1] UTCTime, -- "120827114232"
     doneDate     [2] UTCTime,
     messageState [3] ENUMERATED { delivered(2),
                                   expired(3),

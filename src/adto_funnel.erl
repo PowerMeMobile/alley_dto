@@ -142,6 +142,49 @@ decode(#funnel_client_offline_event_dto{}, Bin) ->
 		{error, Error} -> {error, Error}
 	end;
 
+decode(#funnel_incoming_sms_dto{}, Bin) ->
+	case 'FunnelAsn':decode('OutgoingBatch', Bin) of
+		{ok, Asn} ->
+			#'OutgoingBatch'{
+				id = ID,
+				messages = Messages
+			} = Asn,
+			DTO = #funnel_incoming_sms_dto{
+				id = adto_uuid:to_binary(ID),
+				messages = incoming_messages_to_dto(Messages)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#funnel_delivery_receipt_dto{}, Bin) ->
+	case 'FunnelAsn':decode('ReceiptBatch', Bin) of
+		{ok, Asn} ->
+			#'ReceiptBatch'{
+				id = ID,
+				receipts = Receipts
+			} = Asn,
+			DTO = #funnel_delivery_receipt_dto{
+				id = adto_uuid:to_binary(ID),
+				receipts = receipts_to_dto(Receipts)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
+decode(#funnel_ack_dto{}, Bin) ->
+	case 'FunnelAsn':decode('BatchAck', Bin) of
+		{ok, Asn} ->
+			#'BatchAck'{
+				batchId = ID
+			} = Asn,
+			DTO = #funnel_ack_dto{
+				id = adto_uuid:to_binary(ID)
+			},
+			{ok, DTO};
+		{error, Error} -> {error, Error}
+	end;
+
 decode(Type, _Message) ->
 	erlang:error({funnel_decode_not_supported, Type}).
 
@@ -311,6 +354,46 @@ encode(DTO = #funnel_client_offline_event_dto{}) ->
 		timestamp = binary_to_list(Timestamp)
 	},
 	case 'FunnelAsn':encode('ConnectionDownEvent', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_incoming_sms_dto{}) ->
+	#funnel_incoming_sms_dto{
+		id = ID,
+		messages = Messages
+	} = DTO,
+	Asn = #'OutgoingBatch'{
+		id = adto_uuid:to_string(ID),
+		messages = incoming_messages_to_asn(Messages)
+	},
+	case 'FunnelAsn':encode('OutgoingBatch', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_delivery_receipt_dto{}) ->
+	#funnel_delivery_receipt_dto{
+		id = ID,
+		receipts = Receipts
+	} = DTO,
+	Asn = #'ReceiptBatch'{
+		id = adto_uuid:to_string(ID),
+		receipts = receipts_to_asn(Receipts)
+	},
+	case 'FunnelAsn':encode('ReceiptBatch', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_ack_dto{}) ->
+	#funnel_ack_dto{
+		id = ID
+	} = DTO,
+	Asn = #'BatchAck'{
+		batchId = adto_uuid:to_string(ID)
+	},
+	case 'FunnelAsn':encode('BatchAck', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
 		{error, Error} -> {error, Error}
 	end;
@@ -525,3 +608,79 @@ errors_to_dto(Error = #'Error'{}) ->
 		error_code = ErrorCode,
 		timestamp = list_to_binary(Timestamp)
 	}.
+
+%% Incoming Messages
+
+incoming_messages_to_asn(Message = #funnel_incoming_sms_message_dto{}) ->
+	#funnel_incoming_sms_message_dto{
+		source  = Source,
+		dest = Dest,
+		message = MessageBody,
+		data_coding = DataCoding
+	} = Message,
+	#'OutgoingMessage'{
+		source = addr_to_asn(Source),
+		dest = addr_to_asn(Dest),
+		message = binary_to_list(MessageBody),
+		dataCoding = DataCoding
+	};
+incoming_messages_to_asn(Messages) ->
+	[incoming_messages_to_asn(Message) || Message <- Messages].
+
+incoming_messages_to_dto(Message = #'OutgoingMessage'{}) ->
+	#'OutgoingMessage'{
+		source = Source,
+		dest = Dest,
+		message = MessageBody,
+		dataCoding = DataCoding
+	} = Message,
+	#funnel_incoming_sms_message_dto{
+		source  = addr_to_dto(Source),
+		dest = addr_to_dto(Dest),
+		message = list_to_binary(MessageBody),
+		data_coding = DataCoding
+	};
+incoming_messages_to_dto(Messages) ->
+	[incoming_messages_to_dto(Message) || Message <- Messages].
+
+%% Receipts
+
+receipts_to_asn(Receipt = #funnel_delivery_receipt_container_dto{}) ->
+	#funnel_delivery_receipt_container_dto{
+		message_id = MessageID,
+		submit_date = SubmitDate,
+		done_date = DoneDate,
+		message_state = MessageState,
+		source = SourceAddr,
+		dest  = DestAddr
+	} = Receipt,
+	#'DeliveryReceipt'{
+		messageId = binary_to_list(MessageID),
+		submitDate = binary_to_list(SubmitDate),
+		doneDate = binary_to_list(DoneDate),
+		messageState = MessageState,
+		source = addr_to_asn(SourceAddr),
+		dest = addr_to_asn(DestAddr)
+	};
+receipts_to_asn(Receipts) ->
+	[receipts_to_asn(Receipt) || Receipt <- Receipts].
+
+receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
+	#'DeliveryReceipt'{
+		messageId = MessageID,
+		submitDate = SubmitDate,
+		doneDate = DoneDate,
+		messageState = MessageState,
+		source = SourceAddr,
+		dest = DestAddr
+	} = Receipt,
+	#funnel_delivery_receipt_container_dto{
+		message_id = list_to_binary(MessageID),
+		submit_date = list_to_binary(SubmitDate),
+		done_date = list_to_binary(DoneDate),
+		message_state = MessageState,
+		source = addr_to_dto(SourceAddr),
+		dest  = addr_to_dto(DestAddr)
+	};
+receipts_to_dto(Receipts) ->
+	[receipts_to_dto(Receipt) || Receipt <- Receipts].

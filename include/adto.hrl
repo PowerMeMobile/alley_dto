@@ -162,12 +162,19 @@
 %% Incoming Sms Entities
 %% ===================================================================
 
--record(funnel_incoming_sms_dto, {
-	id :: string(),
+-record(funnel_incoming_sms_message_dto, {
 	source :: addr_dto(),
 	dest :: addr_dto(),
-	message :: string(),
-	datacoding :: any()
+	message :: binary(),
+	data_coding ::
+		{text, gsm0338} |
+		{text, ucs2} |
+		{other, integer()}
+}).
+
+-record(funnel_incoming_sms_dto, {
+	id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	messages :: [#funnel_incoming_sms_message_dto{}]
 }).
 
 %% ===================================================================
@@ -183,14 +190,18 @@
 	unknown |
 	rejected.
 
--record(funnel_delivey_receipt_dto, {
-	id :: string(),
-	message_id :: string(),
-	submit_date :: utc_time_dto(),
-	done_date :: utc_time_dto(),
+-record(funnel_delivery_receipt_container_dto, {
+	message_id :: binary(), %% <<"614">>
+	submit_date :: binary(),  %% <<"20827114232">>
+	done_date :: binary(), %% <<"20827114232">>
 	message_state :: message_state_dto(),
 	source :: addr_dto(),
 	dest :: addr_dto()
+}).
+
+-record(funnel_delivery_receipt_dto, {
+	id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	receipts :: [#funnel_delivery_receipt_dto{}]
 }).
 
 %% ===================================================================
@@ -198,7 +209,7 @@
 %% ===================================================================
 
 -record(funnel_ack_dto, {
-	id :: string()
+	id :: binary() %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 }).
 
 %% ===================================================================
@@ -276,9 +287,9 @@
 	#funnel_client_offline_event_dto{} |
 
 	#funnel_incoming_sms_dto{} |
-	%% #funnel_delivery_receipt_dto{} |
-
+	#funnel_delivery_receipt_dto{} |
 	#funnel_ack_dto{} |
+
 	#just_sms_request_dto{} |
 	#just_sms_response_dto{} |
 	#just_incoming_sms_dto{} |

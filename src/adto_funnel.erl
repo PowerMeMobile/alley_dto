@@ -275,7 +275,7 @@ encode(DTO = #funnel_auth_response_dto{result = {error, _}}) ->
 	} = DTO,
 	Asn = #'BindResponse'{
 		connectionId = adto_uuid:to_string(ConnectionID),
-		result = {error, binary_to_list(Error)}
+		result = {error, io_lib:format("~p", [Error])}
 	},
 	case 'FunnelAsn':encode('BindResponse', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};

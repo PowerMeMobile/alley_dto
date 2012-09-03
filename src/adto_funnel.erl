@@ -463,7 +463,9 @@ addr_to_asn(FullAddr = #addr_dto{}) ->
 		addr = binary_to_list(Addr),
 		ton = TON,
 		npi = NPI
-	}.
+	};
+addr_to_asn(Addrs) ->
+	[addr_to_asn(Addr) || Addr <- Addrs].
 
 addr_to_dto(FullAddr = #'Addr'{}) ->
 	#'Addr'{
@@ -475,7 +477,9 @@ addr_to_dto(FullAddr = #'Addr'{}) ->
 		addr = list_to_binary(Addr),
 		ton = TON,
 		npi = NPI
-	}.
+	};
+addr_to_dto(Addrs) ->
+	[addr_to_dto(Addr) || Addr <- Addrs].
 
 %% Networks
 

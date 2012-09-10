@@ -7,7 +7,6 @@
 
 -include("adto.hrl").
 -include("JustAsn.hrl").
--include("logging.hrl").
 -include("helpers.hrl").
 
 %% ===================================================================
@@ -28,9 +27,9 @@ encode(DTO = #just_sms_request_dto{}) ->
 		message_ids = MessageIDs
 	} = DTO,
 	Asn = #'SmsRequest'{
-		id = adto_uuid:to_string(ID),
-		gatewayId = adto_uuid:to_string(GtwID),
-		customerId = adto_uuid:to_string(CustomerID),
+		id = uuid:to_string(ID),
+		gatewayId = uuid:to_string(GtwID),
+		customerId = uuid:to_string(CustomerID),
 		type = Type,
 		message = binary_to_list(Message),
 		encoding = Encoding,
@@ -53,9 +52,9 @@ encode(DTO = #just_sms_response_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'SmsResponse'{
-		id = adto_uuid:to_string(ID),
-		gatewayId = adto_uuid:to_string(GtwID),
-		customerId = adto_uuid:to_string(CustomerID),
+		id = uuid:to_string(ID),
+		gatewayId = uuid:to_string(GtwID),
+		customerId = uuid:to_string(CustomerID),
 		statuses = sms_statuses_to_asn(Statuses),
 		timestamp = binary_to_list(Timestamp)
 	},
@@ -77,7 +76,7 @@ encode(DTO = #just_incoming_sms_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'IncomingSm'{
-		gatewayId = adto_uuid:to_string(GtwID),
+		gatewayId = uuid:to_string(GtwID),
 		source = full_addr_to_asn(Source),
 		dest = full_addr_to_asn(Dest),
 		message = binary_to_list(Message),
@@ -99,7 +98,7 @@ encode(DTO = #just_delivery_receipt_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'ReceiptBatch'{
-		gatewayId = adto_uuid:to_string(GtwID),
+		gatewayId = uuid:to_string(GtwID),
 		receipts = just_receipt_to_asn(Receipts),
 		timestamp = Timestamp
 	},
@@ -131,9 +130,9 @@ decode(#just_sms_request_dto{}, Bin) ->
 				messageIds = MessageIDs
 			} = SmsRequest,
 		DTO = #just_sms_request_dto{
-			id = adto_uuid:to_binary(ID),
-			gateway_id = adto_uuid:to_binary(GtwID),
-			customer_id = adto_uuid:to_binary(CustomerID),
+			id = uuid:to_binary(ID),
+			gateway_id = uuid:to_binary(GtwID),
+			customer_id = uuid:to_binary(CustomerID),
 			type = Type,
 			message = list_to_binary(Message),
 			encoding = Encoding,
@@ -157,9 +156,9 @@ decode(#just_sms_response_dto{}, Bin) ->
 				timestamp = Timestamp
 			} = SmsResponse,
 			DTO = #just_sms_response_dto{
-				id = adto_uuid:to_binary(ID),
-				gateway_id = adto_uuid:to_binary(GtwID),
-				customer_id = adto_uuid:to_binary(CustomerID),
+				id = uuid:to_binary(ID),
+				gateway_id = uuid:to_binary(GtwID),
+				customer_id = uuid:to_binary(CustomerID),
 				statuses = sms_statuses_to_dto(Statuses),
 				timestamp = list_to_binary(Timestamp)
 			},
@@ -182,7 +181,7 @@ decode(#just_incoming_sms_dto{}, Bin) ->
 				timestamp = Timestamp
 		   	} = IncomingSms,
 			DTO = #just_incoming_sms_dto{
-				gateway_id = adto_uuid:to_binary(GtwID),
+				gateway_id = uuid:to_binary(GtwID),
 				source = full_addr_to_dto(Source),
 				dest = full_addr_to_dto(Dest),
 				message = list_to_binary(Message),
@@ -205,7 +204,7 @@ decode(#just_delivery_receipt_dto{}, Bin) ->
 				timestamp = Timestamp
 			} = Asn,
 			DTO = #just_delivery_receipt_dto{
-				gateway_id = adto_uuid:to_binary(GtwID),
+				gateway_id = uuid:to_binary(GtwID),
 				receipts = just_receipt_to_dto(Receipts),
 				timestamp = Timestamp
 			},

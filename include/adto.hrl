@@ -81,7 +81,7 @@
 -record(funnel_auth_response_dto, {
 	connection_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	result ::
-		{error, binary()} | %% <<"error">>
+		{error, string()} | %% "error"
 		{customer, #funnel_auth_response_customer_dto{}}
 
 }).

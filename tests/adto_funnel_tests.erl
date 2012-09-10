@@ -50,7 +50,7 @@ provider_dto() ->
 
 funnel_auth_request_test() ->
 	DTO = #funnel_auth_request_dto{
-		connection_id = adto_uuid:newid(),
+		connection_id = uuid:newid(),
 		ip = <<"127.0.0.1">>,
 		customer_id = <<"test-sys-id">>,
 		user_id = <<"user">>,
@@ -65,35 +65,35 @@ funnel_auth_request_test() ->
 
 funnel_success_auth_response_test() ->
 	Provider = #provider_dto{
-		id = adto_uuid:newid(),
-		gateway = adto_uuid:newid(),
-		bulk_gateway = adto_uuid:newid(),
+		id = uuid:newid(),
+		gateway = uuid:newid(),
+		bulk_gateway = uuid:newid(),
 		receipts_supported = true
 	},
 	Network = #network_dto{
-		id = adto_uuid:newid(),
+		id = uuid:newid(),
 		country_code = <<"375">>,
 		numbers_len = 12,
 		prefixes = [<<"33">>, <<"44">>],
-		provider_id = adto_uuid:newid()
+		provider_id = uuid:newid()
 	},
 	CustomerDTO = #funnel_auth_response_customer_dto{
 		id = <<"system-id">>,
-		uuid = adto_uuid:newid(),
+		uuid = uuid:newid(),
 		priority = 0,
 		rps = 100,
 		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
 		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
 		providers = [Provider],
-		default_provider_id = adto_uuid:newid(),
+		default_provider_id = uuid:newid(),
 		receipts_allowed = true,
 		no_retry = true,
 		default_validity = <<"000003000000000R">>,
 		max_validity = 1234567
 	},
 	DTO = #funnel_auth_response_dto{
-		connection_id = adto_uuid:newid(),
+		connection_id = uuid:newid(),
 		result = {customer, CustomerDTO}
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -101,8 +101,8 @@ funnel_success_auth_response_test() ->
 
 funnel_error_auth_response_test() ->
 	DTO = #funnel_auth_response_dto{
-		connection_id = adto_uuid:newid(),
-		result = {error, <<"test error">>}
+		connection_id = uuid:newid(),
+		result = {error, "test error"}
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_response_dto{}, Bin).
@@ -127,7 +127,7 @@ funnel_stopped_event_test() ->
 
 funnel_client_online_event_test() ->
 	DTO = #funnel_client_online_event_dto{
-		connection_id = adto_uuid:newid(),
+		connection_id = uuid:newid(),
 		customer_id = <<"system_id">>,
 		user_id = <<"user_id">>,
 		type = transmitter,
@@ -139,7 +139,7 @@ funnel_client_online_event_test() ->
 
 funnel_client_offline_event_test() ->
 	DTO = #funnel_client_offline_event_dto{
-		connection_id = adto_uuid:newid(),
+		connection_id = uuid:newid(),
 		customer_id = <<"system_id">>,
 		user_id = <<"user_id">>,
 		type = transmitter,
@@ -165,7 +165,7 @@ funnel_incoming_sms_test() ->
 		data_coding = {text, gsm0338}
 	},
 	DTO = #funnel_incoming_sms_dto{
-		id = adto_uuid:newid(),
+		id = uuid:newid(),
 		messages = [MessageDTO]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -185,7 +185,7 @@ funnel_delivery_receipt_test() ->
 		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}
 	},
 	DTO = #funnel_delivery_receipt_dto{
-		id = adto_uuid:newid(),
+		id = uuid:newid(),
 		receipts = [ReceiptDTO]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -197,7 +197,7 @@ funnel_delivery_receipt_test() ->
 
 funnel_ack_test() ->
 	DTO = #funnel_ack_dto{
-		id = adto_uuid:newid()
+		id = uuid:newid()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_ack_dto{}, Bin).

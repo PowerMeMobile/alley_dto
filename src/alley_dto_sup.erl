@@ -24,6 +24,4 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    {ok, { {one_for_one, 5, 10}, [
-		{adto_uuid, {adto_uuid, start_link, []}, permanent, 5000, worker, [adto_uuid]}
-	]} }.
+    {ok, { {one_for_one, 5, 10}, []} }.

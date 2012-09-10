@@ -4,7 +4,8 @@ all: test
 
 test: clean compile
 	@erl -noshell -pa ebin/ \
-					dep/*/ebin/ \
+					deps/*/ebin/ \
+		-eval 'application:start(uuid)' \
 		-eval 'application:start(alley_dto)' \
 		-eval 'eunit:test("ebin",[verbose])' \
 		-s init stop
@@ -20,7 +21,8 @@ clean:
 
 dev: compile
 	@erl -noshell -pa ebin/ \
-					dep/*/ebin/ \
+					deps/*/ebin/ \
+		-eval 'application:start(uuid)' \
 		-eval 'application:start(alley_dto)' \
-		-eval 'adto_just_tests:just_incoming_sms_test()' \
+		-eval 'adto_funnel_tests:funnel_error_auth_response_test()' \
 		-s init stop

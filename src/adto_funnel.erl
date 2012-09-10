@@ -32,7 +32,7 @@ decode(#funnel_auth_request_dto{}, Bin) ->
 				expiration = Expiration
 			} = Asn,
 			DTO = #funnel_auth_request_dto{
-				connection_id = adto_uuid:to_binary(ConnectionID),
+				connection_id = uuid:to_binary(ConnectionID),
 				ip = list_to_binary(IP),
 				customer_id = list_to_binary(CustomerID),
 				user_id = list_to_binary(UserID),
@@ -54,7 +54,7 @@ decode(#funnel_auth_response_dto{}, Bin) ->
 				result = ResultAsn
 			} = Asn,
 			DTO = #funnel_auth_response_dto{
-				connection_id = adto_uuid:to_binary(ID),
+				connection_id = uuid:to_binary(ID),
 				result = funnel_auth_response_result_to_dto(ResultAsn)
 			},
 			{ok, DTO};
@@ -100,7 +100,7 @@ decode(#funnel_client_online_event_dto{}, Bin) ->
 				timestamp = Timestamp
 			} = Asn,
 			DTO = #funnel_client_online_event_dto{
-				connection_id = adto_uuid:to_binary(ConnectionID),
+				connection_id = uuid:to_binary(ConnectionID),
 				customer_id = list_to_binary(CustomerID),
 				user_id = list_to_binary(UserID),
 				type = Type,
@@ -127,7 +127,7 @@ decode(#funnel_client_offline_event_dto{}, Bin) ->
 				timestamp = Timestamp
 			} = Asn,
 			DTO = #funnel_client_offline_event_dto{
-				connection_id = adto_uuid:to_binary(ConnectionID),
+				connection_id = uuid:to_binary(ConnectionID),
 				customer_id = list_to_binary(CustomerID),
 				user_id = list_to_binary(UserID),
 				type = Type,
@@ -150,7 +150,7 @@ decode(#funnel_incoming_sms_dto{}, Bin) ->
 				messages = Messages
 			} = Asn,
 			DTO = #funnel_incoming_sms_dto{
-				id = adto_uuid:to_binary(ID),
+				id = uuid:to_binary(ID),
 				messages = incoming_messages_to_dto(Messages)
 			},
 			{ok, DTO};
@@ -165,7 +165,7 @@ decode(#funnel_delivery_receipt_dto{}, Bin) ->
 				receipts = Receipts
 			} = Asn,
 			DTO = #funnel_delivery_receipt_dto{
-				id = adto_uuid:to_binary(ID),
+				id = uuid:to_binary(ID),
 				receipts = receipts_to_dto(Receipts)
 			},
 			{ok, DTO};
@@ -179,7 +179,7 @@ decode(#funnel_ack_dto{}, Bin) ->
 				batchId = ID
 			} = Asn,
 			DTO = #funnel_ack_dto{
-				id = adto_uuid:to_binary(ID)
+				id = uuid:to_binary(ID)
 			},
 			{ok, DTO};
 		{error, Error} -> {error, Error}
@@ -209,7 +209,7 @@ encode(DTO = #funnel_auth_request_dto{}) ->
 		expiration = Expiration
 	} = DTO,
 	Asn = #'BindRequest'{
-		connectionId = adto_uuid:to_string(ConnectionID),
+		connectionId = uuid:to_string(ConnectionID),
 		remoteIp = binary_to_list(IP),
 		customerId = binary_to_list(CustomerID),
 		userId = binary_to_list(UserID),
@@ -246,21 +246,21 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
 	} = CustomerDTO,
 	CustomerAsn = #'Customer'{
 		id = binary_to_list(SystemID),
-		uuid = adto_uuid:to_string(UUID),
+		uuid = uuid:to_string(UUID),
 		priority = Priority,
 		rps = to_optional_asn(RPS),
 		allowedSources = [addr_to_asn(Source) || Source <- AllowedSources],
 		defaultSource = to_optional_asn(DefaultSource, fun addr_to_asn/1),
 		networks = networks_to_asn(Networks),
 		providers = providers_to_asn(Providers),
-		defaultProviderId = to_optional_asn(DefaultProviderID, fun adto_uuid:to_string/1),
+		defaultProviderId = to_optional_asn(DefaultProviderID, fun uuid:to_string/1),
 		receiptsAllowed = ReceiptsAllowed,
 		noRetry = NoRetry,
 		defaultValidity = binary_to_list(DefaultValidity),
 		maxValidity = MaxValidity
 	},
 	Asn = #'BindResponse'{
-		connectionId = adto_uuid:to_string(ConnectionID),
+		connectionId = uuid:to_string(ConnectionID),
 		result = {customer, CustomerAsn}
 	},
 	case 'FunnelAsn':encode('BindResponse', Asn) of
@@ -274,8 +274,8 @@ encode(DTO = #funnel_auth_response_dto{result = {error, _}}) ->
 		result = {error, Error}
 	} = DTO,
 	Asn = #'BindResponse'{
-		connectionId = adto_uuid:to_string(ConnectionID),
-		result = {error, io_lib:format("~p", [Error])}
+		connectionId = uuid:to_string(ConnectionID),
+		result = {error, Error}
 	},
 	case 'FunnelAsn':encode('BindResponse', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
@@ -316,7 +316,7 @@ encode(DTO = #funnel_client_online_event_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'ConnectionUpEvent'{
-		connectionId = adto_uuid:to_string(ConnectionID),
+		connectionId = uuid:to_string(ConnectionID),
 		customerId = binary_to_list(CustomerID),
 		userId = binary_to_list(UserID),
 		type = Type,
@@ -342,7 +342,7 @@ encode(DTO = #funnel_client_offline_event_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'ConnectionDownEvent'{
-		connectionId = adto_uuid:to_string(ConnectionID),
+		connectionId = uuid:to_string(ConnectionID),
 		customerId = binary_to_list(CustomerID),
 		userId = binary_to_list(UserID),
 		type = Type,
@@ -364,7 +364,7 @@ encode(DTO = #funnel_incoming_sms_dto{}) ->
 		messages = Messages
 	} = DTO,
 	Asn = #'OutgoingBatch'{
-		id = adto_uuid:to_string(ID),
+		id = uuid:to_string(ID),
 		messages = incoming_messages_to_asn(Messages)
 	},
 	case 'FunnelAsn':encode('OutgoingBatch', Asn) of
@@ -378,7 +378,7 @@ encode(DTO = #funnel_delivery_receipt_dto{}) ->
 		receipts = Receipts
 	} = DTO,
 	Asn = #'ReceiptBatch'{
-		id = adto_uuid:to_string(ID),
+		id = uuid:to_string(ID),
 		receipts = receipts_to_asn(Receipts)
 	},
 	case 'FunnelAsn':encode('ReceiptBatch', Asn) of
@@ -391,7 +391,7 @@ encode(DTO = #funnel_ack_dto{}) ->
 		id = ID
 	} = DTO,
 	Asn = #'BatchAck'{
-		batchId = adto_uuid:to_string(ID)
+		batchId = uuid:to_string(ID)
 	},
 	case 'FunnelAsn':encode('BatchAck', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
@@ -492,11 +492,11 @@ networks_to_asn(Network = #network_dto{}) ->
 		provider_id = ProviderID
 	} = Network,
 	#'Network'{
-		id = adto_uuid:to_string(ID),
+		id = uuid:to_string(ID),
 		countryCode = binary_to_list(CountryCode),
 		numbersLen = NumbersLength,
 		prefixes = [binary_to_list(Prefix) || Prefix <- Prefixes],
-		providerId = adto_uuid:to_string(ProviderID)
+		providerId = uuid:to_string(ProviderID)
 	};
 networks_to_asn(Networks) ->
 	[networks_to_asn(Network) || Network <- Networks].
@@ -510,11 +510,11 @@ networks_to_dto(Network = #'Network'{}) ->
 		providerId = ProviderID
 	} = Network,
 	#network_dto{
-		id = adto_uuid:to_binary(ID),
+		id = uuid:to_binary(ID),
 		country_code = list_to_binary(CountryCode),
 		numbers_len = NumbersLength,
 		prefixes = [list_to_binary(Prefix) || Prefix <- Prefixes],
-		provider_id = adto_uuid:to_binary(ProviderID)
+		provider_id = uuid:to_binary(ProviderID)
 	};
 networks_to_dto(Networks) ->
 	[networks_to_dto(Network) || Network <- Networks].
@@ -529,9 +529,9 @@ providers_to_asn(Provider = #provider_dto{}) ->
 		receipts_supported = ReceiptsSupported
 	} = Provider,
 	#'Provider'{
-		id = adto_uuid:to_string(ID),
-		gateway = adto_uuid:to_string(GtwID),
-		bulkGateway = adto_uuid:to_string(BulkGtwID),
+		id = uuid:to_string(ID),
+		gateway = uuid:to_string(GtwID),
+		bulkGateway = uuid:to_string(BulkGtwID),
 		receiptsSupported = ReceiptsSupported
 	};
 providers_to_asn(Providers) ->
@@ -545,9 +545,9 @@ providers_to_dto(Provider = #'Provider'{}) ->
 		receiptsSupported = ReceiptsSupported
 	} = Provider,
 	#provider_dto{
-		id = adto_uuid:to_binary(ID),
-		gateway = adto_uuid:to_binary(GtwID),
-		bulk_gateway = adto_uuid:to_binary(BulkGtwID),
+		id = uuid:to_binary(ID),
+		gateway = uuid:to_binary(GtwID),
+		bulk_gateway = uuid:to_binary(BulkGtwID),
 		receipts_supported = ReceiptsSupported
 	};
 providers_to_dto(Providers) ->
@@ -573,14 +573,14 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
 	} = CustomerAsn,
 	CustomerDTO = #funnel_auth_response_customer_dto{
 		id = list_to_binary(SystemID),
-		uuid = adto_uuid:to_binary(UUID),
+		uuid = uuid:to_binary(UUID),
 		priority = Priority,
 		rps = from_optional_asn(RPS),
 		allowed_sources = [addr_to_dto(Source) || Source <- AllowedSources],
 		default_source = from_optional_asn(DefaultSource, fun addr_to_dto/1),
 		networks = networks_to_dto(Networks),
 		providers = providers_to_dto(Providers),
-		default_provider_id = from_optional_asn(DefaultProviderID, fun adto_uuid:to_binary/1),
+		default_provider_id = from_optional_asn(DefaultProviderID, fun uuid:to_binary/1),
 		receipts_allowed = ReceiptsAllowed,
 		no_retry = NoRetry,
 		default_validity = list_to_binary(DefaultValidity),
@@ -589,7 +589,7 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
 	{customer, CustomerDTO};
 
 funnel_auth_response_result_to_dto({error, Error}) ->
-	{error, list_to_binary(Error)}.
+	{error, Error}.
 
 %% Client Errors
 

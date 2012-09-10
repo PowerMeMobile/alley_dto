@@ -51,9 +51,9 @@ just_sms_response_test() ->
 		error_code = undefined
 	},
 	DTO = #just_sms_response_dto{
-		id = adto_uuid:newid(),
-		gateway_id = adto_uuid:newid(),
-		customer_id = adto_uuid:newid(),
+		id = uuid:newid(),
+		gateway_id = uuid:newid(),
+		customer_id = uuid:newid(),
 		statuses = [StatusDTO],
 		timestamp = <<"120827114305">>
 	},
@@ -66,7 +66,7 @@ just_sms_response_test() ->
 
 just_incoming_sms_test() ->
 	DTO = #just_incoming_sms_dto{
-		gateway_id = adto_uuid:newid(),
+		gateway_id = uuid:newid(),
 		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
 		dest = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
 		message = <<"message">>,
@@ -90,7 +90,7 @@ just_delivery_receipt_test() ->
 		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1}
 	},
 	DTO = #just_delivery_receipt_dto{
-		gateway_id = adto_uuid:newid(),
+		gateway_id = uuid:newid(),
 		receipts = [ReceiptDTO],
 		timestamp = 1346067785681000
 	},

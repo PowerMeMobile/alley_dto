@@ -5,46 +5,6 @@
 -include_lib("eunit/include/eunit.hrl").
 
 %% ===================================================================
-%% Variables
-%% ===================================================================
-
-bin_uuid() -> <<138,192,76,106,232,107,75,217,141,162,249,70,128,211,111,2>>.
-
-str_uuid() -> "1ad95af3-b33c-4eba-be89-a31ff0b14d39".
-
-precise_time_dto() ->
-	#precise_time_dto{
-		time = utc_time(),
-		milliseconds = 573
-	}.
-utc_time() ->
-	"120823124151".
-
-addr_dto() ->
-	#addr_dto{
-		addr = <<"addr">>,
-		ton = 0,
-		npi = 1
-	}.
-
-network_dto() ->
-	#network_dto{
-	  id = bin_uuid(),
-	  country_code = <<"country_code">>,
-	  numbers_len = 12,
-	  prefixes = [<<"12">>, <<"34">>],
-	  provider_id = bin_uuid()
-	 }.
-
-provider_dto() ->
-	#provider_dto{
-		id = bin_uuid(),
-		gateway = bin_uuid(),
-		bulk_gateway  = bin_uuid(),
-		receipts_supported = true
-	}.
-
-%% ===================================================================
 %% Funnel Auth Tests
 %% ===================================================================
 

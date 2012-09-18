@@ -5,18 +5,6 @@
 -include_lib("eunit/include/eunit.hrl").
 
 %% ===================================================================
-%% Variables
-%% ===================================================================
-
-%% str_uuid() -> "12fd794d-9e32-4cf6-b421-b797196b60e3".
-
-%% sms_req_params() ->
-%% 	[{'Param',"registered_delivery",{boolean,true}},{'Param',"service_type",{string,[]}},{'Param',"no_retry",{boolean,false}},{'Param',"validity_period",{string,"000003000000000R"}},{'Param',"priority_flag",{integer,0}},{'Param',"esm_class",{integer,3}},{'Param',"protocol_id",{integer,0}}].
-
-%% full_addr() ->
-%% 	{'FullAddr',"375296662323",1,1}.
-
-%% ===================================================================
 %% Just Sms Request Tests
 %% ===================================================================
 

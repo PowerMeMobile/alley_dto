@@ -24,5 +24,5 @@ dev: compile
 					deps/*/ebin/ \
 		-eval 'application:start(uuid)' \
 		-eval 'application:start(alley_dto)' \
-		-eval 'adto_funnel_tests:funnel_error_auth_response_test()' \
+		-eval 'adto_just_tests:just_sms_response_test()' \
 		-s init stop

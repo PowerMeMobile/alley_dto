@@ -13,6 +13,7 @@ just_sms_request_test() ->
 		id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
 		gateway_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
 		customer_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
+		client_type = k1api,
 		type = regular,
 		message = <<"message">>,
 		encoding = {text, default},
@@ -42,6 +43,7 @@ just_sms_response_test() ->
 		id = uuid:newid(),
 		gateway_id = uuid:newid(),
 		customer_id = uuid:newid(),
+		client_type = k1api,
 		statuses = [StatusDTO],
 		timestamp = <<"120827114305">>
 	},

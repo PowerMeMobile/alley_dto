@@ -5,6 +5,8 @@
 %% Generic Entities
 %% ===================================================================
 
+-type client_type() :: k1api | funnel.
+
 -record(addr_dto, {
 	addr :: string(),
 	ton :: integer(),
@@ -149,6 +151,7 @@
 	id :: bin_uuid(),
 	gateway_id :: bin_uuid(),
 	customer_id :: bin_uuid(),
+	client_type :: client_type(),
 	type :: regular | part,
 	message :: binary(),
 	encoding :: jsms_req_encoding(),
@@ -230,6 +233,7 @@
 	id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	gateway_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
 	customer_id :: binary(), %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+	client_type :: client_type(),
 	statuses :: [] | [#just_sms_status_dto{}],
 	timestamp :: binary() %%  <<"120827114305">>
 }).

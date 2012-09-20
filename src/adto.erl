@@ -1,3 +1,7 @@
+%% @doc Alley DTO interface module.
+%% Provides public methods to decode & encode messages.
+%% Routes calls by dto record name to suitable decoder module.
+
 -module(adto).
 
 -export([
@@ -6,6 +10,10 @@
 ]).
 
 -include("adto.hrl").
+
+%% ===================================================================
+%% API Functions
+%% ===================================================================
 
 -spec encode(message_type_dto()) ->
 	{ok, binary()} |
@@ -20,6 +28,10 @@ encode(Message) ->
 decode(Type, Message) ->
 	Module = module(Type),
 	Module:decode(Type, Message).
+
+%% ===================================================================
+%% Internal Functions
+%% ===================================================================
 
 %% Funnel entities
 module(#funnel_auth_request_dto{}) ->
@@ -51,11 +63,19 @@ module(#just_incoming_sms_dto{}) ->
 module(#just_delivery_receipt_dto{}) ->
 	just();
 
+%% k1api entities
+module(#k1api_sms_delivery_status_request_dto{}) ->
+	k1api();
+module(#k1api_sms_delivery_status_response_dto{}) ->
+	k1api();
+
+%% invoke error if type unsupported
 module(Type) ->
 	erlang:error({adto_unsupported_type, Type}).
 
-funnel() ->
-	adto_funnel.
 
-just() ->
-	adto_just.
+funnel() -> adto_funnel.
+
+just() -> adto_just.
+
+k1api() -> adto_k1api.

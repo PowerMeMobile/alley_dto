@@ -279,6 +279,46 @@
 }).
 
 %% ===================================================================
+%% k1api Sms Delivery Status Request
+%% ===================================================================
+
+-record(k1api_sms_delivery_status_request_dto, {
+	id :: binary(), %% uuid
+	customer_id :: binary(), %% uuid
+	user_id :: bitstring(),
+	sms_request_id :: binary(), %% uuid
+	address :: #addr_dto{}
+}).
+
+%% ===================================================================
+%% k1api Sms Delivery Status Response
+%% ===================================================================
+
+-type k1api_sms_status() :: submitted |
+							success_waiting_delivery |
+							success_no_delivery |
+							failure |
+							enroute |
+							delivered |
+							expired |
+							deleted |
+							undeliverable |
+							accepted |
+							unknown |
+							rejected |
+							unrecognized.
+
+-record(k1api_sms_status_dto, {
+	address :: #addr_dto{},
+	status :: k1api_sms_status()
+}).
+
+-record(k1api_sms_delivery_status_response_dto, {
+	id :: binary(), %% uuid
+	statuses :: [#k1api_sms_status_dto{}]
+}).
+
+%% ===================================================================
 %% Misc
 %% ===================================================================
 
@@ -297,7 +337,10 @@
 	#just_sms_request_dto{} |
 	#just_sms_response_dto{} |
 	#just_incoming_sms_dto{} |
-	#just_delivery_receipt_dto{}.
+	#just_delivery_receipt_dto{} |
+
+	#k1api_sms_delivery_status_request_dto{} |
+	#k1api_sms_delivery_status_response_dto{}.
 
 -endif. % adto_hrl
 

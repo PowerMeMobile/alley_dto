@@ -1,0 +1,41 @@
+
+message OneApiSmsDeliveryStatusReq {
+		required bytes id = 1;	   			// uuid <<12,42...
+		required bytes customer_id = 2;		// uuid <<12,42...
+		required bytes user_id = 3;    		// string, <<"user id">>
+		required bytes sms_request_id = 4;  // uuid <<12..
+		required k1apiAddr address = 5;
+}
+
+message OneApiSmsDeliveryStatusResp {
+		required bytes id = 1;					// uuid from request <<12...
+		repeated SmsStatus statuses = 2;
+}
+
+message SmsStatus {
+		required k1apiAddr address = 1;
+		required SmsStatuses status = 2;
+}
+
+enum SmsStatuses {
+	SUBMITTED = 1;					 // Kelly handled sms request
+	SUCCESS_WAITING_DELIVERY = 2; 	 // just sms response (success + registered_delivery true)
+	SUCCESS_NO_DELIVERY = 3;    	 // just sms response (success + registered_delivery false)
+	FAILURE	= 4;		  			 // just sms response
+    ENROUTE = 5;					 // just sms delivery receipt
+    DELIVERED = 6;					 // -//-
+	EXPIRED = 7;
+    DELETED = 8;
+	UNDELIVERABLE = 9;
+	ACCEPTED = 10;
+	UNKNOWN = 11;
+	REJECTED = 12;
+	UNRECOGNIZED = 13;
+}
+
+
+message k1apiAddr {
+    required bytes addr = 1;
+    required uint32 ton = 2;
+    required uint32 npi = 3;
+}

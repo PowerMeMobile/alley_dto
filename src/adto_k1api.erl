@@ -83,7 +83,6 @@ encode(DTO = #k1api_sms_delivery_status_response_dto{}) ->
 		id = ID,
 		statuses = sms_statuses_dto_to_pb(Statuses)
 	},
-	io:format("PB: ~p", [PB]),
 	Bin = k1api_pb:encode_oneapismsdeliverystatusresp(PB),
 	{ok, Bin};
 

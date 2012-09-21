@@ -8,3 +8,4 @@ src/JustAsn.asn1db
 src/JustAsn.erl
 erl_crash.dump
 include/k1api_pb.hrl
+.eunit/

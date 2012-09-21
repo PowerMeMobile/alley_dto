@@ -341,29 +341,6 @@ sms_statuses_to_asn(DTO = #just_sms_status_dto{}, ClientType) ->
 sms_statuses_to_asn(Statuses, ClientType) ->
 	[sms_statuses_to_asn(Status, ClientType) || Status <- Statuses].
 
-%% sms_statuses_to_dto(SmsStatus = #'SmStatus'{}) ->
-%% 	sms_statuses_to_dto(SmsStatus = #'SmsStatus'{}, a
-%% 	#'SmStatus'{
-%% 		originalId = OriginalID,
-%% 		destAddr = DestAddr,
-%% 		status = Status,
-%% 		partsTotal = PartsTotal,
-%% 		partIndex = PartIndex,
-%% 		messageId = MessageID,
-%% 		errorCode = ErrorCode
-%% 	} = SmsStatus,
-%% 	#just_sms_status_dto{
-%% 		original_id = list_to_binary(OriginalID),
-%% 		dest_addr = full_addr_to_dto(DestAddr),
-%% 		status = Status,
-%% 		parts_total = PartsTotal,
-%% 		part_index = from_optional_asn(PartIndex),
-%% 		message_id = from_optional_asn(MessageID, fun list_to_binary/1),
-%% 		error_code = from_optional_asn(ErrorCode)
-%% 	};
-%% sms_statuses_to_dto(Statuses) ->
-%% 	[sms_statuses_to_dto(Status) || Status <- Statuses].
-
 sms_statuses_to_dto(Statuses) ->
 	sms_statuses_to_dto(Statuses, [], funnel).
 sms_statuses_to_dto([], Acc, ClientType) ->

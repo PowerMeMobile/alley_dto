@@ -1,14 +1,33 @@
 -module(adto_funnel_tests).
 
 -include("adto.hrl").
--include("FunnelAsn.hrl").
 -include_lib("eunit/include/eunit.hrl").
+
+start_uuid() ->
+	ok = application:start(uuid).
+stop_uuid(_) ->
+	application:stop(uuid).
+
+funnel_dto_test_() ->
+	{setup,
+	fun start_uuid/0,
+	fun stop_uuid/1,
+	[?_test(funnel_auth_request()),
+	?_test(funnel_success_auth_response()),
+	?_test(funnel_error_auth_response()),
+	?_test(funnel_started_event()),
+	?_test(funnel_stopped_event()),
+	?_test(funnel_client_online_event()),
+	?_test(funnel_client_offline_event()),
+	?_test(funnel_incoming_sms()),
+	?_test(funnel_delivery_receipt()),
+	?_test(funnel_ack())]}.
 
 %% ===================================================================
 %% Funnel Auth Tests
 %% ===================================================================
 
-funnel_auth_request_test() ->
+funnel_auth_request() ->
 	DTO = #funnel_auth_request_dto{
 		connection_id = uuid:newid(),
 		ip = <<"127.0.0.1">>,
@@ -23,7 +42,8 @@ funnel_auth_request_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Bin).
 
-funnel_success_auth_response_test() ->
+
+funnel_success_auth_response() ->
 	Provider = #provider_dto{
 		id = uuid:newid(),
 		gateway = uuid:newid(),
@@ -59,7 +79,7 @@ funnel_success_auth_response_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_response_dto{}, Bin).
 
-funnel_error_auth_response_test() ->
+funnel_error_auth_response() ->
 	DTO = #funnel_auth_response_dto{
 		connection_id = uuid:newid(),
 		result = {error, "test error"}
@@ -71,21 +91,21 @@ funnel_error_auth_response_test() ->
 %% Funnel Events Test
 %% ===================================================================
 
-funnel_started_event_test() ->
+funnel_started_event() ->
 	DTO = #funnel_started_event_dto{
 		timestamp = <<"120827114232">>
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_started_event_dto{}, Bin).
 
-funnel_stopped_event_test() ->
+funnel_stopped_event() ->
 	DTO = #funnel_stopped_event_dto{
 		timestamp = <<"120827114232">>
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_stopped_event_dto{}, Bin).
 
-funnel_client_online_event_test() ->
+funnel_client_online_event() ->
 	DTO = #funnel_client_online_event_dto{
 		connection_id = uuid:newid(),
 		customer_id = <<"system_id">>,
@@ -97,7 +117,7 @@ funnel_client_online_event_test() ->
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_client_online_event_dto{}, Bin).
 
-funnel_client_offline_event_test() ->
+funnel_client_offline_event() ->
 	DTO = #funnel_client_offline_event_dto{
 		connection_id = uuid:newid(),
 		customer_id = <<"system_id">>,
@@ -117,7 +137,7 @@ funnel_client_offline_event_test() ->
 %% Funnel Incoming Sms Test
 %% ===================================================================
 
-funnel_incoming_sms_test() ->
+funnel_incoming_sms() ->
 	MessageDTO = #funnel_incoming_sms_message_dto{
 		source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
 		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
@@ -135,7 +155,7 @@ funnel_incoming_sms_test() ->
 %% Funnel Delivery Receipt Test
 %% ===================================================================
 
-funnel_delivery_receipt_test() ->
+funnel_delivery_receipt() ->
 	ReceiptDTO = #funnel_delivery_receipt_container_dto{
 		message_id = <<"614">>,
 		submit_date = <<"20827114232">>,
@@ -155,7 +175,7 @@ funnel_delivery_receipt_test() ->
 %% Funnel Ack Test
 %% ===================================================================
 
-funnel_ack_test() ->
+funnel_ack() ->
 	DTO = #funnel_ack_dto{
 		id = uuid:newid()
 	},

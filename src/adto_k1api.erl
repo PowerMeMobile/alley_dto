@@ -16,8 +16,8 @@
 	{ok, message_type_dto()} |
 	{error, Reason :: any()}.
 decode(#k1api_sms_delivery_status_request_dto{}, Bin) ->
-	PB = k1api_pb:decode_oneapismsdeliverystatusreq(Bin),
-	#oneapismsdeliverystatusreq{
+	PB = k1api_pb:decode_smsdeliverystatusreq(Bin),
+	#smsdeliverystatusreq{
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
@@ -34,14 +34,58 @@ decode(#k1api_sms_delivery_status_request_dto{}, Bin) ->
 	{ok, DTO};
 
 decode(#k1api_sms_delivery_status_response_dto{}, Bin) ->
-	PB = k1api_pb:decode_oneapismsdeliverystatusresp(Bin),
-	#oneapismsdeliverystatusresp{
+	PB = k1api_pb:decode_smsdeliverystatusresp(Bin),
+	#smsdeliverystatusresp{
 		id = ID,
 		statuses = Statuses
 	} = PB,
 	DTO = #k1api_sms_delivery_status_response_dto{
 		id = ID,
 		statuses = sms_statuses_pb_to_dto(Statuses)
+	},
+	{ok, DTO};
+
+decode(#k1api_retrieve_sms_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_retrievesmsreq(Bin),
+	#retrievesmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		address = Address,
+		batch_size = BatchSize
+	} = PB,
+	DTO = #k1api_retrieve_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		address = addr_pb_to_dto(Address),
+		batch_size = BatchSize
+	},
+	{ok, DTO};
+
+decode(#k1api_retrieve_sms_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_retrievesmsresp(Bin),
+	#retrievesmsresp{
+		id = ID,
+		messages = RetrievedMessagesPB,
+		total = TotalMessages
+	} = PB,
+	DTO = #k1api_retrieve_sms_response_dto{
+		id = ID,
+		messages = retrieved_messages_to_dto(RetrievedMessagesPB),
+		total = TotalMessages
+	},
+	{ok, DTO};
+
+decode(#k1api_remove_retrieved_sms_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_removeretrievedmessages(Bin),
+	#removeretrievedmessages{
+		id = ID,
+		message_ids = MessageIDs
+	} = PB,
+	DTO = #k1api_remove_retrieved_sms_request_dto{
+		id = ID,
+		message_ids = MessageIDs
 	},
 	{ok, DTO};
 
@@ -64,14 +108,14 @@ encode(DTO = #k1api_sms_delivery_status_request_dto{}) ->
 		sms_request_id = RequestID,
 		address = Addr
 	} = DTO,
-	PB = #oneapismsdeliverystatusreq{
+	PB = #smsdeliverystatusreq{
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
 		sms_request_id = RequestID,
 		address = addr_dto_to_pb(Addr)
 	},
-	Bin = k1api_pb:encode_oneapismsdeliverystatusreq(PB),
+	Bin = k1api_pb:encode_smsdeliverystatusreq(PB),
 	{ok, Bin};
 
 encode(DTO = #k1api_sms_delivery_status_response_dto{}) ->
@@ -79,11 +123,55 @@ encode(DTO = #k1api_sms_delivery_status_response_dto{}) ->
 		id = ID,
 		statuses = Statuses
 	} = DTO,
-	PB = #oneapismsdeliverystatusresp{
+	PB = #smsdeliverystatusresp{
 		id = ID,
 		statuses = sms_statuses_dto_to_pb(Statuses)
 	},
-	Bin = k1api_pb:encode_oneapismsdeliverystatusresp(PB),
+	Bin = k1api_pb:encode_smsdeliverystatusresp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_retrieve_sms_request_dto{}) ->
+	#k1api_retrieve_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		address = Address,
+		batch_size = BatchSize
+	} = DTO,
+	PB = #retrievesmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		address = addr_dto_to_pb(Address),
+		batch_size = BatchSize
+	},
+	Bin = k1api_pb:encode_retrievesmsreq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_retrieve_sms_response_dto{}) ->
+	#k1api_retrieve_sms_response_dto{
+		id = ID,
+		messages = RetrievedMessagesDTO,
+		total = TotalMessages
+	} = DTO,
+	PB = #retrievesmsresp{
+		id = ID,
+		messages = retrieved_messages_to_pb(RetrievedMessagesDTO),
+		total = TotalMessages
+	},
+	Bin = k1api_pb:encode_retrievesmsresp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_remove_retrieved_sms_request_dto{}) ->
+	#k1api_remove_retrieved_sms_request_dto{
+		id = ID,
+		message_ids = MessageIDs
+	} = DTO,
+	PB = #removeretrievedmessages{
+		id = ID,
+		message_ids = MessageIDs
+	},
+	Bin = k1api_pb:encode_removeretrievedmessages(PB),
 	{ok, Bin};
 
 encode(Message) ->
@@ -100,14 +188,14 @@ addr_dto_to_pb(AddrDTO) ->
 		ton = TON,
 		npi = NPI
 	} = AddrDTO,
-	#k1apiaddr{
+	#fulladdr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
 	}.
 
 addr_pb_to_dto(AddrPB) ->
-	#k1apiaddr{
+	#fulladdr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
@@ -171,3 +259,35 @@ status_name_pb_to_dto('UNKNOWN') -> 					unknown;
 status_name_pb_to_dto('REJECTED') -> 					rejected;
 status_name_pb_to_dto('UNRECOGNIZED') -> 				unrecognized.
 
+
+retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->
+	#k1api_retrieved_sms_dto{
+		datetime = DateTime,
+		dest_addr = DestAddr,
+		message_id = MessageID,
+		message = Message
+	} = DTO,
+	#retrievedmessage{
+		datetime = DateTime,
+		dest_addr = addr_dto_to_pb(DestAddr),
+		message_id = MessageID,
+		message = Message
+	};
+retrieved_messages_to_pb(MessagesDTO) ->
+	[retrieved_messages_to_pb(DTO) || DTO <- MessagesDTO].
+
+retrieved_messages_to_dto(PB = #retrievedmessage{}) ->
+	#retrievedmessage{
+		datetime = DateTime,
+		dest_addr = DestAddr,
+		message_id = MessageID,
+		message = Message
+	} = PB,
+	#k1api_retrieved_sms_dto{
+		datetime = DateTime,
+		dest_addr = addr_pb_to_dto(DestAddr),
+		message_id = MessageID,
+		message = Message
+	};
+retrieved_messages_to_dto(MessagesPB) ->
+	[retrieved_messages_to_dto(PB) || PB <- MessagesPB].

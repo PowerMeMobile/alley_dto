@@ -1,6 +1,6 @@
 %% @doc Alley DTO interface module.
 %% Provides public methods to decode & encode messages.
-%% Routes calls by dto record name to suitable decoder module.
+%% Routes calls by dto record name to suitable dto codec module.
 
 -module(adto).
 
@@ -33,7 +33,7 @@ decode(Type, Message) ->
 %% Internal Functions
 %% ===================================================================
 
-%% Funnel entities
+%% Funnel dto
 module(#funnel_auth_request_dto{}) ->
 	funnel();
 module(#funnel_auth_response_dto{}) ->
@@ -53,7 +53,7 @@ module(#funnel_delivery_receipt_dto{}) ->
 module(#funnel_ack_dto{}) ->
 	funnel();
 
-%% Just entities
+%% Just dto
 module(#just_sms_request_dto{}) ->
 	just();
 module(#just_sms_response_dto{}) ->
@@ -63,19 +63,22 @@ module(#just_incoming_sms_dto{}) ->
 module(#just_delivery_receipt_dto{}) ->
 	just();
 
-%% k1api entities
+%% k1api dto
 module(#k1api_sms_delivery_status_request_dto{}) ->
 	k1api();
 module(#k1api_sms_delivery_status_response_dto{}) ->
 	k1api();
+module(#k1api_retrieve_sms_request_dto{}) ->
+	k1api();
+module(#k1api_retrieve_sms_response_dto{}) ->
+	k1api();
+module(#k1api_remove_retrieved_sms_request_dto{}) ->
+	k1api();
 
-%% invoke error if type unsupported
 module(Type) ->
 	erlang:error({adto_unsupported_type, Type}).
 
-
+%% codec modules
 funnel() -> adto_funnel.
-
 just() -> adto_just.
-
 k1api() -> adto_k1api.

@@ -319,6 +319,44 @@
 }).
 
 %% ===================================================================
+%% k1api Retrieve Sms Request
+%% ===================================================================
+
+-record(k1api_retrieve_sms_request_dto, {
+	id :: binary(), %% uuid <<12,34..
+	customer_id :: binary(), %% uuid <<12,34...
+	user_id :: bitstring(), %% <<"user_id">>
+	address :: #addr_dto{},
+	batch_size :: undefined | integer()
+}).
+
+%% ===================================================================
+%% k1api Retrieve Sms Response
+%% ===================================================================
+
+-record(k1api_retrieved_sms_dto, {
+	datetime :: bitstring(), %% ???
+	dest_addr :: #addr_dto{},
+	message_id :: bitstring(), %% <<"123">>
+	message :: bitstring() %% <<"message">>
+}).
+
+-record(k1api_retrieve_sms_response_dto, {
+	id :: binary(), %% uuid <<12,34...
+	messages :: [#k1api_retrieved_sms_dto{}],
+	total :: integer()
+}).
+
+%% ===================================================================
+%% k1api Remove Retrieved Sms Request
+%% ===================================================================
+
+-record(k1api_remove_retrieved_sms_request_dto, {
+	id :: binary(), %% uuid <<12,34..
+	message_ids :: [bitstring()] %% [<<"123">>]
+}).
+
+%% ===================================================================
 %% Misc
 %% ===================================================================
 
@@ -340,7 +378,10 @@
 	#just_delivery_receipt_dto{} |
 
 	#k1api_sms_delivery_status_request_dto{} |
-	#k1api_sms_delivery_status_response_dto{}.
+	#k1api_sms_delivery_status_response_dto{} |
+	#k1api_retrieve_sms_request_dto{} |
+	#k1api_retrieve_sms_response_dto{} |
+	#k1api_remove_retrieved_sms_request_dto{}.
 
 -endif. % adto_hrl
 

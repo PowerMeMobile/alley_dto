@@ -1,19 +1,50 @@
 
-message OneApiSmsDeliveryStatusReq {
+// Query delivery status
+message SmsDeliveryStatusReq {
 		required bytes id = 1;	   			// uuid <<12,42...
 		required bytes customer_id = 2;		// uuid <<12,42...
 		required bytes user_id = 3;    		// string, <<"user id">>
 		required bytes sms_request_id = 4;  // uuid <<12..
-		required k1apiAddr address = 5;
+		required FullAddr address = 5;
 }
 
-message OneApiSmsDeliveryStatusResp {
+message SmsDeliveryStatusResp {
 		required bytes id = 1;					// uuid from request <<12...
 		repeated SmsStatus statuses = 2;
 }
 
+// Retrieve sms messages
+
+message RetrieveSmsReq {
+	   required bytes id = 1;
+	   required bytes customer_id = 2;
+	   required bytes user_id = 3;
+	   required FullAddr address = 4;			// customer destination address
+	   optional uint32 batch_size = 5;
+}
+
+message RetrieveSmsResp {
+		required bytes id = 1;
+		repeated RetrievedMessage messages = 2;
+		required uint32 total = 3; 			// total number of pending messages
+}
+
+message RetrievedMessage {
+		required bytes datetime = 1;
+		required FullAddr dest_addr = 2;
+		required bytes message_id = 3;
+		required bytes message = 4;
+}
+
+message RemoveRetrievedMessages {
+		required bytes id = 1;
+		repeated bytes message_ids = 2;
+}
+
+// Misc ---------------------
+
 message SmsStatus {
-		required k1apiAddr address = 1;
+		required FullAddr address = 1;
 		required SmsStatuses status = 2;
 }
 
@@ -34,7 +65,7 @@ enum SmsStatuses {
 }
 
 
-message k1apiAddr {
+message FullAddr {
     required bytes addr = 1;
     required uint32 ton = 2;
     required uint32 npi = 3;

@@ -19,7 +19,7 @@ message RetrieveSmsReq {
 	   required bytes id = 1;
 	   required bytes customer_id = 2;
 	   required bytes user_id = 3;
-	   required FullAddr address = 4;			// customer destination address
+	   required FullAddr dest_addr = 4;			// customer destination address
 	   optional uint32 batch_size = 5;
 }
 
@@ -30,8 +30,8 @@ message RetrieveSmsResp {
 }
 
 message RetrievedMessage {
-		required bytes datetime = 1;
-		required FullAddr dest_addr = 2;
+		required uint32 datetime = 1;		// utc unix epoch seconds
+		required FullAddr sender_addr = 2;
 		required bytes message_id = 3;
 		required bytes message = 4;
 }

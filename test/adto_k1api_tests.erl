@@ -77,7 +77,7 @@ retrieve_sms_request() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
-		address = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		dest_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = 5
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -89,7 +89,7 @@ retrieve_sms_request2() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
-		address = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		dest_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = undefined
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -102,8 +102,8 @@ retrieve_sms_request2() ->
 
 retrieve_sms_response() ->
 	MessageDTO = #k1api_retrieved_sms_dto{
-		datetime = <<"2009-11-19T12:00:00">>,
-		dest_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		datetime = 1348574534,
+		sender_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>
 	},

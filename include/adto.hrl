@@ -326,7 +326,7 @@
 	id :: binary(), %% uuid <<12,34..
 	customer_id :: binary(), %% uuid <<12,34...
 	user_id :: bitstring(), %% <<"user_id">>
-	address :: #addr_dto{},
+	dest_addr :: #addr_dto{},
 	batch_size :: undefined | integer()
 }).
 
@@ -336,7 +336,7 @@
 
 -record(k1api_retrieved_sms_dto, {
 	datetime :: bitstring(), %% ???
-	dest_addr :: #addr_dto{},
+	sender_addr :: #addr_dto{},
 	message_id :: bitstring(), %% <<"123">>
 	message :: bitstring() %% <<"message">>
 }).

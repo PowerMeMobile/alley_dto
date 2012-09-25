@@ -51,14 +51,14 @@ decode(#k1api_retrieve_sms_request_dto{}, Bin) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		address = Address,
+		dest_addr = Address,
 		batch_size = BatchSize
 	} = PB,
 	DTO = #k1api_retrieve_sms_request_dto{
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		address = addr_pb_to_dto(Address),
+		dest_addr = addr_pb_to_dto(Address),
 		batch_size = BatchSize
 	},
 	{ok, DTO};
@@ -135,14 +135,14 @@ encode(DTO = #k1api_retrieve_sms_request_dto{}) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		address = Address,
+		dest_addr = Address,
 		batch_size = BatchSize
 	} = DTO,
 	PB = #retrievesmsreq{
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		address = addr_dto_to_pb(Address),
+		dest_addr = addr_dto_to_pb(Address),
 		batch_size = BatchSize
 	},
 	Bin = k1api_pb:encode_retrievesmsreq(PB),
@@ -263,13 +263,13 @@ status_name_pb_to_dto('UNRECOGNIZED') -> 				unrecognized.
 retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->
 	#k1api_retrieved_sms_dto{
 		datetime = DateTime,
-		dest_addr = DestAddr,
+		sender_addr = DestAddr,
 		message_id = MessageID,
 		message = Message
 	} = DTO,
 	#retrievedmessage{
 		datetime = DateTime,
-		dest_addr = addr_dto_to_pb(DestAddr),
+		sender_addr = addr_dto_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message
 	};
@@ -279,13 +279,13 @@ retrieved_messages_to_pb(MessagesDTO) ->
 retrieved_messages_to_dto(PB = #retrievedmessage{}) ->
 	#retrievedmessage{
 		datetime = DateTime,
-		dest_addr = DestAddr,
+		sender_addr = DestAddr,
 		message_id = MessageID,
 		message = Message
 	} = PB,
 	#k1api_retrieved_sms_dto{
 		datetime = DateTime,
-		dest_addr = addr_pb_to_dto(DestAddr),
+		sender_addr = addr_pb_to_dto(DestAddr),
 		message_id = MessageID,
 		message = Message
 	};

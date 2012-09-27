@@ -1,44 +1,83 @@
 
 // Query delivery status
 message SmsDeliveryStatusReq {
-		required bytes id = 1;	   			// uuid <<12,42...
-		required bytes customer_id = 2;		// uuid <<12,42...
-		required bytes user_id = 3;    		// string, <<"user id">>
-		required bytes sms_request_id = 4;  // uuid <<12..
-		required FullAddr address = 5;
+	required bytes id = 1;	   			// uuid <<12,42...
+	required bytes customer_id = 2;		// uuid <<12,42...
+	required bytes user_id = 3;    		// string, <<"user id">>
+	required bytes sms_request_id = 4;  // uuid <<12..
+	required FullAddr address = 5;
 }
 
 message SmsDeliveryStatusResp {
-		required bytes id = 1;					// uuid from request <<12...
-		repeated SmsStatus statuses = 2;
+	required bytes id = 1;					// uuid from request <<12...
+	repeated SmsStatus statuses = 2;
 }
 
 // Retrieve sms messages
 
 message RetrieveSmsReq {
-	   required bytes id = 1;
-	   required bytes customer_id = 2;
-	   required bytes user_id = 3;
-	   required FullAddr dest_addr = 4;			// customer destination address
-	   optional uint32 batch_size = 5;
+   required bytes id = 1;
+   required bytes customer_id = 2;
+   required bytes user_id = 3;
+   required FullAddr dest_addr = 4;			// customer destination address
+   optional uint32 batch_size = 5;
 }
 
 message RetrieveSmsResp {
-		required bytes id = 1;
-		repeated RetrievedMessage messages = 2;
-		required uint32 total = 3; 			// total number of pending messages
+	required bytes id = 1;
+	repeated RetrievedMessage messages = 2;
+	required uint32 total = 3; 			// total number of pending messages
 }
 
 message RetrievedMessage {
-		required uint32 datetime = 1;		// utc unix epoch seconds
-		required FullAddr sender_addr = 2;
-		required bytes message_id = 3;
-		required bytes message = 4;
+	required uint32 datetime = 1;		// utc unix epoch seconds
+	required FullAddr sender_addr = 2;
+	required bytes message_id = 3;
+	required bytes message = 4;
 }
 
 message RemoveRetrievedMessages {
-		required bytes id = 1;
-		repeated bytes message_ids = 2;
+	required bytes id = 1;
+	repeated bytes message_ids = 2;
+}
+
+// Incoming Sms Notifications
+
+message SubscribeIncomingSmsReq {
+	required bytes id = 1;
+	required bytes customer_id = 2;
+	required bytes user_id = 3;
+	required FullAddr dest_addr = 4;
+	required bytes notify_url = 5;
+	optional bytes criteria = 6;
+	optional bytes notification_format = 7;
+	optional bytes correlator = 8;
+	optional bytes callback_data = 9;
+}
+
+message SubscribeIncomingSmsResp {
+	required bytes id = 1;
+	required bytes subscription_id = 2;
+}
+
+message UnsubscribeIncomingSmsReq {
+	required bytes id = 1;
+	required bytes customer_id = 2;
+	required bytes user_id = 3;
+	required bytes subscription_id = 4;
+}
+
+message UnsubscribeIncomingSmsResp {
+	required bytes id = 1;
+}
+
+message SmsNotificationReq {
+	required bytes callback_data = 1;
+	required uint32 datetime = 2;
+	required FullAddr dest_addr = 3;
+	required bytes message_id = 4;
+	required bytes message = 5;
+	required FullAddr sender_addr = 6;
 }
 
 // Misc ---------------------

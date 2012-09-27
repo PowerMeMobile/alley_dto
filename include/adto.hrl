@@ -335,7 +335,7 @@
 %% ===================================================================
 
 -record(k1api_retrieved_sms_dto, {
-	datetime :: bitstring(), %% ???
+	datetime :: integer(), %% unix epoch seconds
 	sender_addr :: #addr_dto{},
 	message_id :: bitstring(), %% <<"123">>
 	message :: bitstring() %% <<"message">>
@@ -354,6 +354,55 @@
 -record(k1api_remove_retrieved_sms_request_dto, {
 	id :: binary(), %% uuid <<12,34..
 	message_ids :: [bitstring()] %% [<<"123">>]
+}).
+
+%% ===================================================================
+%% k1api Subscribe Incoming Sms
+%% ===================================================================
+
+-record(k1api_subscribe_incoming_sms_request_dto, {
+	id :: binary(), %% uuid <<12,34...
+	customer_id :: binary(), %% uuid <<12,34...
+	user_id :: bitstring(),
+	dest_addr :: #addr_dto{},
+	notify_url :: bitstring(),
+	criteria :: undefined | bitstring(),
+	notification_format :: undefined | bitstring(), %% <<"json">>
+	correlator :: undefined | bitstring(),
+	callback_data :: undefined | bitstring()
+}).
+
+-record(k1api_subscribe_incoming_sms_response_dto, {
+	id :: binary(), %% uuid <<12,34..
+	subscription_id :: binary() %% uuid <<12,23...
+}).
+
+%% ===================================================================
+%% k1api Unsubscribe Incoming Sms
+%% ===================================================================
+
+-record(k1api_unsubscribe_incoming_sms_request_dto, {
+	id :: binary(), %% uuid <<12,34...
+	customer_id :: binary(), %% uuid <<12,34...
+	user_id :: bitstring(),
+	subscription_id :: binary() %% uuid <<12,34...
+}).
+
+-record(k1api_unsubscribe_incoming_sms_response_dto, {
+	id :: binary() %% uuid <<12,34...
+}).
+
+%% ===================================================================
+%% k1api Incoming Sms Notification
+%% ===================================================================
+
+-record(k1api_sms_notification_request_dto, {
+	callback_data :: bitstring(),
+	datetime :: integer(), %% unix epoch seconds
+	dest_addr :: #addr_dto{},
+	message_id :: bitstring(),
+	message :: bitstring(),
+	sender_addr :: #addr_dto{}
 }).
 
 %% ===================================================================
@@ -381,8 +430,14 @@
 	#k1api_sms_delivery_status_response_dto{} |
 	#k1api_retrieve_sms_request_dto{} |
 	#k1api_retrieve_sms_response_dto{} |
-	#k1api_remove_retrieved_sms_request_dto{}.
+	#k1api_remove_retrieved_sms_request_dto{} |
+	#k1api_subscribe_incoming_sms_request_dto{} |
+	#k1api_subscribe_incoming_sms_response_dto{} |
+	#k1api_unsubscribe_incoming_sms_request_dto{} |
+	#k1api_unsubscribe_incoming_sms_response_dto{} |
+	#k1api_sms_notification_request_dto{}.
 
 -endif. % adto_hrl
+
 
 

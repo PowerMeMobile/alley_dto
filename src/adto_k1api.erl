@@ -89,6 +89,90 @@ decode(#k1api_remove_retrieved_sms_request_dto{}, Bin) ->
 	},
 	{ok, DTO};
 
+decode(#k1api_subscribe_incoming_sms_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_subscribeincomingsmsreq(Bin),
+	#subscribeincomingsmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = DestAddr,
+		notify_url = NotifyURL,
+		criteria = Criteria,
+		notification_format = Format,
+		correlator = Correlator,
+		callback_data = Callback
+	} = PB,
+	DTO = #k1api_subscribe_incoming_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = addr_pb_to_dto(DestAddr),
+		notify_url = NotifyURL,
+		criteria = Criteria,
+		notification_format = Format,
+		correlator = Correlator,
+		callback_data = Callback
+	},
+	{ok, DTO};
+
+decode(#k1api_subscribe_incoming_sms_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_subscribeincomingsmsresp(Bin),
+	#subscribeincomingsmsresp{
+		id = ID,
+		subscription_id = SubscriptionID
+	} = PB,
+	DTO = #k1api_subscribe_incoming_sms_response_dto{
+		id = ID,
+		subscription_id = SubscriptionID
+	},
+	{ok, DTO};
+
+decode(#k1api_unsubscribe_incoming_sms_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_unsubscribeincomingsmsreq(Bin),
+	#unsubscribeincomingsmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
+	} = PB,
+	DTO = #k1api_unsubscribe_incoming_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
+	},
+	{ok, DTO};
+
+decode(#k1api_unsubscribe_incoming_sms_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_unsubscribeincomingsmsresp(Bin),
+	#unsubscribeincomingsmsresp{
+		id = ID
+	} = PB,
+	DTO = #k1api_unsubscribe_incoming_sms_response_dto{
+		id = ID
+	},
+	{ok, DTO};
+
+decode(#k1api_sms_notification_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsnotificationreq(Bin),
+	#smsnotificationreq{
+		callback_data = Callback,
+		datetime = DateTime,
+		dest_addr = DestAddr,
+		message_id = MessageID,
+		message = Message,
+		sender_addr = SenderAddr
+	} = PB,
+	DTO = #k1api_sms_notification_request_dto{
+		callback_data = Callback,
+		datetime = DateTime,
+		dest_addr = addr_pb_to_dto(DestAddr),
+		message_id = MessageID,
+		message = Message,
+		sender_addr = addr_pb_to_dto(SenderAddr)
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({k1api_decode_not_supported, Type}).
 
@@ -172,6 +256,90 @@ encode(DTO = #k1api_remove_retrieved_sms_request_dto{}) ->
 		message_ids = MessageIDs
 	},
 	Bin = k1api_pb:encode_removeretrievedmessages(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_subscribe_incoming_sms_request_dto{}) ->
+	#k1api_subscribe_incoming_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = DestAddr,
+		notify_url = NotifyURL,
+		criteria = Criteria,
+		notification_format = Format,
+		correlator = Correlator,
+		callback_data = Callback
+	} = DTO,
+	PB = #subscribeincomingsmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = addr_dto_to_pb(DestAddr),
+		notify_url = NotifyURL,
+		criteria = Criteria,
+		notification_format = Format,
+		correlator = Correlator,
+		callback_data = Callback
+	},
+	Bin = k1api_pb:encode_subscribeincomingsmsreq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_subscribe_incoming_sms_response_dto{}) ->
+	#k1api_subscribe_incoming_sms_response_dto{
+		id = ID,
+		subscription_id = SubscriptionID
+	} = DTO,
+	PB = #subscribeincomingsmsresp{
+		id = ID,
+		subscription_id = SubscriptionID
+	},
+	Bin = k1api_pb:encode_subscribeincomingsmsresp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_unsubscribe_incoming_sms_request_dto{}) ->
+	#k1api_unsubscribe_incoming_sms_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
+	} = DTO,
+	PB = #unsubscribeincomingsmsreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
+	},
+	Bin = k1api_pb:encode_unsubscribeincomingsmsreq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_unsubscribe_incoming_sms_response_dto{}) ->
+	#k1api_unsubscribe_incoming_sms_response_dto{
+		id = ID
+	} = DTO,
+	PB = #unsubscribeincomingsmsresp{
+		id = ID
+	},
+	Bin = k1api_pb:encode_unsubscribeincomingsmsresp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_sms_notification_request_dto{}) ->
+	#k1api_sms_notification_request_dto{
+		callback_data = Callback,
+		datetime = DateTime,
+		dest_addr = DestAddr,
+		message_id = MessageID,
+		message = Message,
+		sender_addr = SenderAddr
+	} = DTO,
+	PB = #smsnotificationreq{
+		callback_data = Callback,
+		datetime = DateTime,
+		dest_addr = addr_dto_to_pb(DestAddr),
+		message_id = MessageID,
+		message = Message,
+		sender_addr = addr_dto_to_pb(SenderAddr)
+	},
+	Bin = k1api_pb:encode_smsnotificationreq(PB),
 	{ok, Bin};
 
 encode(Message) ->

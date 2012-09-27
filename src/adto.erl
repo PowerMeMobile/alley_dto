@@ -74,6 +74,16 @@ module(#k1api_retrieve_sms_response_dto{}) ->
 	k1api();
 module(#k1api_remove_retrieved_sms_request_dto{}) ->
 	k1api();
+module(#k1api_subscribe_incoming_sms_request_dto{}) ->
+	k1api();
+module(#k1api_subscribe_incoming_sms_response_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_incoming_sms_request_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_incoming_sms_response_dto{}) ->
+	k1api();
+module(#k1api_sms_notification_request_dto{}) ->
+	k1api();
 
 module(Type) ->
 	erlang:error({adto_unsupported_type, Type}).

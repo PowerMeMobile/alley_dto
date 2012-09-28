@@ -161,7 +161,8 @@ decode(#k1api_sms_notification_request_dto{}, Bin) ->
 		dest_addr = DestAddr,
 		message_id = MessageID,
 		message = Message,
-		sender_addr = SenderAddr
+		sender_addr = SenderAddr,
+		notify_url = NotifyURL
 	} = PB,
 	DTO = #k1api_sms_notification_request_dto{
 		callback_data = Callback,
@@ -169,7 +170,8 @@ decode(#k1api_sms_notification_request_dto{}, Bin) ->
 		dest_addr = addr_pb_to_dto(DestAddr),
 		message_id = MessageID,
 		message = Message,
-		sender_addr = addr_pb_to_dto(SenderAddr)
+		sender_addr = addr_pb_to_dto(SenderAddr),
+		notify_url = NotifyURL
 	},
 	{ok, DTO};
 
@@ -329,7 +331,8 @@ encode(DTO = #k1api_sms_notification_request_dto{}) ->
 		dest_addr = DestAddr,
 		message_id = MessageID,
 		message = Message,
-		sender_addr = SenderAddr
+		sender_addr = SenderAddr,
+		notify_url = NotifyURL
 	} = DTO,
 	PB = #smsnotificationreq{
 		callback_data = Callback,
@@ -337,7 +340,8 @@ encode(DTO = #k1api_sms_notification_request_dto{}) ->
 		dest_addr = addr_dto_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message,
-		sender_addr = addr_dto_to_pb(SenderAddr)
+		sender_addr = addr_dto_to_pb(SenderAddr),
+		notify_url = NotifyURL
 	},
 	Bin = k1api_pb:encode_smsnotificationreq(PB),
 	{ok, Bin};

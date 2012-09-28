@@ -186,7 +186,8 @@ incoming_sms_request() ->
 		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>,
-		sender_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1}
+		sender_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		notify_url  = <<"notify_url">>
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_sms_notification_request_dto{}, Bin).

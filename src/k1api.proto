@@ -78,6 +78,7 @@ message SmsNotificationReq {
 	required bytes message_id = 4;
 	required bytes message = 5;
 	required FullAddr sender_addr = 6;
+	required bytes notify_url = 7;
 }
 
 // Misc ---------------------

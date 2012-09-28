@@ -402,7 +402,8 @@
 	dest_addr :: #addr_dto{},
 	message_id :: bitstring(),
 	message :: bitstring(),
-	sender_addr :: #addr_dto{}
+	sender_addr :: #addr_dto{},
+	notify_url :: bitstring()
 }).
 
 %% ===================================================================

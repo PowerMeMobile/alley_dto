@@ -1,3 +1,42 @@
+// k1api
+
+// Auth
+message AuthReq {
+	required bytes id = 1;				// request uuid <<12,34...
+	required bytes customer_id = 2;		// customer system id <<"system-id">>
+	required bytes user_id = 3;	 		// <<"user">>
+	required bytes password = 4;		// <<"password">>
+}
+
+message Provider {
+	required bytes id = 1;				// request uuid <<12,34...
+	required bytes gateway = 2;			// gateway uuid <<12,34..
+	required bytes bulk_gateway = 3;	// --||--
+	required bool receipts_supported = 4;
+}
+
+message Network {
+	required bytes id = 1;				// request uuid <<12,34...
+	required bytes country_code = 2;	// <<"375">>
+	required uint32 numbers_len = 3;
+	repeated bytes prefixes = 4;		// <<"29">>
+	required bytes provider_id = 5;		// provider uuid <<12,34...
+}
+
+message AuthResp {
+	required bytes id = 1;					// request uuid <<12,34...
+	required bytes system_id = 2;			// <<"system-id">>
+	required bytes uuid = 3;   				// customer uuid
+	repeated FullAddr allowed_sources = 4;
+	optional FullAddr default_source = 5;
+	repeated Network networks = 6;
+	repeated Provider providers = 7;
+	optional bytes default_provider_id = 8;	// provider uuid
+	required bool receipts_allowed = 9;
+	required bool no_retry = 10;
+	required uint32 default_validity = 11;	// seconds
+	required uint32 max_validity = 12; 		// seconds
+}
 
 // Query delivery status
 message SmsDeliveryStatusReq {

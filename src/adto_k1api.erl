@@ -175,6 +175,54 @@ decode(#k1api_sms_notification_request_dto{}, Bin) ->
 	},
 	{ok, DTO};
 
+decode(#k1api_auth_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_authreq(Bin),
+	#authreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		password = Password
+	} = PB,
+	DTO = #k1api_auth_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		password = Password
+	},
+	{ok, DTO};
+
+decode(#k1api_auth_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_authresp(Bin),
+	 #authresp{
+		id = ID,
+		system_id = SystemID,
+		uuid = UUID,
+		allowed_sources = AllowedSources,
+		default_source = DefaultSource,
+		networks = Networks,
+		providers = Providers,
+		default_provider_id = DefProviderID,
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = DefValidity,
+		max_validity = MaxValidity
+	} = PB,
+	DTO = #k1api_auth_response_dto{
+		id = ID,
+		system_id = SystemID,
+		uuid = UUID,
+		allowed_sources = addr_pb_to_dto(AllowedSources),
+		default_source = addr_pb_to_dto(DefaultSource),
+		networks = network_pb_to_dto(Networks),
+		providers = provider_pb_to_dto(Providers),
+		default_provider_id = DefProviderID,
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = DefValidity,
+		max_validity = MaxValidity
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({k1api_decode_not_supported, Type}).
 
@@ -346,6 +394,54 @@ encode(DTO = #k1api_sms_notification_request_dto{}) ->
 	Bin = k1api_pb:encode_smsnotificationreq(PB),
 	{ok, Bin};
 
+encode(DTO = #k1api_auth_request_dto{}) ->
+	#k1api_auth_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		password = Password
+	} = DTO,
+	PB = #authreq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		password = Password
+	},
+	Bin = k1api_pb:encode_authreq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_auth_response_dto{}) ->
+	#k1api_auth_response_dto{
+		id = ID,
+		system_id = SystemID,
+		uuid = UUID,
+		allowed_sources = AllowedSources,
+		default_source = DefaultSource,
+		networks = Networks,
+		providers = Providers,
+		default_provider_id = DefProviderID,
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = DefValidity,
+		max_validity = MaxValidity
+	} = DTO,
+	PB = #authresp{
+		id = ID,
+		system_id = SystemID,
+		uuid = UUID,
+		allowed_sources = addr_dto_to_pb(AllowedSources),
+		default_source = addr_dto_to_pb(DefaultSource),
+		networks = network_dto_to_pb(Networks),
+		providers = provider_dto_to_pb(Providers),
+		default_provider_id = DefProviderID,
+		receipts_allowed = ReceiptsAllowed,
+		no_retry = NoRetry,
+		default_validity = DefValidity,
+		max_validity = MaxValidity
+	},
+	Bin = k1api_pb:encode_authresp(PB),
+	{ok, Bin};
+
 encode(Message) ->
 	erlang:error({k1api_encode_not_supported, Message}).
 
@@ -354,7 +450,9 @@ encode(Message) ->
 %% Internal
 %% ===================================================================
 
-addr_dto_to_pb(AddrDTO) ->
+addr_dto_to_pb(undefined) ->
+	undefined;
+addr_dto_to_pb(AddrDTO = #addr_dto{}) ->
 	#addr_dto{
 		addr = Addr,
 		ton = TON,
@@ -364,9 +462,13 @@ addr_dto_to_pb(AddrDTO) ->
 		addr = Addr,
 		ton = TON,
 		npi = NPI
-	}.
+	};
+addr_dto_to_pb(List) ->
+	[addr_dto_to_pb(Item) || Item <- List].
 
-addr_pb_to_dto(AddrPB) ->
+addr_pb_to_dto(undefined) ->
+	undefined;
+addr_pb_to_dto(AddrPB = #fulladdr{}) ->
 	#fulladdr{
 		addr = Addr,
 		ton = TON,
@@ -376,7 +478,9 @@ addr_pb_to_dto(AddrPB) ->
 		addr = Addr,
 		ton = TON,
 		npi = NPI
-	}.
+	};
+addr_pb_to_dto(List) ->
+	[addr_pb_to_dto(Item) || Item <- List].
 
 sms_statuses_dto_to_pb(StatusDTO = #k1api_sms_status_dto{}) ->
 	#k1api_sms_status_dto{
@@ -463,3 +567,79 @@ retrieved_messages_to_dto(PB = #retrievedmessage{}) ->
 	};
 retrieved_messages_to_dto(MessagesPB) ->
 	[retrieved_messages_to_dto(PB) || PB <- MessagesPB].
+
+%% ===================================================================
+%% Network
+%% ===================================================================
+
+network_dto_to_pb(Network = #network_dto{}) ->
+	#network_dto{
+		id = ID,
+		country_code = CountryCode,
+		numbers_len = NumberLen,
+		prefixes = Prefixes,
+		provider_id = ProviderID
+	} = Network,
+	#network{
+		id = ID,
+		country_code = CountryCode,
+		numbers_len = NumberLen,
+		prefixes = Prefixes,
+		provider_id = ProviderID
+	};
+network_dto_to_pb(List) ->
+	[network_dto_to_pb(Item) || Item <- List].
+
+network_pb_to_dto(Network = #network{}) ->
+	#network{
+		id = ID,
+		country_code = CountryCode,
+		numbers_len = NumberLen,
+		prefixes = Prefixes,
+		provider_id = ProviderID
+	} = Network,
+	#network_dto{
+		id = ID,
+		country_code = CountryCode,
+		numbers_len = NumberLen,
+		prefixes = Prefixes,
+		provider_id = ProviderID
+	};
+network_pb_to_dto(List) ->
+	[network_pb_to_dto(Item) || Item <- List].
+
+%% ===================================================================
+%% Provider
+%% ===================================================================
+
+provider_dto_to_pb(Provider = #provider_dto{}) ->
+	#provider_dto{
+		id = ID,
+		gateway = GtwID,
+		bulk_gateway = BuldGtwID,
+		receipts_supported = Receipts
+	} = Provider,
+	#provider{
+		id = ID,
+		gateway = GtwID,
+		bulk_gateway = BuldGtwID,
+		receipts_supported = Receipts
+	};
+provider_dto_to_pb(List) ->
+	[provider_dto_to_pb(Item) || Item <- List].
+
+provider_pb_to_dto(Provider = #provider{}) ->
+	#provider{
+		id = ID,
+		gateway = GtwID,
+		bulk_gateway = BuldGtwID,
+		receipts_supported = Receipts
+	} = Provider,
+	#provider_dto{
+		id = ID,
+		gateway = GtwID,
+		bulk_gateway = BuldGtwID,
+		receipts_supported = Receipts
+	};
+provider_pb_to_dto(List) ->
+	[provider_pb_to_dto(Item) || Item <- List].

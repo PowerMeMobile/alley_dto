@@ -15,7 +15,9 @@ k1api_dto_test_()->
 	{setup,
 	fun start_uuid/0,
 	fun stop_uuid/1,
-	[?_test(sms_delivery_status_request()),
+	[?_test(auth_request()),
+	?_test(auth_response()),
+	?_test(sms_delivery_status_request()),
 	?_test(sms_delivery_status_response()),
 	?_test(retrieve_sms_request()),
 	?_test(retrieve_sms_request2()),
@@ -28,6 +30,56 @@ k1api_dto_test_()->
 	?_test(unsubscribe_incoming_sms_request()),
 	?_test(unsubscribe_incoming_sms_response()),
 	?_test(incoming_sms_request())]}.
+
+%% ===================================================================
+%% k1api Auth Request
+%% ===================================================================
+
+auth_request() ->
+	DTO = #k1api_auth_request_dto{
+		id = uuid:newid(),
+		customer_id = <<"test-sys-id">>,
+		user_id = <<"user">>,
+		password = <<"password">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_auth_request_dto{}, Bin).
+
+
+%% ===================================================================
+%% k1api Auth Request
+%% ===================================================================
+
+auth_response() ->
+	Provider = #provider_dto{
+		id = uuid:newid(),
+		gateway = uuid:newid(),
+		bulk_gateway = uuid:newid(),
+		receipts_supported = true
+	},
+	Network = #network_dto{
+		id = uuid:newid(),
+		country_code = <<"375">>,
+		numbers_len = 12,
+		prefixes = [<<"33">>, <<"44">>],
+		provider_id = uuid:newid()
+	},
+	DTO = #k1api_auth_response_dto{
+		id = uuid:newid(),
+		system_id = <<"system-id">>,
+		uuid = uuid:newid(),
+		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
+		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		networks = [Network],
+		providers = [Provider],
+		default_provider_id = uuid:newid(),
+		receipts_allowed = true,
+		no_retry = true,
+		default_validity = 12345,
+		max_validity = 1234567
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_auth_response_dto{}, Bin).
 
 %% ===================================================================
 %% Sms Delivery Status Request Tests

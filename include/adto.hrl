@@ -407,6 +407,32 @@
 }).
 
 %% ===================================================================
+%% k1api Auth
+%% ===================================================================
+
+-record(k1api_auth_request_dto, {
+	id :: binary(), %% <<12,34...
+	customer_id :: bitstring(), %% <<"system_id">>
+	user_id :: bitstring(),
+	password :: bitstring()
+}).
+
+-record(k1api_auth_response_dto, {
+	id :: binary(), %% <<12,34...
+	system_id :: bitstring(), %% <<"system-id">>
+	uuid :: binary(), %% <<12,34...
+	allowed_sources :: [#addr_dto{}],
+	default_source :: #addr_dto{} | undefined,
+	networks :: [#network_dto{}],
+	providers :: [#provider_dto{}],
+	default_provider_id :: binary() | undefined, %% <<12,34...
+	receipts_allowed :: boolean(),
+	no_retry :: boolean(),
+	default_validity :: integer(), %% seconds
+	max_validity :: integer() %% seconds
+}).
+
+%% ===================================================================
 %% Misc
 %% ===================================================================
 
@@ -427,6 +453,8 @@
 	#just_incoming_sms_dto{} |
 	#just_delivery_receipt_dto{} |
 
+	#k1api_auth_request_dto{} |
+	#k1api_auth_request_dto{} |
 	#k1api_sms_delivery_status_request_dto{} |
 	#k1api_sms_delivery_status_response_dto{} |
 	#k1api_retrieve_sms_request_dto{} |

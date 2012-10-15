@@ -64,6 +64,10 @@ module(#just_delivery_receipt_dto{}) ->
 	just();
 
 %% k1api dto
+module(#k1api_auth_request_dto{}) ->
+	k1api();
+module(#k1api_auth_response_dto{}) ->
+	k1api();
 module(#k1api_sms_delivery_status_request_dto{}) ->
 	k1api();
 module(#k1api_sms_delivery_status_response_dto{}) ->

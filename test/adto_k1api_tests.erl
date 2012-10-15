@@ -68,6 +68,7 @@ auth_response() ->
 		id = uuid:newid(),
 		system_id = <<"system-id">>,
 		uuid = uuid:newid(),
+		billing_type = prepaid, %% postpaid
 		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
 		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
@@ -79,6 +80,8 @@ auth_response() ->
 		max_validity = 1234567
 	},
 	{ok, Bin} = adto:encode(DTO),
+	?debugVal(DTO),
+	?debugVal(adto:decode(#k1api_auth_response_dto{}, Bin)),
 	{ok, DTO} = adto:decode(#k1api_auth_response_dto{}, Bin).
 
 %% ===================================================================

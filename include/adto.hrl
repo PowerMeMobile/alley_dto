@@ -421,6 +421,7 @@
 	id :: binary(), %% <<12,34...
 	system_id :: bitstring(), %% <<"system-id">>
 	uuid :: binary(), %% <<12,34...
+	billing_type :: prepaid | postpaid,
 	allowed_sources :: [#addr_dto{}],
 	default_source :: #addr_dto{} | undefined,
 	networks :: [#network_dto{}],

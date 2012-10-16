@@ -25,11 +25,66 @@ k1api_dto_test_()->
 	?_test(remove_retrieved_sms_request()),
 	?_test(bad_type_encode()),
 	?_test(bad_type_decode()),
+
 	?_test(subscribe_incoming_sms_request()),
 	?_test(subscribe_incoming_sms_response()),
 	?_test(unsubscribe_incoming_sms_request()),
 	?_test(unsubscribe_incoming_sms_response()),
+
+	?_test(subscribe_sms_receipts_request()),
+	?_test(subscribe_sms_receipts_response()),
+	?_test(unsubscribe_sms_receipts_request()),
+	?_test(unsubscribe_sms_receipts_response()),
+
 	?_test(incoming_sms_request())]}.
+
+%% ===================================================================
+%% k1api Subscribe Sms Receipts Request
+%% ===================================================================
+
+subscribe_sms_receipts_request() ->
+	DTO = #k1api_subscribe_sms_receipts_request_dto{
+		id = uuid:newid(),
+		customer_id = uuid:newid(),
+		user_id = <<"user">>,
+		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		callback_data = <<"callback">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_subscribe_sms_receipts_request_dto{}, Bin).
+
+%% ===================================================================
+%% k1api Subscribe Sms Receipts Response
+%% ===================================================================
+
+subscribe_sms_receipts_response() ->
+	DTO = #k1api_subscribe_sms_receipts_response_dto{
+		id = uuid:newid()
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_subscribe_sms_receipts_response_dto{}, Bin).
+
+%% ===================================================================
+%% k1api Unsubscribe Sms Receipts Request
+%% ===================================================================
+
+unsubscribe_sms_receipts_request() ->
+	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
+		id = uuid:newid()
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
+
+%% ===================================================================
+%% k1api Unsubscribe Sms Receipts Response
+%% ===================================================================
+
+unsubscribe_sms_receipts_response() ->
+	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
+		id = uuid:newid()
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
 
 %% ===================================================================
 %% k1api Auth Request
@@ -80,8 +135,6 @@ auth_response() ->
 		max_validity = 1234567
 	},
 	{ok, Bin} = adto:encode(DTO),
-	?debugVal(DTO),
-	?debugVal(adto:decode(#k1api_auth_response_dto{}, Bin)),
 	{ok, DTO} = adto:decode(#k1api_auth_response_dto{}, Bin).
 
 %% ===================================================================

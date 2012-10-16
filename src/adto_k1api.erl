@@ -225,6 +225,54 @@ decode(#k1api_auth_response_dto{}, Bin) ->
 	},
 	{ok, DTO};
 
+decode(#k1api_subscribe_sms_receipts_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsreceiptssubscribereq(Bin),
+	#smsreceiptssubscribereq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = DestAddr,
+		callback_data = Callback
+	} = PB,
+	DTO = #k1api_subscribe_sms_receipts_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = addr_pb_to_dto(DestAddr),
+		callback_data = Callback
+	},
+	{ok, DTO};
+
+decode(#k1api_subscribe_sms_receipts_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsreceiptssubscriberesp(Bin),
+	#smsreceiptssubscriberesp{
+		id = ID
+	} = PB,
+	DTO = #k1api_subscribe_sms_receipts_response_dto{
+		id = ID
+	},
+	{ok, DTO};
+
+decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsreceiptsunsubscribereq(Bin),
+	#smsreceiptsunsubscribereq{
+		id = ID
+	} = PB,
+	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
+		id = ID
+	},
+	{ok, DTO};
+
+decode(#k1api_unsubscribe_sms_receipts_response_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsreceiptsunsubscriberesp(Bin),
+	#smsreceiptsunsubscriberesp{
+		id = ID
+	} = PB,
+	DTO = #k1api_unsubscribe_sms_receipts_response_dto{
+		id = ID
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({k1api_decode_not_supported, Type}).
 
@@ -444,6 +492,54 @@ encode(DTO = #k1api_auth_response_dto{}) ->
 		max_validity = MaxValidity
 	},
 	Bin = k1api_pb:encode_authresp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_subscribe_sms_receipts_request_dto{}) ->
+	#k1api_subscribe_sms_receipts_request_dto{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = DestAddr,
+		callback_data = Callback
+	} = DTO,
+	PB = #smsreceiptssubscribereq{
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		dest_addr = addr_dto_to_pb(DestAddr),
+		callback_data = Callback
+	},
+	Bin = k1api_pb:encode_smsreceiptssubscribereq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_subscribe_sms_receipts_response_dto{}) ->
+	#k1api_subscribe_sms_receipts_response_dto{
+		id = ID
+	} = DTO,
+	PB = #smsreceiptssubscriberesp{
+		id = ID
+	},
+	Bin = k1api_pb:encode_smsreceiptssubscriberesp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_unsubscribe_sms_receipts_request_dto{}) ->
+	#k1api_unsubscribe_sms_receipts_request_dto{
+		id = ID
+	} = DTO,
+	PB = #smsreceiptsunsubscribereq{
+		id = ID
+	},
+	Bin = k1api_pb:encode_smsreceiptsunsubscribereq(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_unsubscribe_sms_receipts_response_dto{}) ->
+	#k1api_unsubscribe_sms_receipts_response_dto{
+		id = ID
+	} = DTO,
+	PB = #smsreceiptsunsubscriberesp{
+		id = ID
+	},
+	Bin = k1api_pb:encode_smsreceiptsunsubscriberesp(PB),
 	{ok, Bin};
 
 encode(Message) ->

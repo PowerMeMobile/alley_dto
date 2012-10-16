@@ -126,6 +126,28 @@ message SmsNotificationReq {
 	required bytes notify_url = 7;
 }
 
+// Sms Receipts Subscriptions
+
+message SmsReceiptsSubscribeReq {
+	required bytes id = 1;
+	required bytes customer_id = 2;
+	required bytes user_id = 3;
+	required FullAddr dest_addr = 4;
+	required bytes callback_data = 5;
+}
+
+message SmsReceiptsSubscribeResp {
+	required bytes id = 1;
+}
+
+message SmsReceiptsUnsubscribeReq {
+	required bytes id = 1;
+}
+
+message SmsReceiptsUnsubscribeResp {
+	required bytes id = 1;
+}
+
 // Misc ---------------------
 
 message SmsStatus {

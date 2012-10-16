@@ -434,6 +434,30 @@
 }).
 
 %% ===================================================================
+%% k1api Sms Receipts Subscriptions
+%% ===================================================================
+
+-record(k1api_subscribe_sms_receipts_request_dto, {
+	id :: binary(), %% uuid <<12,34...
+	customer_id :: binary(), %% uuid <<12,34...
+	user_id :: bitstring(), %% <<"user">>
+	dest_addr :: #addr_dto{},
+	callback_data :: bitstring() %% <<"callback">>
+}).
+
+-record(k1api_subscribe_sms_receipts_response_dto, {
+	id :: binary() %% uuid <<12,34...
+}).
+
+-record(k1api_unsubscribe_sms_receipts_request_dto, {
+	id :: binary() %% uuid <<12,34...
+}).
+
+-record(k1api_unsubscribe_sms_receipts_response_dto, {
+	id :: binary() %% uuid <<12,34...
+}).
+
+%% ===================================================================
 %% Misc
 %% ===================================================================
 
@@ -465,6 +489,10 @@
 	#k1api_subscribe_incoming_sms_response_dto{} |
 	#k1api_unsubscribe_incoming_sms_request_dto{} |
 	#k1api_unsubscribe_incoming_sms_response_dto{} |
+	#k1api_subscribe_sms_receipts_request_dto{} |
+	#k1api_subscribe_sms_receipts_response_dto{} |
+	#k1api_unsubscribe_sms_receipts_request_dto{} |
+	#k1api_unsubscribe_sms_receipts_response_dto{} |
 	#k1api_sms_notification_request_dto{}.
 
 -endif. % adto_hrl

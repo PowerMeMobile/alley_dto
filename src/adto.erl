@@ -96,6 +96,8 @@ module(#k1api_unsubscribe_sms_receipts_request_dto{}) ->
 	k1api();
 module(#k1api_unsubscribe_sms_receipts_response_dto{}) ->
 	k1api();
+module(#k1api_sms_delivery_receipt_notification_dto{}) ->
+	k1api();
 
 module(Type) ->
 	erlang:error({adto_unsupported_type, Type}).

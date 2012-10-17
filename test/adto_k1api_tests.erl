@@ -35,6 +35,7 @@ k1api_dto_test_()->
 	?_test(subscribe_sms_receipts_response()),
 	?_test(unsubscribe_sms_receipts_request()),
 	?_test(unsubscribe_sms_receipts_response()),
+	?_test(sms_delivery_receipt_notification()),
 
 	?_test(incoming_sms_request())]}.
 
@@ -85,6 +86,21 @@ unsubscribe_sms_receipts_response() ->
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
+
+%% ===================================================================
+%% k1api Sms Delivery Status
+%% ===================================================================
+
+sms_delivery_receipt_notification() ->
+	DTO = #k1api_sms_delivery_receipt_notification_dto{
+		id = uuid:newid(),
+		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		status = submitted,
+		callback_data = <<"callback">>,
+		url = <<"url">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin).
 
 %% ===================================================================
 %% k1api Auth Request

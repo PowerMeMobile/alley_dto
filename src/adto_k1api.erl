@@ -273,6 +273,24 @@ decode(#k1api_unsubscribe_sms_receipts_response_dto{}, Bin) ->
 	},
 	{ok, DTO};
 
+decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin) ->
+	PB = k1api_pb:decode_smsdeliveryreceiptnotification(Bin),
+	#smsdeliveryreceiptnotification{
+		id = ID,
+		dest_addr = DestAddr,
+		status = Status,
+		callback_data = CallbackData,
+		url = Url
+	} = PB,
+	DTO = #k1api_sms_delivery_receipt_notification_dto{
+		id = ID,
+		dest_addr = addr_pb_to_dto(DestAddr),
+		status = status_name_pb_to_dto(Status),
+		callback_data = CallbackData,
+		url = Url
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({k1api_decode_not_supported, Type}).
 
@@ -540,6 +558,24 @@ encode(DTO = #k1api_unsubscribe_sms_receipts_response_dto{}) ->
 		id = ID
 	},
 	Bin = k1api_pb:encode_smsreceiptsunsubscriberesp(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
+	#k1api_sms_delivery_receipt_notification_dto{
+		id = ID,
+		dest_addr = DestAddr,
+		status = Status,
+		callback_data = CallbackData,
+		url = Url
+	} = DTO,
+	PB = #smsdeliveryreceiptnotification{
+		id = ID,
+		dest_addr = addr_dto_to_pb(DestAddr),
+		status = status_name_dto_to_pb(Status),
+		callback_data = CallbackData,
+		url = Url
+	},
+	Bin = k1api_pb:encode_smsdeliveryreceiptnotification(PB),
 	{ok, Bin};
 
 encode(Message) ->

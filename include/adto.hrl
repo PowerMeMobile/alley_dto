@@ -457,6 +457,14 @@
 	id :: binary() %% uuid <<12,34...
 }).
 
+-record(k1api_sms_delivery_receipt_notification_dto, {
+	id :: binary(), %% uuid <<12,34...
+	dest_addr :: #addr_dto{},
+	status :: k1api_sms_status(),
+	callback_data :: bitstring(),
+	url :: bitstring()
+}).
+
 %% ===================================================================
 %% Misc
 %% ===================================================================
@@ -478,22 +486,33 @@
 	#just_incoming_sms_dto{} |
 	#just_delivery_receipt_dto{} |
 
+%% k1api dto
+	%% k1api auth
 	#k1api_auth_request_dto{} |
-	#k1api_auth_request_dto{} |
+	#k1api_auth_response_dto{} |
+
+	%% k1api sms delivery status
 	#k1api_sms_delivery_status_request_dto{} |
 	#k1api_sms_delivery_status_response_dto{} |
+
+	%% k1api retrieve sms
 	#k1api_retrieve_sms_request_dto{} |
 	#k1api_retrieve_sms_response_dto{} |
 	#k1api_remove_retrieved_sms_request_dto{} |
+
+	%% k1api incoming sms subscription
 	#k1api_subscribe_incoming_sms_request_dto{} |
 	#k1api_subscribe_incoming_sms_response_dto{} |
 	#k1api_unsubscribe_incoming_sms_request_dto{} |
 	#k1api_unsubscribe_incoming_sms_response_dto{} |
+	#k1api_sms_notification_request_dto{} |
+
+	%% k1api delivery receipt subscription
 	#k1api_subscribe_sms_receipts_request_dto{} |
 	#k1api_subscribe_sms_receipts_response_dto{} |
 	#k1api_unsubscribe_sms_receipts_request_dto{} |
 	#k1api_unsubscribe_sms_receipts_response_dto{} |
-	#k1api_sms_notification_request_dto{}.
+	#k1api_sms_delivery_receipt_notification_dto{}.
 
 -endif. % adto_hrl
 

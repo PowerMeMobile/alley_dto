@@ -148,6 +148,14 @@ message SmsReceiptsUnsubscribeResp {
 	required bytes id = 1;
 }
 
+message SmsDeliveryReceiptNotification {
+	required bytes id = 1;
+	required FullAddr dest_addr = 2;
+	required SmsStatuses status = 3;
+	required bytes url = 4;
+	optional bytes callback_data = 5;
+}
+
 // Misc ---------------------
 
 message SmsStatus {

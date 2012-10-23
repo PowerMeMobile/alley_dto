@@ -48,6 +48,7 @@ subscribe_sms_receipts_request() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
+		url = <<"url">>,
 		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
 		callback_data = <<"callback">>
 	},

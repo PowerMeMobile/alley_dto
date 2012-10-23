@@ -441,6 +441,7 @@
 	id :: binary(), %% uuid <<12,34...
 	customer_id :: binary(), %% uuid <<12,34...
 	user_id :: bitstring(), %% <<"user">>
+	url :: bitstring(),
 	dest_addr :: #addr_dto{},
 	callback_data :: bitstring() %% <<"callback">>
 }).

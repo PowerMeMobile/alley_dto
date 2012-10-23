@@ -231,6 +231,7 @@ decode(#k1api_subscribe_sms_receipts_request_dto{}, Bin) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
+		url = Url,
 		dest_addr = DestAddr,
 		callback_data = Callback
 	} = PB,
@@ -238,6 +239,7 @@ decode(#k1api_subscribe_sms_receipts_request_dto{}, Bin) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
+		url = Url,
 		dest_addr = addr_pb_to_dto(DestAddr),
 		callback_data = Callback
 	},
@@ -517,6 +519,7 @@ encode(DTO = #k1api_subscribe_sms_receipts_request_dto{}) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
+		url = Url,
 		dest_addr = DestAddr,
 		callback_data = Callback
 	} = DTO,
@@ -524,6 +527,7 @@ encode(DTO = #k1api_subscribe_sms_receipts_request_dto{}) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
+		url = Url,
 		dest_addr = addr_dto_to_pb(DestAddr),
 		callback_data = Callback
 	},

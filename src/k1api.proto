@@ -134,6 +134,7 @@ message SmsReceiptsSubscribeReq {
 	required bytes user_id = 3;
 	required FullAddr dest_addr = 4;
 	required bytes callback_data = 5;
+	required bytes url = 6;
 }
 
 message SmsReceiptsSubscribeResp {

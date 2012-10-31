@@ -194,9 +194,9 @@
 	rejected.
 
 -record(funnel_delivery_receipt_container_dto, {
-	message_id :: binary(), %% <<"614">>
-	submit_date :: binary(),  %% <<"20827114232">>
-	done_date :: binary(), %% <<"20827114232">>
+	message_id :: bitstring(), %% <<"614">>
+	submit_date :: integer(),  %% utc unix epoch
+	done_date :: integer(), %% utc unix epoch
 	message_state :: message_state_dto(),
 	source :: addr_dto(),
 	dest :: addr_dto()

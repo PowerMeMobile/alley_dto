@@ -660,8 +660,8 @@ receipts_to_asn(Receipt = #funnel_delivery_receipt_container_dto{}) ->
 	} = Receipt,
 	#'DeliveryReceipt'{
 		messageId = binary_to_list(MessageID),
-		submitDate = binary_to_list(SubmitDate),
-		doneDate = binary_to_list(DoneDate),
+		submitDate = date_to_asn(SubmitDate),
+		doneDate = date_to_asn(DoneDate),
 		messageState = MessageState,
 		source = addr_to_asn(SourceAddr),
 		dest = addr_to_asn(DestAddr)
@@ -680,11 +680,32 @@ receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
 	} = Receipt,
 	#funnel_delivery_receipt_container_dto{
 		message_id = list_to_binary(MessageID),
-		submit_date = list_to_binary(SubmitDate),
-		done_date = list_to_binary(DoneDate),
+		submit_date = date_to_dto(SubmitDate),
+		done_date = date_to_dto(DoneDate),
 		message_state = MessageState,
 		source = addr_to_dto(SourceAddr),
 		dest  = addr_to_dto(DestAddr)
 	};
 receipts_to_dto(Receipts) ->
 	[receipts_to_dto(Receipt) || Receipt <- Receipts].
+
+date_to_asn(UnixTime) ->
+	NM = UnixTime div 1000000,
+	NS = UnixTime - (NM * 1000000),
+	T = {NM, NS, 0},
+	{{YY, MM, DD}, {H, M, S}} = calendar:now_to_universal_time(T),
+	lists:map(
+		fun(C) ->
+			case C of
+				$\  -> $0;
+				_ -> C
+			end
+		end,
+		lists:flatten(io_lib:format("~4B~2B~2B~2B~2B~2B", [YY, MM, DD, H, M, S])) %% print " 5"
+	).
+
+date_to_dto(StrUTCTime) ->
+	{ok,[YY, MM, DD, H, M, S],[]} = io_lib:fread("~4d~2d~2d~2d~2d~2d", StrUTCTime),
+    ReferenceDate = {{1970,1,1},{0,0,0}},
+    calendar:datetime_to_gregorian_seconds({{YY, MM, DD}, {H, M, S}}) -
+	calendar:datetime_to_gregorian_seconds(ReferenceDate).

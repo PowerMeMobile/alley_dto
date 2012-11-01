@@ -626,7 +626,7 @@ incoming_messages_to_asn(Message = #funnel_incoming_sms_message_dto{}) ->
 		source = addr_to_asn(Source),
 		dest = addr_to_asn(Dest),
 		message = binary_to_list(MessageBody),
-		dataCoding = DataCoding
+		dataCoding = message_encoding_to_asn(DataCoding)
 	};
 incoming_messages_to_asn(Messages) ->
 	[incoming_messages_to_asn(Message) || Message <- Messages].
@@ -642,7 +642,7 @@ incoming_messages_to_dto(Message = #'OutgoingMessage'{}) ->
 		source  = addr_to_dto(Source),
 		dest = addr_to_dto(Dest),
 		message = list_to_binary(MessageBody),
-		data_coding = DataCoding
+		data_coding = message_encoding_to_dto(DataCoding)
 	};
 incoming_messages_to_dto(Messages) ->
 	[incoming_messages_to_dto(Message) || Message <- Messages].
@@ -709,3 +709,10 @@ date_to_dto(StrUTCTime) ->
     ReferenceDate = {{1970,1,1},{0,0,0}},
     calendar:datetime_to_gregorian_seconds({{YY, MM, DD}, {H, M, S}}) -
 	calendar:datetime_to_gregorian_seconds(ReferenceDate).
+
+message_encoding_to_dto({_, Encoding}) ->
+	Encoding.
+message_encoding_to_asn(Encoding) when is_atom(Encoding) ->
+	{text, Encoding};
+message_encoding_to_asn(Encoding) when is_integer(Encoding) ->
+	{other, Encoding}.

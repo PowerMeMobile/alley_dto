@@ -72,9 +72,13 @@ subscribe_sms_receipts_response() ->
 
 unsubscribe_sms_receipts_request() ->
 	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
-		id = uuid:newid()
+		id = uuid:newid(),
+		customer_id = uuid:newid(),
+		user_id = <<"user">>,
+		subscription_id = uuid:newid()
 	},
 	{ok, Bin} = adto:encode(DTO),
+	?debugHere,
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
 
 %% ===================================================================
@@ -82,11 +86,11 @@ unsubscribe_sms_receipts_request() ->
 %% ===================================================================
 
 unsubscribe_sms_receipts_response() ->
-	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
+	DTO = #k1api_unsubscribe_sms_receipts_response_dto{
 		id = uuid:newid()
 	},
 	{ok, Bin} = adto:encode(DTO),
-	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
+	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_response_dto{}, Bin).
 
 %% ===================================================================
 %% k1api Sms Delivery Status

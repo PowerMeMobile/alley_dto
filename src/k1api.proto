@@ -143,6 +143,9 @@ message SmsReceiptsSubscribeResp {
 
 message SmsReceiptsUnsubscribeReq {
 	required bytes id = 1;
+	required bytes customer_id = 2;
+	required bytes user_id = 3;
+	required bytes subscription_id = 4;
 }
 
 message SmsReceiptsUnsubscribeResp {

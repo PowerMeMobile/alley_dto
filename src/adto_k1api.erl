@@ -258,10 +258,16 @@ decode(#k1api_subscribe_sms_receipts_response_dto{}, Bin) ->
 decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin) ->
 	PB = k1api_pb:decode_smsreceiptsunsubscribereq(Bin),
 	#smsreceiptsunsubscribereq{
-		id = ID
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
 	} = PB,
 	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
-		id = ID
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
 	},
 	{ok, DTO};
 
@@ -546,10 +552,16 @@ encode(DTO = #k1api_subscribe_sms_receipts_response_dto{}) ->
 
 encode(DTO = #k1api_unsubscribe_sms_receipts_request_dto{}) ->
 	#k1api_unsubscribe_sms_receipts_request_dto{
-		id = ID
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
 	} = DTO,
 	PB = #smsreceiptsunsubscribereq{
-		id = ID
+		id = ID,
+		customer_id = CustomerID,
+		user_id = UserID,
+		subscription_id = SubscriptionID
 	},
 	Bin = k1api_pb:encode_smsreceiptsunsubscribereq(PB),
 	{ok, Bin};

@@ -451,7 +451,10 @@
 }).
 
 -record(k1api_unsubscribe_sms_receipts_request_dto, {
-	id :: binary() %% uuid <<12,34...
+	id :: binary(), %% uuid <<12,34...
+	customer_id :: binary(),
+	user_id :: bitstring(),
+	subscription_id :: binary()
 }).
 
 -record(k1api_unsubscribe_sms_receipts_response_dto, {

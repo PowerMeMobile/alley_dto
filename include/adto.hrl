@@ -77,7 +77,8 @@
 	receipts_allowed :: boolean(),
 	no_retry :: boolean(),
 	default_validity :: binary(), %% <<"000003000000000R">>
-	max_validity :: integer()
+	max_validity :: integer(),
+	billing_type :: prepaid | postpaid
 }).
 
 -record(funnel_auth_response_dto, {

@@ -112,7 +112,7 @@
 
 -record(error_dto, {
 	error_code :: integer(),
-	timestamp :: binary() %% <<"120827114232">>
+	timestamp :: bitstring() %% <<"120827114232">>
 }).
 
 -record(funnel_client_offline_event_dto, {
@@ -214,6 +214,29 @@
 
 -record(funnel_ack_dto, {
 	id :: binary() %% <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>
+}).
+
+%% ===================================================================
+%% Funnel Connections
+%% ===================================================================
+
+-record(funnel_connections_request_dto, {
+}).
+
+-record(funnel_connection_dto, {
+	connection_id 	:: binary(),	%% <<123,45, ..
+	remote_ip 		:: bitstring(), %% <<"127.0.0.1">>
+	customer_id 	:: bitstring(), %% system (smpp) id
+	user_id 		:: bitstring(),
+	connected_at 	:: bitstring(),
+	type 			:: smpp_type_dto(),
+	msgs_received 	:: integer(),
+	msgs_sent 		:: integer(),
+	errors 			:: [#error_dto{}]
+}).
+
+-record(funnel_connections_response_dto, {
+	connections = [#funnel_connection_dto{}]
 }).
 
 %% ===================================================================

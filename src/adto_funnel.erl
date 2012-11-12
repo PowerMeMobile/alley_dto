@@ -185,6 +185,43 @@ decode(#funnel_ack_dto{}, Bin) ->
 		{error, Error} -> {error, Error}
 	end;
 
+decode(#funnel_connections_request_dto{}, _Bin) ->
+	{ok, #funnel_connections_request_dto{}};
+
+decode(#funnel_connections_response_dto{}, Bin) ->
+	{ok, Asn} = 'FunnelAsn':decode('ConnectionsResponse', Bin),
+	 #'ConnectionsResponse'{
+		connections = Connections
+	} = Asn,
+	ConvertConnection = fun(ConnectionASN = #'Connection'{}) ->
+		#'Connection'{
+			connectionId = UUID,
+			remoteIp = IP,
+			customerId = SystemID,
+			userId = UserID,
+			connectedAt = ConnectedAt,
+			type = Type,
+			msgsReceived = Received,
+			msgsSent = Sent,
+			errors = Errors
+		} = ConnectionASN,
+		#funnel_connection_dto{
+			connection_id = uuid:to_binary(UUID),
+			remote_ip = list_to_binary(IP),
+			customer_id = list_to_binary(SystemID),
+			user_id = list_to_binary(UserID),
+			connected_at = list_to_binary(ConnectedAt),
+			type = Type,
+			msgs_received = Received,
+			msgs_sent = Sent,
+			errors = lists:map(fun errors_to_dto/1, Errors)
+		}
+	end,
+	DTO = #funnel_connections_response_dto{
+		connections = lists:map(ConvertConnection, Connections)
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({funnel_decode_not_supported, Type}).
 
@@ -396,6 +433,49 @@ encode(DTO = #funnel_ack_dto{}) ->
 		batchId = uuid:to_string(ID)
 	},
 	case 'FunnelAsn':encode('BatchAck', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(_DTO = #funnel_connections_request_dto{}) ->
+	Asn = #'ConnectionsRequest'{},
+	case 'FunnelAsn':encode('ConnectionsRequest', Asn) of
+		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
+		{error, Error} -> {error, Error}
+	end;
+
+encode(DTO = #funnel_connections_response_dto{}) ->
+	ConvertConnection = fun(ConnectionDTO = #funnel_connection_dto{}) ->
+		#funnel_connection_dto{
+			connection_id = UUID,
+			remote_ip = IP,
+			customer_id = SystemID,
+			user_id = UserID,
+			connected_at = ConnectedAt,
+			type = Type,
+			msgs_received = Received,
+			msgs_sent = Sent,
+			errors = Errors
+		} = ConnectionDTO,
+		#'Connection'{
+			connectionId = uuid:to_string(UUID),
+			remoteIp = binary_to_list(IP),
+			customerId = binary_to_list(SystemID),
+			userId = binary_to_list(UserID),
+			connectedAt = binary_to_list(ConnectedAt),
+			type = Type,
+			msgsReceived = Received,
+			msgsSent = Sent,
+			errors = lists:map(fun errors_to_asn/1, Errors)
+		}
+	end,
+	#funnel_connections_response_dto{
+		connections = Connections
+	} = DTO,
+	Asn = #'ConnectionsResponse'{
+		connections = lists:map(ConvertConnection, Connections)
+	},
+	case 'FunnelAsn':encode('ConnectionsResponse', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
 		{error, Error} -> {error, Error}
 	end;

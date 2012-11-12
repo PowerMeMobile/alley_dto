@@ -21,7 +21,9 @@ funnel_dto_test_() ->
 	?_test(client_offline_event()),
 	?_test(incoming_sms()),
 	?_test(delivery_receipt()),
-	?_test(ack())]}.
+	?_test(ack()),
+	?_test(connections_req()),
+	?_test(connections_resp())]}.
 
 %% ===================================================================
 %% Funnel Auth Tests
@@ -182,3 +184,32 @@ ack() ->
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_ack_dto{}, Bin).
+
+%% ===================================================================
+%% Funnel Connections
+%% ===================================================================
+
+connections_req() ->
+	DTO = #funnel_connections_request_dto{
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_connections_request_dto{}, Bin).
+
+connections_resp() ->
+	Error = #error_dto{error_code = 1, timestamp = <<"120827114232">>},
+	Connection = #funnel_connection_dto{
+		connection_id = uuid:newid(),
+		remote_ip = <<"127.0.0.1">>,
+		customer_id = <<"system-id">>,
+		user_id = <<"user">>,
+		connected_at = <<"120827114232">>,
+		type = transmitter,
+		msgs_received = 1,
+		msgs_sent = 2,
+		errors = [Error]
+	},
+	DTO = #funnel_connections_response_dto{
+		connections = [Connection]
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#funnel_connections_response_dto{}, Bin).

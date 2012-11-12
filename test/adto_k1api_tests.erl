@@ -78,7 +78,6 @@ unsubscribe_sms_receipts_request() ->
 		subscription_id = uuid:newid()
 	},
 	{ok, Bin} = adto:encode(DTO),
-	?debugHere,
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
 
 %% ===================================================================

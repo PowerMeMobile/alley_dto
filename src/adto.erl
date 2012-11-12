@@ -52,6 +52,10 @@ module(#funnel_delivery_receipt_dto{}) ->
 	funnel();
 module(#funnel_ack_dto{}) ->
 	funnel();
+module(#funnel_connections_request_dto{}) ->
+	funnel();
+module(#funnel_connections_response_dto{}) ->
+	funnel();
 
 %% Just dto
 module(#just_sms_request_dto{}) ->

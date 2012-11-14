@@ -490,8 +490,8 @@ encode(Message) ->
 
 %% PreciseTime
 
-precise_time_to_asn(DTO = #precise_time_dto{}) ->
-	#precise_time_dto{
+precise_time_to_asn(DTO = #fun_precise_time_dto{}) ->
+	#fun_precise_time_dto{
 		time = Time,
 		milliseconds = Milliseconds
 	} = DTO,
@@ -505,7 +505,7 @@ precise_time_to_dto(Asn = #'PreciseTime'{}) ->
 		time = Time,
 		milliseconds = Milliseconds
 	} = Asn,
-	#precise_time_dto{
+	#fun_precise_time_dto{
 		time = list_to_binary(Time),
 		milliseconds = Milliseconds
 	}.

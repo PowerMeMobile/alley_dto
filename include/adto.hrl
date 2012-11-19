@@ -20,8 +20,8 @@
 }).
 
 
--type billing_type() 	:: prepaid | postpaid.
--type uuid() 			:: bitstring(). 	%% <<"12fd794d-9e32-4cf6...
+-type billing_type_() 	:: prepaid | postpaid.
+-type uuid_() 			:: bitstring(). 	%% <<"12fd794d-9e32-4cf6...
 -type smpp_type_dto() 	:: receiver | transciever | transmitter.
 
 %% ===================================================================
@@ -40,7 +40,7 @@
 %% ===================================================================
 
 -record(funnel_auth_request_dto, {
-	connection_id 		:: uuid(),
+	connection_id 		:: uuid_(),
 	ip 					:: bitstring(), %% <<"127.0.0.1">>
 	customer_id 		:: bitstring(), %% <<"system-id">>
 	user_id 			:: bitstring(), %% <<"user">>
@@ -56,35 +56,35 @@
 %% ===================================================================
 
 -record(network_dto, {
-	id 					:: uuid(),
+	id 					:: uuid_(),
 	country_code 		:: bitstring(), %% <<"375">>
 	numbers_len 		:: integer(),
 	prefixes 			:: [bitstring()], %% [<<"44">>, <<"33">>]
-	provider_id 		:: uuid()
+	provider_id 		:: uuid_()
 }).
 
 -record(provider_dto, {
-	id 					:: uuid(),
-	gateway 			:: uuid(),
-	bulk_gateway 		:: uuid(),
+	id 					:: uuid_(),
+	gateway 			:: uuid_(),
+	bulk_gateway 		:: uuid_(),
 	receipts_supported 	:: boolean()
 }).
 
 -record(funnel_auth_response_customer_dto, {
 	id 					:: bitstring(), %% <<"system-id">>
-	uuid 				:: uuid(),
+	uuid 				:: uuid_(),
 	priority 			:: integer(),
 	rps 				:: integer() | undefined,
 	allowed_sources 	:: [#addr_dto{}],
 	default_source 		:: #addr_dto{} | undefined,
 	networks 			:: [#network_dto{}],
 	providers 			:: [#provider_dto{}],
-	default_provider_id :: uuid() | undefined,
+	default_provider_id :: uuid_() | undefined,
 	receipts_allowed 	:: boolean(),
 	no_retry 			:: boolean(),
 	default_validity 	:: bitstring(), %% <<"000003000000000R">>
 	max_validity 		:: integer(), 	%% in seconds (relative)
-	billing_type 		:: billing_type()
+	billing_type 		:: billing_type_()
 }).
 
 -type funnel_auth_response_result() ::
@@ -92,7 +92,7 @@
 	{customer, #funnel_auth_response_customer_dto{}}.
 
 -record(funnel_auth_response_dto, {
-	connection_id 		:: uuid(),
+	connection_id 		:: uuid_(),
 	result 				:: funnel_auth_response_result()
 }).
 
@@ -109,7 +109,7 @@
 }).
 
 -record(funnel_client_online_event_dto, {
-	connection_id 	:: uuid(),
+	connection_id 	:: uuid_(),
 	customer_id 	:: bitstring(), %% <<"system_id">>
 	user_id 		:: bitstring(), %% <<"user_id>>
 	type 			:: smpp_type_dto(),
@@ -123,7 +123,7 @@
 }).
 
 -record(funnel_client_offline_event_dto, {
-	connection_id 	:: uuid(),
+	connection_id 	:: uuid_(),
 	customer_id 	:: bitstring(), %% <<"system_id">>
 	user_id 		:: bitstring(), %% <<"user_id">>
 	type 			:: smpp_type_dto(),
@@ -160,9 +160,9 @@
 -type jsms_req_params() :: [#just_sms_request_param_dto{}].
 
 -record(just_sms_request_dto, {
-	id 				:: uuid(),
-	gateway_id 		:: uuid(),
-	customer_id 	:: uuid(),
+	id 				:: uuid_(),
+	gateway_id 		:: uuid_(),
+	customer_id 	:: uuid_(),
 	client_type 	:: client_type(),
 	type 			:: regular | part,
 	message 		:: binary(),
@@ -190,7 +190,7 @@
 }).
 
 -record(funnel_incoming_sms_dto, {
-	id 				:: uuid(),
+	id 				:: uuid_(),
 	messages 		:: [#funnel_incoming_sms_message_dto{}]
 }).
 
@@ -217,7 +217,7 @@
 }).
 
 -record(funnel_delivery_receipt_dto, {
-	id 				:: uuid(),
+	id 				:: uuid_(),
 	receipts 		:: [#funnel_delivery_receipt_dto{}]
 }).
 
@@ -226,7 +226,7 @@
 %% ===================================================================
 
 -record(funnel_ack_dto, {
-	id 				:: uuid()
+	id 				:: uuid_()
 }).
 
 %% ===================================================================
@@ -237,7 +237,7 @@
 }).
 
 -record(funnel_connection_dto, {
-	connection_id 	:: uuid(),
+	connection_id 	:: uuid_(),
 	remote_ip 		:: bitstring(), %% <<"127.0.0.1">>
 	customer_id 	:: bitstring(), %% system (smpp) id
 	user_id 		:: bitstring(),
@@ -267,9 +267,9 @@
 }).
 
 -record(just_sms_response_dto, {
-	id 				:: uuid(),
-	gateway_id 		:: uuid(),
-	customer_id 	:: uuid(),
+	id 				:: uuid_(),
+	gateway_id 		:: uuid_(),
+	customer_id 	:: uuid_(),
 	client_type 	:: client_type(),
 	statuses 		:: [#just_sms_status_dto{}],
 	timestamp 		:: fun_utc_time()
@@ -280,7 +280,7 @@
 %% ===================================================================
 
 -record(just_incoming_sms_dto, {
-	gateway_id 		:: uuid(),
+	gateway_id 		:: uuid_(),
 	source 			:: #addr_dto{},
 	dest 			:: #addr_dto{},
 	message 		:: binary(),
@@ -312,7 +312,7 @@
 }).
 
 -record(just_delivery_receipt_dto, {
-	gateway_id 		:: uuid(),
+	gateway_id 		:: uuid_(),
 	receipts 		:: [#just_receipt_dto{}],
 	timestamp 		:: integer() %% 1346067785681000
 }).
@@ -322,10 +322,10 @@
 %% ===================================================================
 
 -record(k1api_sms_delivery_status_request_dto, {
-	id 				:: uuid(),
-	customer_id 	:: uuid(),
+	id 				:: uuid_(),
+	customer_id 	:: uuid_(),
 	user_id 		:: bitstring(),
-	sms_request_id 	:: uuid(),
+	sms_request_id 	:: uuid_(),
 	address 		:: #addr_dto{}
 }).
 
@@ -354,7 +354,7 @@
 }).
 
 -record(k1api_sms_delivery_status_response_dto, {
-	id 			:: uuid(),
+	id 			:: uuid_(),
 	statuses 	:: [#k1api_sms_status_dto{}]
 }).
 
@@ -363,8 +363,8 @@
 %% ===================================================================
 
 -record(k1api_retrieve_sms_request_dto, {
-	id 			:: uuid(),
-	customer_id :: uuid(),
+	id 			:: uuid_(),
+	customer_id :: uuid_(),
 	user_id 	:: bitstring(), %% <<"user_id">>
 	dest_addr 	:: #addr_dto{},
 	batch_size 	:: undefined | integer()
@@ -382,7 +382,7 @@
 }).
 
 -record(k1api_retrieve_sms_response_dto, {
-	id 			:: uuid(),
+	id 			:: uuid_(),
 	messages 	:: [#k1api_retrieved_sms_dto{}],
 	total 		:: integer()
 }).
@@ -392,7 +392,7 @@
 %% ===================================================================
 
 -record(k1api_remove_retrieved_sms_request_dto, {
-	id 			:: uuid(),
+	id 			:: uuid_(),
 	message_ids :: [bitstring()] %% [<<"123">>]
 }).
 
@@ -401,8 +401,8 @@
 %% ===================================================================
 
 -record(k1api_subscribe_incoming_sms_request_dto, {
-	id 					:: uuid(),
-	customer_id 		:: uuid(),
+	id 					:: uuid_(),
+	customer_id 		:: uuid_(),
 	user_id 			:: bitstring(),
 	dest_addr 			:: #addr_dto{},
 	notify_url 			:: bitstring(),
@@ -413,8 +413,8 @@
 }).
 
 -record(k1api_subscribe_incoming_sms_response_dto, {
-	id 					:: uuid(),
-	subscription_id 	:: uuid()
+	id 					:: uuid_(),
+	subscription_id 	:: uuid_()
 }).
 
 %% ===================================================================
@@ -422,14 +422,14 @@
 %% ===================================================================
 
 -record(k1api_unsubscribe_incoming_sms_request_dto, {
-	id 					:: uuid(),
-	customer_id 		:: uuid(),
+	id 					:: uuid_(),
+	customer_id 		:: uuid_(),
 	user_id 			:: bitstring(),
-	subscription_id 	:: uuid()
+	subscription_id 	:: uuid_()
 }).
 
 -record(k1api_unsubscribe_incoming_sms_response_dto, {
-	id 					:: uuid()
+	id 					:: uuid_()
 }).
 
 %% ===================================================================
@@ -451,22 +451,22 @@
 %% ===================================================================
 
 -record(k1api_auth_request_dto, {
-	id 					:: uuid(),
+	id 					:: uuid_(),
 	customer_id 		:: bitstring(), %% <<"system_id">>
 	user_id 			:: bitstring(),
 	password 			:: bitstring()
 }).
 
 -record(k1api_auth_response_dto, {
-	id 					:: uuid(),
+	id 					:: uuid_(),
 	system_id 			:: bitstring(), %% <<"system-id">>
-	uuid 				:: uuid(),
-	billing_type 		:: billing_type(),
+	uuid 				:: uuid_(),
+	billing_type 		:: billing_type_(),
 	allowed_sources 	:: [#addr_dto{}],
 	default_source 		:: #addr_dto{} | undefined,
 	networks 			:: [#network_dto{}],
 	providers 			:: [#provider_dto{}],
-	default_provider_id :: uuid() | undefined,
+	default_provider_id :: uuid_() | undefined,
 	receipts_allowed 	:: boolean(),
 	no_retry 			:: boolean(),
 	default_validity 	:: integer(), %% seconds
@@ -478,8 +478,8 @@
 %% ===================================================================
 
 -record(k1api_subscribe_sms_receipts_request_dto, {
-	id 				:: uuid(),
-	customer_id 	:: uuid(),
+	id 				:: uuid_(),
+	customer_id 	:: uuid_(),
 	user_id 		:: bitstring(), %% <<"user">>
 	url 			:: bitstring(),
 	dest_addr 		:: #addr_dto{},
@@ -487,22 +487,22 @@
 }).
 
 -record(k1api_subscribe_sms_receipts_response_dto, {
-	id 				:: uuid()
+	id 				:: uuid_()
 }).
 
 -record(k1api_unsubscribe_sms_receipts_request_dto, {
-	id 				:: uuid(),
-	customer_id 	:: uuid(),
+	id 				:: uuid_(),
+	customer_id 	:: uuid_(),
 	user_id 		:: bitstring(),
-	subscription_id :: uuid()
+	subscription_id :: uuid_()
 }).
 
 -record(k1api_unsubscribe_sms_receipts_response_dto, {
-	id 				:: uuid()
+	id 				:: uuid_()
 }).
 
 -record(k1api_sms_delivery_receipt_notification_dto, {
-	id 				:: uuid(),
+	id 				:: uuid_(),
 	dest_addr 		:: #addr_dto{},
 	status 			:: k1api_sms_status(),
 	callback_data 	:: bitstring(),

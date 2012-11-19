@@ -21,8 +21,7 @@
 
 
 -type billing_type() 	:: prepaid | postpaid.
--type bitstr_uuid()		:: bitstring(). %% <<"12fd794d-9e32-4cf6...
--type uuid() 			:: binary(). 	%% <<18,253,121,77,158,50...
+-type uuid() 			:: bitstring(). 	%% <<"12fd794d-9e32-4cf6...
 -type smpp_type_dto() 	:: receiver | transciever | transmitter.
 
 %% ===================================================================
@@ -161,9 +160,9 @@
 -type jsms_req_params() :: [#just_sms_request_param_dto{}].
 
 -record(just_sms_request_dto, {
-	id 				:: bitstr_uuid(),
-	gateway_id 		:: bitstr_uuid(),
-	customer_id 	:: bitstr_uuid(),
+	id 				:: uuid(),
+	gateway_id 		:: uuid(),
+	customer_id 	:: uuid(),
 	client_type 	:: client_type(),
 	type 			:: regular | part,
 	message 		:: binary(),

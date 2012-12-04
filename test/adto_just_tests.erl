@@ -1,30 +1,32 @@
 -module(adto_just_tests).
 
 -include("adto.hrl").
--include("JustAsn.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
-%% ===================================================================
-%% Variables
-%% ===================================================================
+start_uuid() ->
+	ok = application:start(uuid).
+stop_uuid(_) ->
+	application:stop(uuid).
 
-%% str_uuid() -> "12fd794d-9e32-4cf6-b421-b797196b60e3".
-
-%% sms_req_params() ->
-%% 	[{'Param',"registered_delivery",{boolean,true}},{'Param',"service_type",{string,[]}},{'Param',"no_retry",{boolean,false}},{'Param',"validity_period",{string,"000003000000000R"}},{'Param',"priority_flag",{integer,0}},{'Param',"esm_class",{integer,3}},{'Param',"protocol_id",{integer,0}}].
-
-%% full_addr() ->
-%% 	{'FullAddr',"375296662323",1,1}.
+just_dto_test_() ->
+	{setup,
+	fun start_uuid/0,
+	fun stop_uuid/1,
+	[?_test(just_sms_request()),
+	?_test(just_sms_response()),
+	?_test(just_incoming_sms()),
+	?_test(just_delivery_receipt())]}.
 
 %% ===================================================================
 %% Just Sms Request Tests
 %% ===================================================================
 
-just_sms_request_test() ->
+just_sms_request() ->
 	DTO = #just_sms_request_dto{
 		id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
 		gateway_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
 		customer_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
+		client_type = k1api,
 		type = regular,
 		message = <<"message">>,
 		encoding = {text, default},
@@ -40,7 +42,7 @@ just_sms_request_test() ->
 %% Sms Response Tests
 %% ===================================================================
 
-just_sms_response_test() ->
+just_sms_response() ->
 	StatusDTO = #just_sms_status_dto{
 		original_id = <<"614">>,
 		dest_addr = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
@@ -51,9 +53,10 @@ just_sms_response_test() ->
 		error_code = undefined
 	},
 	DTO = #just_sms_response_dto{
-		id = adto_uuid:newid(),
-		gateway_id = adto_uuid:newid(),
-		customer_id = adto_uuid:newid(),
+		id = uuid:newid(),
+		gateway_id = uuid:newid(),
+		customer_id = uuid:newid(),
+		client_type = k1api,
 		statuses = [StatusDTO],
 		timestamp = <<"120827114305">>
 	},
@@ -64,9 +67,9 @@ just_sms_response_test() ->
 %% Just Incoming Sms Tests
 %% ===================================================================
 
-just_incoming_sms_test() ->
+just_incoming_sms() ->
 	DTO = #just_incoming_sms_dto{
-		gateway_id = adto_uuid:newid(),
+		gateway_id = uuid:newid(),
 		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
 		dest = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
 		message = <<"message">>,
@@ -83,14 +86,14 @@ just_incoming_sms_test() ->
 %% Just Delivery Receipt Tests
 %% ===================================================================
 
-just_delivery_receipt_test() ->
+just_delivery_receipt() ->
 	ReceiptDTO = #just_receipt_dto{
 		message_id = <<"614">>,
 		message_state = delivered,
 		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1}
 	},
 	DTO = #just_delivery_receipt_dto{
-		gateway_id = adto_uuid:newid(),
+		gateway_id = uuid:newid(),
 		receipts = [ReceiptDTO],
 		timestamp = 1346067785681000
 	},

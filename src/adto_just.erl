@@ -7,7 +7,6 @@
 
 -include("adto.hrl").
 -include("JustAsn.hrl").
--include("logging.hrl").
 -include("helpers.hrl").
 
 %% ===================================================================
@@ -19,6 +18,7 @@ encode(DTO = #just_sms_request_dto{}) ->
 		id = ID,
 		gateway_id = GtwID,
 		customer_id = CustomerID,
+		client_type = ClientType,
 		type = Type,
 		message = Message,
 		encoding = Encoding,
@@ -28,16 +28,16 @@ encode(DTO = #just_sms_request_dto{}) ->
 		message_ids = MessageIDs
 	} = DTO,
 	Asn = #'SmsRequest'{
-		id = adto_uuid:to_string(ID),
-		gatewayId = adto_uuid:to_string(GtwID),
-		customerId = adto_uuid:to_string(CustomerID),
+		id = binary_to_list(ID),
+		gatewayId = binary_to_list(GtwID),
+		customerId = binary_to_list(CustomerID),
 		type = Type,
 		message = binary_to_list(Message),
 		encoding = Encoding,
 		params = sms_req_params_to_asn(Params),
 		sourceAddr = full_addr_to_asn(SourceAddr),
 		destAddrs = dest_addrs_to_asn(DestAddrs),
-		messageIds = [binary_to_list(MesID) || MesID <- MessageIDs]
+		messageIds = add_client_type(MessageIDs, ClientType)
 	},
 	case 'JustAsn':encode('SmsRequest', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
@@ -49,14 +49,15 @@ encode(DTO = #just_sms_response_dto{}) ->
 		id = ID,
 		gateway_id = GtwID,
 		customer_id = CustomerID,
+		client_type = ClientType,
 		statuses = Statuses,
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'SmsResponse'{
-		id = adto_uuid:to_string(ID),
-		gatewayId = adto_uuid:to_string(GtwID),
-		customerId = adto_uuid:to_string(CustomerID),
-		statuses = sms_statuses_to_asn(Statuses),
+		id = binary_to_list(ID),
+		gatewayId = binary_to_list(GtwID),
+		customerId = binary_to_list(CustomerID),
+		statuses = sms_statuses_to_asn(Statuses, ClientType),
 		timestamp = binary_to_list(Timestamp)
 	},
 	case 'JustAsn':encode('SmsResponse', Asn) of
@@ -77,7 +78,7 @@ encode(DTO = #just_incoming_sms_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'IncomingSm'{
-		gatewayId = adto_uuid:to_string(GtwID),
+		gatewayId = binary_to_list(GtwID),
 		source = full_addr_to_asn(Source),
 		dest = full_addr_to_asn(Dest),
 		message = binary_to_list(Message),
@@ -99,7 +100,7 @@ encode(DTO = #just_delivery_receipt_dto{}) ->
 		timestamp = Timestamp
 	} = DTO,
 	Asn = #'ReceiptBatch'{
-		gatewayId = adto_uuid:to_string(GtwID),
+		gatewayId = binary_to_list(GtwID),
 		receipts = just_receipt_to_asn(Receipts),
 		timestamp = Timestamp
 	},
@@ -128,19 +129,21 @@ decode(#just_sms_request_dto{}, Bin) ->
 				params = Params,
 				sourceAddr = SourceAddr,
 				destAddrs = DestAddrs,
-				messageIds = MessageIDs
+				messageIds = RawMessageIDs
 			} = SmsRequest,
+		{MessageIDs, ClientType} = substract_client_type(RawMessageIDs),
 		DTO = #just_sms_request_dto{
-			id = adto_uuid:to_binary(ID),
-			gateway_id = adto_uuid:to_binary(GtwID),
-			customer_id = adto_uuid:to_binary(CustomerID),
+			id = list_to_binary(ID),
+			gateway_id = list_to_binary(GtwID),
+			customer_id = list_to_binary(CustomerID),
+			client_type = ClientType,
 			type = Type,
 			message = list_to_binary(Message),
 			encoding = Encoding,
 			params = sms_req_params_to_dto(Params),
 			source_addr = full_addr_to_dto(SourceAddr),
 			dest_addrs = dest_addrs_to_dto(DestAddrs),
-			message_ids = [list_to_binary(MesID) || MesID <- MessageIDs]
+			message_ids = MessageIDs
 		},
 		{ok, DTO};
 		{error, Error} -> {error, Error}
@@ -156,11 +159,13 @@ decode(#just_sms_response_dto{}, Bin) ->
 				statuses = Statuses,
 				timestamp = Timestamp
 			} = SmsResponse,
+			{StatusesDTO, ClientType} = sms_statuses_to_dto(Statuses),
 			DTO = #just_sms_response_dto{
-				id = adto_uuid:to_binary(ID),
-				gateway_id = adto_uuid:to_binary(GtwID),
-				customer_id = adto_uuid:to_binary(CustomerID),
-				statuses = sms_statuses_to_dto(Statuses),
+				id = list_to_binary(ID),
+				gateway_id = list_to_binary(GtwID),
+				customer_id = list_to_binary(CustomerID),
+				client_type = ClientType,
+				statuses = StatusesDTO,
 				timestamp = list_to_binary(Timestamp)
 			},
 			{ok, DTO};
@@ -182,7 +187,7 @@ decode(#just_incoming_sms_dto{}, Bin) ->
 				timestamp = Timestamp
 		   	} = IncomingSms,
 			DTO = #just_incoming_sms_dto{
-				gateway_id = adto_uuid:to_binary(GtwID),
+				gateway_id = list_to_binary(GtwID),
 				source = full_addr_to_dto(Source),
 				dest = full_addr_to_dto(Dest),
 				message = list_to_binary(Message),
@@ -205,7 +210,7 @@ decode(#just_delivery_receipt_dto{}, Bin) ->
 				timestamp = Timestamp
 			} = Asn,
 			DTO = #just_delivery_receipt_dto{
-				gateway_id = adto_uuid:to_binary(GtwID),
+				gateway_id = list_to_binary(GtwID),
 				receipts = just_receipt_to_dto(Receipts),
 				timestamp = Timestamp
 			},
@@ -312,7 +317,7 @@ dest_addrs_to_asn({part, Addresses}) ->
 
 %% Sms Statuses
 
-sms_statuses_to_asn(DTO = #just_sms_status_dto{}) ->
+sms_statuses_to_asn(DTO = #just_sms_status_dto{}, ClientType) ->
 	#just_sms_status_dto{
 		original_id = OriginalID,
 		dest_addr = DestAddr,
@@ -323,7 +328,7 @@ sms_statuses_to_asn(DTO = #just_sms_status_dto{}) ->
 		error_code = ErrorCode
 	} = DTO,
 	#'SmStatus'{
-		originalId = binary_to_list(OriginalID),
+		originalId = atom_to_list(ClientType) ++ "@" ++ binary_to_list(OriginalID),
 		destAddr = full_addr_to_asn(DestAddr),
 		status = Status,
 		partsTotal = PartsTotal,
@@ -331,12 +336,16 @@ sms_statuses_to_asn(DTO = #just_sms_status_dto{}) ->
 		messageId = to_optional_asn(MessageID, fun binary_to_list/1),
 		errorCode = to_optional_asn(ErrorCode)
 	};
-sms_statuses_to_asn(Statuses) ->
-	[sms_statuses_to_asn(Status) || Status <- Statuses].
+sms_statuses_to_asn(Statuses, ClientType) ->
+	[sms_statuses_to_asn(Status, ClientType) || Status <- Statuses].
 
-sms_statuses_to_dto(SmsStatus = #'SmStatus'{}) ->
+sms_statuses_to_dto(Statuses) ->
+	sms_statuses_to_dto(Statuses, [], funnel).
+sms_statuses_to_dto([], Acc, ClientType) ->
+	{lists:reverse(Acc), ClientType};
+sms_statuses_to_dto([SmsStatus | RestStatuses], Acc, _ClientType) ->
 	#'SmStatus'{
-		originalId = OriginalID,
+		originalId = RawOriginalID,
 		destAddr = DestAddr,
 		status = Status,
 		partsTotal = PartsTotal,
@@ -344,7 +353,8 @@ sms_statuses_to_dto(SmsStatus = #'SmStatus'{}) ->
 		messageId = MessageID,
 		errorCode = ErrorCode
 	} = SmsStatus,
-	#just_sms_status_dto{
+	{OriginalID, NewClientType} = substract_client_type([RawOriginalID]),
+	DTO = #just_sms_status_dto{
 		original_id = list_to_binary(OriginalID),
 		dest_addr = full_addr_to_dto(DestAddr),
 		status = Status,
@@ -352,9 +362,9 @@ sms_statuses_to_dto(SmsStatus = #'SmStatus'{}) ->
 		part_index = from_optional_asn(PartIndex),
 		message_id = from_optional_asn(MessageID, fun list_to_binary/1),
 		error_code = from_optional_asn(ErrorCode)
-	};
-sms_statuses_to_dto(Statuses) ->
-	[sms_statuses_to_dto(Status) || Status <- Statuses].
+	},
+	sms_statuses_to_dto(RestStatuses, [DTO | Acc], NewClientType).
+
 
 %% Optional Asn Values
 
@@ -410,3 +420,47 @@ just_receipt_to_dto(Asn = #'DeliveryReceipt'{}) ->
 	};
 just_receipt_to_dto(Receipts) ->
 	[just_receipt_to_dto(Receipt) || Receipt <- Receipts].
+
+%% Client type hack
+
+add_client_type(ListMessageIDsBin, ClientTypeAtom) ->
+	ClientType = atom_to_list(ClientTypeAtom),
+	MessageIDs = [binary_to_list(MesID) || MesID <- ListMessageIDsBin],
+	lists:map(fun(ID) ->
+		case string:tokens(ID, ":") of
+			[_] -> ClientType ++ "@" ++ ID;
+			List -> string:join([ClientType ++ "@" ++ Item || Item <- List], ":")
+		end
+	end, MessageIDs).
+
+
+substract_client_type(RawMessageIDs) ->
+	substract_client_type(RawMessageIDs, [], funnel).
+
+substract_client_type([], Acc, ClientType) ->
+	{[list_to_binary(Item) || Item <- lists:reverse(Acc)], ClientType};
+substract_client_type([RawID | RestIDs], Acc, ClientType) ->
+	case string:tokens(RawID, ":") of
+		[_] ->
+			{ID, NewClientType} = try_split_single(RawID, ClientType),
+			substract_client_type(RestIDs, [ID | Acc], NewClientType);
+	   	List ->
+			{IDs, NewClientType} = try_split_partial(List, ClientType),
+			substract_client_type(RestIDs, [string:join(IDs, ":") | Acc], NewClientType)
+	end.
+
+try_split_partial(List, ClientType) ->
+	try_split_partial(List, [], ClientType).
+try_split_partial([], Acc, ClientType) ->
+	{lists:reverse(Acc), ClientType};
+try_split_partial([RawID | RestIDs], Acc, ClientType) ->
+	{ID, NewClientType} = try_split_single(RawID, ClientType),
+	try_split_partial(RestIDs, [ID | Acc], NewClientType).
+
+try_split_single(RawID, ClientType) ->
+	case string:tokens(RawID, "@") of
+		[_] ->
+			{RawID, ClientType};
+		["k1api", ID] ->
+			{ID, k1api}
+	end.

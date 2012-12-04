@@ -1,3 +1,7 @@
+%% @doc Alley DTO interface module.
+%% Provides public methods to decode & encode messages.
+%% Routes calls by dto record name to suitable dto codec module.
+
 -module(adto).
 
 -export([
@@ -6,6 +10,10 @@
 ]).
 
 -include("adto.hrl").
+
+%% ===================================================================
+%% API Functions
+%% ===================================================================
 
 -spec encode(message_type_dto()) ->
 	{ok, binary()} |
@@ -21,7 +29,11 @@ decode(Type, Message) ->
 	Module = module(Type),
 	Module:decode(Type, Message).
 
-%% Funnel entities
+%% ===================================================================
+%% Internal Functions
+%% ===================================================================
+
+%% Funnel dto
 module(#funnel_auth_request_dto{}) ->
 	funnel();
 module(#funnel_auth_response_dto{}) ->
@@ -40,8 +52,12 @@ module(#funnel_delivery_receipt_dto{}) ->
 	funnel();
 module(#funnel_ack_dto{}) ->
 	funnel();
+module(#funnel_connections_request_dto{}) ->
+	funnel();
+module(#funnel_connections_response_dto{}) ->
+	funnel();
 
-%% Just entities
+%% Just dto
 module(#just_sms_request_dto{}) ->
 	just();
 module(#just_sms_response_dto{}) ->
@@ -51,11 +67,46 @@ module(#just_incoming_sms_dto{}) ->
 module(#just_delivery_receipt_dto{}) ->
 	just();
 
+%% k1api dto
+module(#k1api_auth_request_dto{}) ->
+	k1api();
+module(#k1api_auth_response_dto{}) ->
+	k1api();
+module(#k1api_sms_delivery_status_request_dto{}) ->
+	k1api();
+module(#k1api_sms_delivery_status_response_dto{}) ->
+	k1api();
+module(#k1api_retrieve_sms_request_dto{}) ->
+	k1api();
+module(#k1api_retrieve_sms_response_dto{}) ->
+	k1api();
+module(#k1api_remove_retrieved_sms_request_dto{}) ->
+	k1api();
+module(#k1api_subscribe_incoming_sms_request_dto{}) ->
+	k1api();
+module(#k1api_subscribe_incoming_sms_response_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_incoming_sms_request_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_incoming_sms_response_dto{}) ->
+	k1api();
+module(#k1api_sms_notification_request_dto{}) ->
+	k1api();
+module(#k1api_subscribe_sms_receipts_request_dto{}) ->
+	k1api();
+module(#k1api_subscribe_sms_receipts_response_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_sms_receipts_request_dto{}) ->
+	k1api();
+module(#k1api_unsubscribe_sms_receipts_response_dto{}) ->
+	k1api();
+module(#k1api_sms_delivery_receipt_notification_dto{}) ->
+	k1api();
+
 module(Type) ->
 	erlang:error({adto_unsupported_type, Type}).
 
-funnel() ->
-	adto_funnel.
-
-just() ->
-	adto_just.
+%% codec modules
+funnel() -> adto_funnel.
+just() -> adto_just.
+k1api() -> adto_k1api.

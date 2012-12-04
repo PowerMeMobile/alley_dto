@@ -1,26 +1,21 @@
-REBAR=./rebar -C rebar.test.config
-
 all: test
 
-test: clean compile
-	@erl -noshell -pa ebin/ \
-					dep/*/ebin/ \
-		-eval 'application:start(alley_dto)' \
-		-eval 'eunit:test("ebin",[verbose])' \
-		-s init stop
+test: compile
+	@./rebar skip_deps=true eunit
 
 get-deps:
-	@$(REBAR) get-deps
+	@./rebar get-deps
 
 compile: get-deps
-	@$(REBAR) compile
+	@./rebar compile
 
 clean:
-	@$(REBAR) clean
+	@./rebar clean
 
 dev: compile
 	@erl -noshell -pa ebin/ \
-					dep/*/ebin/ \
+					deps/*/ebin/ \
+		-eval 'application:start(uuid)' \
 		-eval 'application:start(alley_dto)' \
-		-eval 'adto_just_tests:just_incoming_sms_test()' \
+		-eval 'adto_just_tests:just_sms_response_test()' \
 		-s init stop

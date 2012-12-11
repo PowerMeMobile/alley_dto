@@ -773,11 +773,8 @@ receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
 receipts_to_dto(Receipts) ->
 	[receipts_to_dto(Receipt) || Receipt <- Receipts].
 
-date_to_asn(UnixTime) ->
-	NM = UnixTime div 1000000,
-	NS = UnixTime - (NM * 1000000),
-	T = {NM, NS, 0},
-	{{YY, MM, DD}, {H, M, S}} = calendar:now_to_universal_time(T),
+date_to_asn(TimeStamp) ->
+	{{YY, MM, DD}, {H, M, S}} = calendar:now_to_universal_time(TimeStamp),
 	lists:map(
 		fun(C) ->
 			case C of
@@ -791,8 +788,11 @@ date_to_asn(UnixTime) ->
 date_to_dto(StrUTCTime) ->
 	{ok,[YY, MM, DD, H, M, S],[]} = io_lib:fread("~4d~2d~2d~2d~2d~2d", StrUTCTime),
     ReferenceDate = {{1970,1,1},{0,0,0}},
-    calendar:datetime_to_gregorian_seconds({{YY, MM, DD}, {H, M, S}}) -
-	calendar:datetime_to_gregorian_seconds(ReferenceDate).
+    UTCUnixEpoch = calendar:datetime_to_gregorian_seconds({{YY, MM, DD}, {H, M, S}}) -
+		calendar:datetime_to_gregorian_seconds(ReferenceDate),
+	MegaSecs = trunc(UTCUnixEpoch / 1000000),
+	Secs = (UTCUnixEpoch - MegaSecs * 1000000),
+	{MegaSecs, Secs, 0}.
 
 message_encoding_to_dto({_, Encoding}) ->
 	Encoding.

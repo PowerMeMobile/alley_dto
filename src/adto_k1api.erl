@@ -166,7 +166,7 @@ decode(#k1api_sms_notification_request_dto{}, Bin) ->
 	} = PB,
 	DTO = #k1api_sms_notification_request_dto{
 		callback_data = Callback,
-		datetime = DateTime,
+		datetime = date_to_dto(DateTime),
 		dest_addr = addr_pb_to_dto(DestAddr),
 		message_id = MessageID,
 		message = Message,
@@ -460,7 +460,7 @@ encode(DTO = #k1api_sms_notification_request_dto{}) ->
 	} = DTO,
 	PB = #smsnotificationreq{
 		callback_data = Callback,
-		datetime = DateTime,
+		datetime = date_to_pb(DateTime),
 		dest_addr = addr_dto_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message,
@@ -696,7 +696,7 @@ retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->
 		message = Message
 	} = DTO,
 	#retrievedmessage{
-		datetime = DateTime,
+		datetime = date_to_pb(DateTime),
 		sender_addr = addr_dto_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message
@@ -712,7 +712,7 @@ retrieved_messages_to_dto(PB = #retrievedmessage{}) ->
 		message = Message
 	} = PB,
 	#k1api_retrieved_sms_dto{
-		datetime = DateTime,
+		datetime = date_to_dto(DateTime),
 		sender_addr = addr_pb_to_dto(DestAddr),
 		message_id = MessageID,
 		message = Message
@@ -795,3 +795,14 @@ provider_pb_to_dto(Provider = #provider{}) ->
 	};
 provider_pb_to_dto(List) ->
 	[provider_pb_to_dto(Item) || Item <- List].
+
+date_to_pb(TimeStamp) ->
+	{{YY, MM, DD}, {H, M, S}} = calendar:now_to_universal_time(TimeStamp),
+    ReferenceDate = {{1970,1,1},{0,0,0}},
+	calendar:datetime_to_gregorian_seconds({{YY, MM, DD}, {H, M, S}}) -
+		calendar:datetime_to_gregorian_seconds(ReferenceDate).
+
+date_to_dto(UTCUnixEpoch) ->
+	MegaSecs = trunc(UTCUnixEpoch / 1000000),
+	Secs = (UTCUnixEpoch - MegaSecs * 1000000),
+	{MegaSecs, Secs, 0}.

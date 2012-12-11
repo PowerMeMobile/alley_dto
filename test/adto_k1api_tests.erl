@@ -237,7 +237,7 @@ retrieve_sms_request2() ->
 
 retrieve_sms_response() ->
 	MessageDTO = #k1api_retrieved_sms_dto{
-		datetime = 1348574534,
+		datetime = {1355,224026, 0},
 		sender_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>
@@ -310,7 +310,7 @@ unsubscribe_incoming_sms_response() ->
 incoming_sms_request() ->
 	DTO = #k1api_sms_notification_request_dto{
 		callback_data = <<"callback">>,
-		datetime = 1348574534,
+		datetime = {1355,224026, 0},
 		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>,

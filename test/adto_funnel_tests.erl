@@ -64,8 +64,8 @@ success_auth_response() ->
 		uuid = uuid:newid(),
 		priority = 0,
 		rps = 100,
-		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
-		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
+		default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
 		providers = [Provider],
 		default_provider_id = uuid:newid(),
@@ -142,8 +142,8 @@ client_offline_event() ->
 
 incoming_sms() ->
 	MessageDTO = #funnel_incoming_sms_message_dto{
-		source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
-		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
+		dest = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 	 	message = <<"message">>,
 		data_coding = gsm0338
 	},
@@ -164,8 +164,8 @@ delivery_receipt() ->
 		submit_date = {1355,224026, 0},
 		done_date = {1355,224026, 0},
 		message_state = delivered,
-		source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
-		dest = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}
+		source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
+		dest = #addr{addr = <<"375259090909">>, ton = 1, npi = 1}
 	},
 	DTO = #funnel_delivery_receipt_dto{
 		id = uuid:newid(),

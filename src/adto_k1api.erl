@@ -323,7 +323,7 @@ encode(DTO = #k1api_sms_delivery_status_request_dto{}) ->
 		customer_id = CustomerID,
 		user_id = UserID,
 		sms_request_id = RequestID,
-		address = addr_dto_to_pb(Addr)
+		address = addr_to_pb(Addr)
 	},
 	Bin = k1api_pb:encode_smsdeliverystatusreq(PB),
 	{ok, Bin};
@@ -352,7 +352,7 @@ encode(DTO = #k1api_retrieve_sms_request_dto{}) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		dest_addr = addr_dto_to_pb(Address),
+		dest_addr = addr_to_pb(Address),
 		batch_size = BatchSize
 	},
 	Bin = k1api_pb:encode_retrievesmsreq(PB),
@@ -400,7 +400,7 @@ encode(DTO = #k1api_subscribe_incoming_sms_request_dto{}) ->
 		id = ID,
 		customer_id = CustomerID,
 		user_id = UserID,
-		dest_addr = addr_dto_to_pb(DestAddr),
+		dest_addr = addr_to_pb(DestAddr),
 		notify_url = NotifyURL,
 		criteria = Criteria,
 		notification_format = Format,
@@ -461,10 +461,10 @@ encode(DTO = #k1api_sms_notification_request_dto{}) ->
 	PB = #smsnotificationreq{
 		callback_data = Callback,
 		datetime = date_to_pb(DateTime),
-		dest_addr = addr_dto_to_pb(DestAddr),
+		dest_addr = addr_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message,
-		sender_addr = addr_dto_to_pb(SenderAddr),
+		sender_addr = addr_to_pb(SenderAddr),
 		notify_url = NotifyURL
 	},
 	Bin = k1api_pb:encode_smsnotificationreq(PB),
@@ -507,8 +507,8 @@ encode(DTO = #k1api_auth_response_dto{}) ->
 		system_id = SystemID,
 		uuid = UUID,
 		billing_type = BillingType,
-		allowed_sources = addr_dto_to_pb(AllowedSources),
-		default_source = addr_dto_to_pb(DefaultSource),
+		allowed_sources = addr_to_pb(AllowedSources),
+		default_source = addr_to_pb(DefaultSource),
 		networks = network_dto_to_pb(Networks),
 		providers = provider_dto_to_pb(Providers),
 		default_provider_id = DefProviderID,
@@ -534,7 +534,7 @@ encode(DTO = #k1api_subscribe_sms_receipts_request_dto{}) ->
 		customer_id = CustomerID,
 		user_id = UserID,
 		url = Url,
-		dest_addr = addr_dto_to_pb(DestAddr),
+		dest_addr = addr_to_pb(DestAddr),
 		callback_data = Callback
 	},
 	Bin = k1api_pb:encode_smsreceiptssubscribereq(PB),
@@ -586,7 +586,7 @@ encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
 	} = DTO,
 	PB = #smsdeliveryreceiptnotification{
 		id = ID,
-		dest_addr = addr_dto_to_pb(DestAddr),
+		dest_addr = addr_to_pb(DestAddr),
 		status = status_name_dto_to_pb(Status),
 		callback_data = CallbackData,
 		url = Url
@@ -602,10 +602,10 @@ encode(Message) ->
 %% Internal
 %% ===================================================================
 
-addr_dto_to_pb(undefined) ->
+addr_to_pb(undefined) ->
 	undefined;
-addr_dto_to_pb(AddrDTO = #addr_dto{}) ->
-	#addr_dto{
+addr_to_pb(AddrDTO = #addr{}) ->
+	#addr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
@@ -615,8 +615,8 @@ addr_dto_to_pb(AddrDTO = #addr_dto{}) ->
 		ton = TON,
 		npi = NPI
 	};
-addr_dto_to_pb(List) ->
-	[addr_dto_to_pb(Item) || Item <- List].
+addr_to_pb(List) ->
+	[addr_to_pb(Item) || Item <- List].
 
 addr_pb_to_dto(undefined) ->
 	undefined;
@@ -626,7 +626,7 @@ addr_pb_to_dto(AddrPB = #fulladdr{}) ->
 		ton = TON,
 		npi = NPI
 	} = AddrPB,
-	#addr_dto{
+	#addr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
@@ -640,7 +640,7 @@ sms_statuses_dto_to_pb(StatusDTO = #k1api_sms_status_dto{}) ->
 		status = Status
 	} = StatusDTO,
 	#smsstatus{
-		address = addr_dto_to_pb(Addr),
+		address = addr_to_pb(Addr),
 		status = status_name_dto_to_pb(Status)
 	};
 sms_statuses_dto_to_pb(Statuses) ->
@@ -697,7 +697,7 @@ retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->
 	} = DTO,
 	#retrievedmessage{
 		datetime = date_to_pb(DateTime),
-		sender_addr = addr_dto_to_pb(DestAddr),
+		sender_addr = addr_to_pb(DestAddr),
 		message_id = MessageID,
 		message = Message
 	};

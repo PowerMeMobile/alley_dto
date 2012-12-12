@@ -1,25 +1,13 @@
 -ifndef(adto_hrl).
 -define(adto_hrl, included).
 
+-include("addr.hrl").
+
 %% ===================================================================
 %% Generic DTO
 %% ===================================================================
 
 -type client_type() 	:: k1api | funnel.
-
--record(addr_dto, {
-	addr 				:: bitstring(),
-	ton 				:: integer(),
-	npi 				:: integer()
-}).
--type addr_dto() 		:: #addr_dto{}.
-
--record(addr_ref_num_dto, {
-	full_addr 			:: #addr_dto{},
-	ref_num 			:: integer()
-}).
-
-
 -type billing_type_() 	:: prepaid | postpaid.
 -type uuid_() 			:: bitstring(). 	%% <<"12fd794d-9e32-4cf6...
 -type smpp_type_dto() 	:: receiver | transciever | transmitter.
@@ -75,8 +63,8 @@
 	uuid 				:: uuid_(),
 	priority 			:: integer(),
 	rps 				:: integer() | undefined,
-	allowed_sources 	:: [#addr_dto{}],
-	default_source 		:: #addr_dto{} | undefined,
+	allowed_sources 	:: [addr()],
+	default_source 		:: addr() | undefined,
 	networks 			:: [#network_dto{}],
 	providers 			:: [#provider_dto{}],
 	default_provider_id :: uuid_() | undefined,
@@ -168,8 +156,8 @@
 	message 		:: binary(),
 	encoding 		:: jsms_req_encoding(),
 	params 			:: jsms_req_params(),
-	source_addr, 	%% :: full_addr(),
-	dest_addrs, 	%% :: jsms_req_dest_addrs(),
+	source_addr 	:: addr(),
+	dest_addrs	 	:: {regular, addr()} | {part, addr()},
 	message_ids 	:: [bitstring()]
 }).
 
@@ -183,8 +171,8 @@
 	{other, integer()}.
 
 -record(funnel_incoming_sms_message_dto, {
-	source 			:: addr_dto(),
-	dest 			:: addr_dto(),
+	source 			:: addr(),
+	dest 			:: addr(),
 	message 		:: binary(),
 	data_coding 	:: funnel_incoming_sms_datacoding()
 }).
@@ -212,8 +200,8 @@
 	submit_date 	:: integer(),  %% utc unix epoch
 	done_date 		:: integer(), %% utc unix epoch
 	message_state 	:: message_state_dto(),
-	source 			:: addr_dto(),
-	dest 			:: addr_dto()
+	source 			:: addr(),
+	dest 			:: addr()
 }).
 
 -record(funnel_delivery_receipt_dto, {
@@ -258,7 +246,7 @@
 
 -record(just_sms_status_dto, {
 	original_id 	:: bitstring(), %% <<"634">>
-	dest_addr 		:: #addr_dto{},
+	dest_addr 		:: addr(),
 	status 			:: success | failure,
 	parts_total 	:: integer(),
 	part_index 		:: integer() | undefined,
@@ -281,8 +269,8 @@
 
 -record(just_incoming_sms_dto, {
 	gateway_id 		:: uuid_(),
-	source 			:: #addr_dto{},
-	dest 			:: #addr_dto{},
+	source 			:: addr(),
+	dest 			:: addr(),
 	message 		:: binary(),
 	data_coding 	:: integer(),
 	parts_ref_num 	:: integer() | undefined,
@@ -308,7 +296,7 @@
 -record(just_receipt_dto, {
 	message_id 		:: bitstring(), %% <<"614">>
 	message_state 	:: just_receipt_message_state(),
-	source 			:: #addr_dto{}
+	source 			:: addr()
 }).
 
 -record(just_delivery_receipt_dto, {
@@ -326,7 +314,7 @@
 	customer_id 	:: uuid_(),
 	user_id 		:: bitstring(),
 	sms_request_id 	:: uuid_(),
-	address 		:: #addr_dto{}
+	address 		:: addr()
 }).
 
 %% ===================================================================
@@ -349,7 +337,7 @@
 	unrecognized.
 
 -record(k1api_sms_status_dto, {
-	address 	:: #addr_dto{},
+	address 	:: addr(),
 	status 		:: k1api_sms_status()
 }).
 
@@ -366,7 +354,7 @@
 	id 			:: uuid_(),
 	customer_id :: uuid_(),
 	user_id 	:: bitstring(), %% <<"user_id">>
-	dest_addr 	:: #addr_dto{},
+	dest_addr 	:: addr(),
 	batch_size 	:: undefined | integer()
 }).
 
@@ -376,7 +364,7 @@
 
 -record(k1api_retrieved_sms_dto, {
 	datetime 	:: integer(), %% unix epoch seconds
-	sender_addr :: #addr_dto{},
+	sender_addr :: addr(),
 	message_id 	:: bitstring(), %% <<"123">>
 	message 	:: bitstring() %% <<"message">>
 }).
@@ -404,7 +392,7 @@
 	id 					:: uuid_(),
 	customer_id 		:: uuid_(),
 	user_id 			:: bitstring(),
-	dest_addr 			:: #addr_dto{},
+	dest_addr 			:: addr(),
 	notify_url 			:: bitstring(),
 	criteria 			:: undefined | bitstring(),
 	notification_format :: undefined | bitstring(), %% <<"json">>
@@ -439,10 +427,10 @@
 -record(k1api_sms_notification_request_dto, {
 	callback_data 		:: bitstring(),
 	datetime 			:: integer(), %% unix epoch seconds
-	dest_addr 			:: #addr_dto{},
+	dest_addr 			:: addr(),
 	message_id 			:: bitstring(),
 	message 			:: bitstring(),
-	sender_addr 		:: #addr_dto{},
+	sender_addr 		:: addr(),
 	notify_url 			:: bitstring()
 }).
 
@@ -462,8 +450,8 @@
 	system_id 			:: bitstring(), %% <<"system-id">>
 	uuid 				:: uuid_(),
 	billing_type 		:: billing_type_(),
-	allowed_sources 	:: [#addr_dto{}],
-	default_source 		:: #addr_dto{} | undefined,
+	allowed_sources 	:: [addr()],
+	default_source 		:: addr() | undefined,
 	networks 			:: [#network_dto{}],
 	providers 			:: [#provider_dto{}],
 	default_provider_id :: uuid_() | undefined,
@@ -482,7 +470,7 @@
 	customer_id 	:: uuid_(),
 	user_id 		:: bitstring(), %% <<"user">>
 	url 			:: bitstring(),
-	dest_addr 		:: #addr_dto{},
+	dest_addr 		:: addr(),
 	callback_data 	:: bitstring() %% <<"callback">>
 }).
 
@@ -503,7 +491,7 @@
 
 -record(k1api_sms_delivery_receipt_notification_dto, {
 	id 				:: uuid_(),
-	dest_addr 		:: #addr_dto{},
+	dest_addr 		:: addr(),
 	status 			:: k1api_sms_status(),
 	callback_data 	:: bitstring(),
 	url 			:: bitstring()
@@ -561,6 +549,3 @@
 	#k1api_sms_delivery_receipt_notification_dto{}.
 
 -endif. % adto_hrl
-
-
-

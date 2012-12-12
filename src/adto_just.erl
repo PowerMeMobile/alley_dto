@@ -264,56 +264,60 @@ sms_req_params_to_dto(Params) ->
 
 %% FullAddr
 
-full_addr_to_asn(FullAddr) ->
-	#addr_dto{
+full_addr_to_asn(FAddr = #addr{ref_num = undefined}) ->
+	#addr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
-	} = FullAddr,
+	} = FAddr,
 	#'FullAddr'{
 		addr = binary_to_list(Addr),
 		ton = TON,
 		npi = NPI
+	};
+full_addr_to_asn(FAddr = #addr{}) ->
+	#addr{
+		addr = Addr,
+		ton = TON,
+		npi = NPI,
+		ref_num = RefNum
+	} = FAddr,
+	#'FullAddrAndRefNum'{
+		fullAddr = #'FullAddr'{addr = binary_to_list(Addr), ton = TON, npi = NPI},
+		refNum = RefNum
 	}.
 
 
-full_addr_to_dto(FullAddr) ->
+full_addr_to_dto(FAddr = #'FullAddr'{}) ->
 	#'FullAddr'{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
-	} = FullAddr,
-	#addr_dto{
+	} = FAddr,
+	#addr{
 		addr = list_to_binary(Addr),
 		ton = TON,
 		npi = NPI
+	};
+full_addr_to_dto(FAddr = #'FullAddrAndRefNum'{}) ->
+	#'FullAddrAndRefNum'{
+		fullAddr = #'FullAddr'{addr = Addr, ton = TON, npi = NPI},
+		refNum = RefNum
+	} = FAddr,
+	#addr{
+		addr = list_to_binary(Addr),
+		ton = TON,
+		npi = NPI,
+		ref_num = RefNum
 	}.
 
 %% DestAddr
 
-dest_addrs_to_dto({regular, Addresses}) ->
-	{regular, [full_addr_to_dto(Addr) || Addr <- Addresses]};
-dest_addrs_to_dto({part, Addresses}) ->
-	#'FullAddrAndRefNum'{
-		fullAddr = FullAddr,
-		refNum = RefNum
-	} = Addresses,
-	#addr_ref_num_dto{
-		full_addr = full_addr_to_dto(FullAddr),
-		ref_num = RefNum
-	}.
+dest_addrs_to_dto({Type, Addresses}) ->
+	{Type, [full_addr_to_dto(Addr) || Addr <- Addresses]}.
 
-dest_addrs_to_asn({regular, Addresses}) ->
-	{regular, [full_addr_to_asn(Addr) || Addr <- Addresses]};
-dest_addrs_to_asn({part, Addresses}) ->
-	#addr_ref_num_dto{
-		full_addr = FullAddr,
-		ref_num = RefNum
-	} = Addresses,
-	#'FullAddrAndRefNum'{
-		fullAddr = full_addr_to_asn(FullAddr),
-		refNum = RefNum
-	}.
+dest_addrs_to_asn({Type, Addresses}) ->
+	{Type, [full_addr_to_asn(Addr) || Addr <- Addresses]}.
 
 %% Sms Statuses
 

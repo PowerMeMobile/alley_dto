@@ -49,7 +49,7 @@ subscribe_sms_receipts_request() ->
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
 		url = <<"url">>,
-		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		callback_data = <<"callback">>
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -98,7 +98,7 @@ unsubscribe_sms_receipts_response() ->
 sms_delivery_receipt_notification() ->
 	DTO = #k1api_sms_delivery_receipt_notification_dto{
 		id = uuid:newid(),
-		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		status = submitted,
 		callback_data = <<"callback">>,
 		url = <<"url">>
@@ -144,8 +144,8 @@ auth_response() ->
 		system_id = <<"system-id">>,
 		uuid = uuid:newid(),
 		billing_type = prepaid, %% postpaid
-		allowed_sources = [#addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1}],
-		default_source = #addr_dto{addr = <<"375259090909">>, ton = 1, npi = 1},
+		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
+		default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
 		providers = [Provider],
 		default_provider_id = uuid:newid(),
@@ -167,7 +167,7 @@ sms_delivery_status_request() ->
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
 		sms_request_id = uuid:newid(),
-		address = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1}
+		address = #addr{addr = <<"375269090909">>, ton = 1, npi = 1}
 	},
 	?assertEqual(DTO, decode(#k1api_sms_delivery_status_request_dto{}, encode(DTO))).
 
@@ -192,7 +192,7 @@ statuses() ->
 
 sms_delivery_status_response() ->
 	StatusesDTO = [#k1api_sms_status_dto{
-		address = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		address = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		status = Status
 	} || Status <- statuses()],
 	DTO = #k1api_sms_delivery_status_response_dto{
@@ -212,7 +212,7 @@ retrieve_sms_request() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
-		dest_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = 5
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -224,7 +224,7 @@ retrieve_sms_request2() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
-		dest_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = undefined
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -238,7 +238,7 @@ retrieve_sms_request2() ->
 retrieve_sms_response() ->
 	MessageDTO = #k1api_retrieved_sms_dto{
 		datetime = {1355,224026, 0},
-		sender_addr = #addr_dto{addr = <<"375269090909">>, ton = 1, npi = 1},
+		sender_addr = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>
 	},
@@ -272,7 +272,7 @@ subscribe_incoming_sms_request() ->
 		id = uuid:newid(),
 		customer_id = uuid:newid(),
 		user_id = <<"user">>,
-		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		notify_url = <<"some_url">>,
 		criteria = <<"criteria">>,
 		notification_format = undefined,
@@ -311,10 +311,10 @@ incoming_sms_request() ->
 	DTO = #k1api_sms_notification_request_dto{
 		callback_data = <<"callback">>,
 		datetime = {1355,224026, 0},
-		dest_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		message_id = <<"123">>,
 		message = <<"message">>,
-		sender_addr = #addr_dto{addr = <<"123456">>, ton = 1, npi = 1},
+		sender_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		notify_url  = <<"notify_url">>
 	},
 	{ok, Bin} = adto:encode(DTO),

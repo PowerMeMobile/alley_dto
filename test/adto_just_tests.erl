@@ -31,8 +31,8 @@ just_sms_request() ->
 		message = <<"message">>,
 		encoding = {text, default},
 		params = [#just_sms_request_param_dto{name = <<"registered_delivery">>, value = {boolean, true}}],
-		source_addr = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
-		dest_addrs = {regular, [#addr_dto{addr = <<"375253723886">>, ton = 1, npi = 1}]},
+		source_addr = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
+		dest_addrs = {regular, [#addr{addr = <<"375253723886">>, ton = 1, npi = 1}]},
 		message_ids = [<<"634">>]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -45,7 +45,7 @@ just_sms_request() ->
 just_sms_response() ->
 	StatusDTO = #just_sms_status_dto{
 		original_id = <<"614">>,
-		dest_addr = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
+		dest_addr = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		status = success,
 		parts_total = 1,
 		part_index = undefined,
@@ -70,8 +70,8 @@ just_sms_response() ->
 just_incoming_sms() ->
 	DTO = #just_incoming_sms_dto{
 		gateway_id = uuid:newid(),
-		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
-		dest = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1},
+		source = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
+		dest = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		message = <<"message">>,
 		data_coding = 0,
 		parts_ref_num = undefined,
@@ -90,7 +90,7 @@ just_delivery_receipt() ->
 	ReceiptDTO = #just_receipt_dto{
 		message_id = <<"614">>,
 		message_state = delivered,
-		source = #addr_dto{addr = <<"375296662323">>, ton = 1, npi = 1}
+		source = #addr{addr = <<"375296662323">>, ton = 1, npi = 1}
 	},
 	DTO = #just_delivery_receipt_dto{
 		gateway_id = uuid:newid(),

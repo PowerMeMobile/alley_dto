@@ -535,8 +535,8 @@ from_optional_asn(OptionalValue, Fun) ->
 
 %% Addr
 
-addr_to_asn(FullAddr = #addr_dto{}) ->
-	#addr_dto{
+addr_to_asn(FullAddr = #addr{}) ->
+	#addr{
 		addr = Addr,
 		ton = TON,
 		npi = NPI
@@ -555,7 +555,7 @@ addr_to_dto(FullAddr = #'Addr'{}) ->
 		ton = TON,
 		npi = NPI
 	} = FullAddr,
-	#addr_dto{
+	#addr{
 		addr = list_to_binary(Addr),
 		ton = TON,
 		npi = NPI

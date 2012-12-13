@@ -128,12 +128,12 @@
 %% ===================================================================
 
 -type jsms_req_encoding() ::
-	{text, default} |
-	{text, gsm0338} |
-	{text, ascii} |
-	{text, latin1} |
-	{text, ucs2} |
-	{other, integer()}.
+	default |
+	gsm0338 |
+	ascii |
+	latin1 |
+	ucs2 |
+	integer().
 
 -type just_sms_request_param_value() ::
 	{integer, integer()} |
@@ -166,9 +166,9 @@
 %% ===================================================================
 
 -type funnel_incoming_sms_datacoding() ::
-	{text, gsm0338} |
-	{text, ucs2} |
-	{other, integer()}.
+	gsm0338 |
+	ucs2 |
+	integer().
 
 -record(funnel_incoming_sms_message_dto, {
 	source 			:: addr(),

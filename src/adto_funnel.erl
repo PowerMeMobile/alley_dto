@@ -796,7 +796,11 @@ date_to_dto(StrUTCTime) ->
 
 message_encoding_to_dto({_, Encoding}) ->
 	Encoding.
-message_encoding_to_asn(Encoding) when is_atom(Encoding) ->
+message_encoding_to_asn(Encoding) when
+			   Encoding =:= gsm0338
+		orelse Encoding =:= ucs2 ->
 	{text, Encoding};
 message_encoding_to_asn(Encoding) when is_integer(Encoding) ->
-	{other, Encoding}.
+	{other, Encoding};
+message_encoding_to_asn(_) ->
+	erlang:error(badarg).

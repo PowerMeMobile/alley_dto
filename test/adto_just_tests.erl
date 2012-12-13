@@ -12,8 +12,7 @@ just_dto_test_() ->
 	{setup,
 	fun start_uuid/0,
 	fun stop_uuid/1,
-	[?_test(just_sms_request()),
-	?_test(just_sms_response()),
+	[?_test(just_sms_response()),
 	?_test(just_incoming_sms()),
 	?_test(just_delivery_receipt())]}.
 
@@ -21,7 +20,11 @@ just_dto_test_() ->
 %% Just Sms Request Tests
 %% ===================================================================
 
-just_sms_request() ->
+sms_request_encodings_test_() ->
+	ValidEncodings = [default, gsm0338, ascii, latin1, ucs2, 5],
+	[?_test(sms_request_by_encoding(E)) || E <- ValidEncodings].
+
+sms_request_by_encoding(Encoding) ->
 	DTO = #just_sms_request_dto{
 		id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
 		gateway_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
@@ -29,7 +32,7 @@ just_sms_request() ->
 		client_type = k1api,
 		type = regular,
 		message = <<"message">>,
-		encoding = {text, default},
+		encoding = Encoding,
 		params = [#just_sms_request_param_dto{name = <<"registered_delivery">>, value = {boolean, true}}],
 		source_addr = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		dest_addrs = {regular, [#addr{addr = <<"375253723886">>, ton = 1, npi = 1}]},
@@ -73,7 +76,7 @@ just_incoming_sms() ->
 		source = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		dest = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		message = <<"message">>,
-		data_coding = 0,
+		data_coding = gsm0338,
 		parts_ref_num = undefined,
 		parts_count = undefined,
 		part_index = undefined,

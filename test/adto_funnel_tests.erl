@@ -140,12 +140,21 @@ client_offline_event() ->
 %% Funnel Incoming Sms Test
 %% ===================================================================
 
+valid_incoming_sms_encodings_test_() ->
+	ValidEncodings = [gsm0338, ucs2, 5],
+	{setup,
+	fun start_uuid/0,
+	fun stop_uuid/1,
+	[?_test(incoming_sms(E)) || E <- ValidEncodings]}.
+
 incoming_sms() ->
+	incoming_sms(gsm0338).
+incoming_sms(Encoding) ->
 	MessageDTO = #funnel_incoming_sms_message_dto{
 		source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		dest = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 	 	message = <<"message">>,
-		data_coding = gsm0338
+		data_coding = Encoding
 	},
 	DTO = #funnel_incoming_sms_dto{
 		id = uuid:newid(),

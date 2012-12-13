@@ -33,7 +33,7 @@ encode(DTO = #just_sms_request_dto{}) ->
 		customerId = binary_to_list(CustomerID),
 		type = Type,
 		message = binary_to_list(Message),
-		encoding = Encoding,
+		encoding = sms_req_enc_to_asn(Encoding),
 		params = sms_req_params_to_asn(Params),
 		sourceAddr = full_addr_to_asn(SourceAddr),
 		destAddrs = dest_addrs_to_asn(DestAddrs),
@@ -82,7 +82,7 @@ encode(DTO = #just_incoming_sms_dto{}) ->
 		source = full_addr_to_asn(Source),
 		dest = full_addr_to_asn(Dest),
 		message = binary_to_list(Message),
-		dataCoding = DataCoding,
+		dataCoding = inc_sms_enc_to_asn(DataCoding),
 		partsRefNum = to_optional_asn(PartsRefNum),
 		partsCount = to_optional_asn(PartsCount),
 		partIndex = to_optional_asn(PartIndex),
@@ -139,7 +139,7 @@ decode(#just_sms_request_dto{}, Bin) ->
 			client_type = ClientType,
 			type = Type,
 			message = list_to_binary(Message),
-			encoding = Encoding,
+			encoding = sms_req_enc_to_dto(Encoding),
 			params = sms_req_params_to_dto(Params),
 			source_addr = full_addr_to_dto(SourceAddr),
 			dest_addrs = dest_addrs_to_dto(DestAddrs),
@@ -191,7 +191,7 @@ decode(#just_incoming_sms_dto{}, Bin) ->
 				source = full_addr_to_dto(Source),
 				dest = full_addr_to_dto(Dest),
 				message = list_to_binary(Message),
-				data_coding = DataCoding,
+				data_coding = inc_sms_enc_to_dto(DataCoding),
 				parts_ref_num = from_optional_asn(PartsRefNum),
 				parts_count = from_optional_asn(PartsCount),
 				part_index = from_optional_asn(PartIndex),
@@ -468,3 +468,39 @@ try_split_single(RawID, ClientType) ->
 		["k1api", ID] ->
 			{ID, k1api}
 	end.
+
+sms_req_enc_to_asn(Encoding) when
+						Encoding =:= gsm0338
+				orelse 	Encoding =:= default
+				orelse	Encoding =:= ascii
+				orelse	Encoding =:= latin1
+				orelse	Encoding =:= ucs2  ->
+	{text, Encoding};
+sms_req_enc_to_asn(Encoding) when is_integer(Encoding) ->
+	{other, Encoding};
+sms_req_enc_to_asn(_) ->
+	erlang:error(badarg).
+
+sms_req_enc_to_dto({_, Encoding}) ->
+	Encoding.
+
+inc_sms_enc_to_dto(Encoding) when is_integer(Encoding) ->
+	case Encoding of
+		0 -> gsm0338;
+		8 -> ucs2;
+		_ -> Encoding
+	end;
+inc_sms_enc_to_dto(_) ->
+	erlang:error(badarg).
+
+inc_sms_enc_to_asn(Encoding) when
+				   Encoding =:= gsm0338
+			orelse Encoding =:= ucs2
+			orelse is_integer(Encoding) ->
+	case Encoding of
+		gsm0338 -> 0;
+		ucs2 -> 8;
+		Integer -> Integer
+	end;
+inc_sms_enc_to_asn(_) ->
+	erlagn:error(badarg).

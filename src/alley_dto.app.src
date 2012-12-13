@@ -8,6 +8,5 @@
                   stdlib,
 				  uuid
                  ]},
-  {mod, { alley_dto_app, []}},
   {env, []}
  ]}.

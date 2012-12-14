@@ -256,7 +256,7 @@ remove_retrieved_sms_request() ->
 	{ok, DTO} = adto:decode(#k1api_remove_retrieved_sms_request_dto{}, Bin).
 
 %% ===================================================================
-%% Subscribe Incoming Sms
+%% Subscribe Incoming Sms Request
 %% ===================================================================
 
 subscribe_incoming_sms_request() ->
@@ -273,6 +273,10 @@ subscribe_incoming_sms_request() ->
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_subscribe_incoming_sms_request_dto{}, Bin).
+
+%% ===================================================================
+%% Subscribe Incoming Sms Response
+%% ===================================================================
 
 subscribe_incoming_sms_response() ->
 	DTO = #k1api_subscribe_incoming_sms_response_dto{

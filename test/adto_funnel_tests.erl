@@ -3,9 +3,13 @@
 -include("adto.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
+-define(gv(__Key, __PList),
+	((fun() ->
+		proplists:get_value(__Key, __PList)
+	end))()).
+
 funnel_dto_test_() ->
-	[?_test(auth_request()),
-	?_test(success_auth_response()),
+	[?_test(success_auth_response()),
 	?_test(error_auth_response()),
 	?_test(started_event()),
 	?_test(stopped_event()),
@@ -18,24 +22,57 @@ funnel_dto_test_() ->
 	?_test(connections_resp())].
 
 %% ===================================================================
-%% Funnel Auth Tests
+%% Auth Request
 %% ===================================================================
 
-auth_request() ->
+auth_req_test_() ->
+
+%% smpp types test
+	TypeTestPList =
+	[{connection_id, uuid:newid()},
+	{ip, <<"127.0.0.1">>},
+	{customer_id, <<"test_id">>},
+	{user_id, <<"user_id">>},
+	{password, <<"password">>},
+	{is_cached, true}],
+	ValidTypes = [receiver, transceiver, transmitter],
+	ValSmppTypesTestsPlists =
+		[ ?_test(auth_req([{type, T} | TypeTestPList])) || T <- ValidTypes],
+
+%% invalid smpp types test
+	InvTypeTestPList =
+	[{connection_id, uuid:newid()},
+	{ip, <<"127.0.0.1">>},
+	{customer_id, <<"test_id">>},
+	{user_id, <<"user_id">>},
+	{password, <<"password">>},
+	{is_cached, true}],
+	InvalidTypes = [k1api, eoneapi, oneapi, 1, "list", <<"bin">>],
+	InvSmppTypesTestsPlists =
+		[ ?_assertError({badmatch, _}, auth_req([{type, T} | InvTypeTestPList])) || T <- InvalidTypes],
+
+%% All tests
+   	InvSmppTypesTestsPlists ++
+	ValSmppTypesTestsPlists.
+
+auth_req(PList) ->
 	DTO = #funnel_auth_request_dto{
-		connection_id = uuid:newid(),
-		ip = <<"127.0.0.1">>,
-		customer_id = <<"test-sys-id">>,
-		user_id = <<"user">>,
-		password = <<"password">>,
-		type = transmitter,
-		is_cached = true,
+		connection_id = ?gv(connection_id, PList),
+		ip = ?gv(ip, PList),
+		customer_id = ?gv(customer_id, PList),
+		user_id = ?gv(customer_id, PList),
+		password = ?gv(password, PList),
+		type = ?gv(type, PList),
+		is_cached = ?gv(is_cached, PList),
 		timestamp = #fun_precise_time_dto{time = <<"120827114232">>, milliseconds = 1},
 		expiration = #fun_precise_time_dto{time = <<"120827114232">>, milliseconds = 1}
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_auth_request_dto{}, Bin).
 
+%% ===================================================================
+%% Auth Response
+%% ===================================================================
 
 success_auth_response() ->
 	Provider = #provider_dto{

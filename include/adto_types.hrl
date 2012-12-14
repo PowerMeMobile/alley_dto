@@ -7,7 +7,7 @@
 -type billing_type_() 	:: prepaid | postpaid.
 -type uuid_() 			:: binary(). %% <<"12fd794d-9e32-4cf6...
 -type utc_time()	 	:: binary(). %% <<"120827114232">>
--type smpp_type_dto() 	:: receiver | transciever | transmitter.
+-type smpp_type_dto() 	:: receiver | transceiver | transmitter.
 
 -record(error_dto, {
 	error_code	 		:: integer(),

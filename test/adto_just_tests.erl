@@ -3,18 +3,10 @@
 -include("adto.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
-start_uuid() ->
-	ok = application:start(uuid).
-stop_uuid(_) ->
-	application:stop(uuid).
-
 just_dto_test_() ->
-	{setup,
-	fun start_uuid/0,
-	fun stop_uuid/1,
 	[?_test(just_sms_response()),
 	?_test(just_incoming_sms()),
-	?_test(just_delivery_receipt())]}.
+	?_test(just_delivery_receipt())].
 
 %% ===================================================================
 %% Just Sms Request Tests

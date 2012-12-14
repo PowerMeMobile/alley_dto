@@ -8,11 +8,11 @@
 %% ===================================================================
 
 -type jsms_req_encoding() ::
-	default |
-	gsm0338 |
-	ascii 	|
-	latin1 	|
-	ucs2 	|
+	default 	|
+	gsm0338 	|
+	ascii 		|
+	latin1 		|
+	ucs2 		|
 	integer().
 
 -type just_sms_request_param_value() ::

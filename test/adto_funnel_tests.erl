@@ -3,15 +3,7 @@
 -include("adto.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
-start_uuid() ->
-	ok = application:start(uuid).
-stop_uuid(_) ->
-	application:stop(uuid).
-
 funnel_dto_test_() ->
-	{setup,
-	fun start_uuid/0,
-	fun stop_uuid/1,
 	[?_test(auth_request()),
 	?_test(success_auth_response()),
 	?_test(error_auth_response()),
@@ -23,7 +15,7 @@ funnel_dto_test_() ->
 	?_test(delivery_receipt()),
 	?_test(ack()),
 	?_test(connections_req()),
-	?_test(connections_resp())]}.
+	?_test(connections_resp())].
 
 %% ===================================================================
 %% Funnel Auth Tests
@@ -142,10 +134,7 @@ client_offline_event() ->
 
 valid_incoming_sms_encodings_test_() ->
 	ValidEncodings = [gsm0338, ucs2, 5],
-	{setup,
-	fun start_uuid/0,
-	fun stop_uuid/1,
-	[?_test(incoming_sms(E)) || E <- ValidEncodings]}.
+	[?_test(incoming_sms(E)) || E <- ValidEncodings].
 
 incoming_sms() ->
 	incoming_sms(gsm0338).

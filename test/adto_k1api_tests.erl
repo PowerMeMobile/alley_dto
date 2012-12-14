@@ -5,16 +5,8 @@
 -include("adto.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
-start_uuid() ->
-	ok = application:start(uuid).
-stop_uuid(_) ->
-	application:stop(uuid).
-
 -spec k1api_dto_test_() -> ignore.
 k1api_dto_test_()->
-	{setup,
-	fun start_uuid/0,
-	fun stop_uuid/1,
 	[?_test(auth_request()),
 	?_test(auth_response()),
 	?_test(sms_delivery_status_request()),
@@ -37,7 +29,7 @@ k1api_dto_test_()->
 	?_test(unsubscribe_sms_receipts_response()),
 	?_test(sms_delivery_receipt_notification()),
 
-	?_test(incoming_sms_request())]}.
+	?_test(incoming_sms_request())].
 
 %% ===================================================================
 %% k1api Subscribe Sms Receipts Request

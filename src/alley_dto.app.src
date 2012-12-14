@@ -5,8 +5,7 @@
   {registered, []},
   {applications, [
                   kernel,
-                  stdlib,
-				  uuid
+                  stdlib
                  ]},
   {env, []}
  ]}.

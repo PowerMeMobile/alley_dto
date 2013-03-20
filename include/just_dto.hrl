@@ -31,6 +31,7 @@
 	id 				:: uuid_(),
 	gateway_id 		:: uuid_(),
 	customer_id 	:: uuid_(),
+	user_id         :: binary(),
 	client_type 	:: client_type(),
 	type 			:: regular | part,
 	message 		:: binary(),

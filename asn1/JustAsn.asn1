@@ -5,19 +5,20 @@ SmsRequest ::= SEQUENCE {
     id         [0] IA5String, -- "12fd794d-9e32-4cf6-b421-b797196b60e3"
     gatewayId  [1] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
     customerId [2] IA5String, -- "feda5822-5271-11e1-bd27-001d0947ec73"
-    type       [3] ENUMERATED { regular(0), part(1) }, -- atom
-    message    [4] OCTET STRING,
-    encoding   [5] CHOICE { text  [0] ENUMERATED { default(-1), -- {text, default}
+	userId     [3] IA5String, -- "user1"
+    type       [4] ENUMERATED { regular(0), part(1) }, -- atom
+    message    [5] OCTET STRING,
+    encoding   [6] CHOICE { text  [0] ENUMERATED { default(-1), -- {text, default}
                                                    gsm0338(0),
                                                    ascii(1),
                                                    latin1(3),
                                                    ucs2(8)},
                             other [1] INTEGER }, -- {other, integer()}
-    params     [6] SEQUENCE OF Param, -- [{'Param',"registered_delivery",{boolean,true}},{'Param',"service_type",{string,[]}},{'Param',"no_retry",{boolean,false}},{'Param',"validity_period",{string,"000003000000000R"}},{'Param',"priority_flag",{integer,0}},{'Param',"esm_class",{integer,3}},{'Param',"protocol_id",{integer,0}}]
-    sourceAddr [7] FullAddr, -- {'FullAddr',"375296662323",1,1}
-    destAddrs  [8] CHOICE { regular [0] SEQUENCE OF FullAddr, -- {regular,[{'FullAddr',"375253723886",1,1}]}
+    params     [7] SEQUENCE OF Param, -- [{'Param',"registered_delivery",{boolean,true}},{'Param',"service_type",{string,[]}},{'Param',"no_retry",{boolean,false}},{'Param',"validity_period",{string,"000003000000000R"}},{'Param',"priority_flag",{integer,0}},{'Param',"esm_class",{integer,3}},{'Param',"protocol_id",{integer,0}}]
+    sourceAddr [8] FullAddr, -- {'FullAddr',"375296662323",1,1}
+    destAddrs  [9] CHOICE { regular [0] SEQUENCE OF FullAddr, -- {regular,[{'FullAddr',"375253723886",1,1}]}
                             part    [1] SEQUENCE OF FullAddrAndRefNum },
-    messageIds [9] SEQUENCE OF IA5String -- ["634"]
+    messageIds [10] SEQUENCE OF IA5String -- ["634"]
 }
 
 SmsResponse ::= SEQUENCE {

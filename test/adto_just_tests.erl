@@ -49,9 +49,9 @@ just_sms_response() ->
 		error_code = undefined
 	},
 	DTO = #just_sms_response_dto{
-		id = uuid:newid(),
-		gateway_id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		gateway_id = uuid:generate(),
+		customer_id = uuid:generate(),
 		client_type = k1api,
 		statuses = [StatusDTO],
 		timestamp = <<"120827114305">>
@@ -65,7 +65,7 @@ just_sms_response() ->
 
 just_incoming_sms() ->
 	DTO = #just_incoming_sms_dto{
-		gateway_id = uuid:newid(),
+		gateway_id = uuid:generate(),
 		source = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		dest = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
 		message = <<"message">>,
@@ -89,7 +89,7 @@ just_delivery_receipt() ->
 		source = #addr{addr = <<"375296662323">>, ton = 1, npi = 1}
 	},
 	DTO = #just_delivery_receipt_dto{
-		gateway_id = uuid:newid(),
+		gateway_id = uuid:generate(),
 		receipts = [ReceiptDTO],
 		timestamp = 1346067785681000
 	},

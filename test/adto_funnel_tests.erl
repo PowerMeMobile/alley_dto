@@ -29,7 +29,7 @@ auth_req_test_() ->
 
 %% smpp types test
 	TypeTestPList =
-	[{connection_id, uuid:newid()},
+	[{connection_id, uuid:generate()},
 	{ip, <<"127.0.0.1">>},
 	{customer_id, <<"test_id">>},
 	{user_id, <<"user_id">>},
@@ -41,7 +41,7 @@ auth_req_test_() ->
 
 %% invalid smpp types test
 	InvTypeTestPList =
-	[{connection_id, uuid:newid()},
+	[{connection_id, uuid:generate()},
 	{ip, <<"127.0.0.1">>},
 	{customer_id, <<"test_id">>},
 	{user_id, <<"user_id">>},
@@ -76,28 +76,28 @@ auth_req(PList) ->
 
 success_auth_response() ->
 	Provider = #provider_dto{
-		id = uuid:newid(),
-		gateway = uuid:newid(),
-		bulk_gateway = uuid:newid(),
+		id = uuid:generate(),
+		gateway = uuid:generate(),
+		bulk_gateway = uuid:generate(),
 		receipts_supported = true
 	},
 	Network = #network_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		country_code = <<"375">>,
 		numbers_len = 12,
 		prefixes = [<<"33">>, <<"44">>],
-		provider_id = uuid:newid()
+		provider_id = uuid:generate()
 	},
 	CustomerDTO = #funnel_auth_response_customer_dto{
 		id = <<"system-id">>,
-		uuid = uuid:newid(),
+		uuid = uuid:generate(),
 		priority = 0,
 		rps = 100,
 		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
 		default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
 		providers = [Provider],
-		default_provider_id = uuid:newid(),
+		default_provider_id = uuid:generate(),
 		receipts_allowed = true,
 		no_retry = true,
 		default_validity = <<"000003000000000R">>,
@@ -105,7 +105,7 @@ success_auth_response() ->
 		billing_type = prepaid
 	},
 	DTO = #funnel_auth_response_dto{
-		connection_id = uuid:newid(),
+		connection_id = uuid:generate(),
 		result = {customer, CustomerDTO}
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -113,7 +113,7 @@ success_auth_response() ->
 
 error_auth_response() ->
 	DTO = #funnel_auth_response_dto{
-		connection_id = uuid:newid(),
+		connection_id = uuid:generate(),
 		result = {error, "test error"}
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -139,7 +139,7 @@ stopped_event() ->
 
 client_online_event() ->
 	DTO = #funnel_client_online_event_dto{
-		connection_id = uuid:newid(),
+		connection_id = uuid:generate(),
 		customer_id = <<"system_id">>,
 		user_id = <<"user_id">>,
 		type = transmitter,
@@ -151,7 +151,7 @@ client_online_event() ->
 
 client_offline_event() ->
 	DTO = #funnel_client_offline_event_dto{
-		connection_id = uuid:newid(),
+		connection_id = uuid:generate(),
 		customer_id = <<"system_id">>,
 		user_id = <<"user_id">>,
 		type = transmitter,
@@ -183,7 +183,7 @@ incoming_sms(Encoding) ->
 		data_coding = Encoding
 	},
 	DTO = #funnel_incoming_sms_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		messages = [MessageDTO]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -203,7 +203,7 @@ delivery_receipt() ->
 		dest = #addr{addr = <<"375259090909">>, ton = 1, npi = 1}
 	},
 	DTO = #funnel_delivery_receipt_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		receipts = [ReceiptDTO]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -215,7 +215,7 @@ delivery_receipt() ->
 
 ack() ->
 	DTO = #funnel_ack_dto{
-		id = uuid:newid()
+		id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#funnel_ack_dto{}, Bin).
@@ -233,7 +233,7 @@ connections_req() ->
 connections_resp() ->
 	Error = #error_dto{error_code = 1, timestamp = <<"120827114232">>},
 	Connection = #funnel_connection_dto{
-		connection_id = uuid:newid(),
+		connection_id = uuid:generate(),
 		remote_ip = <<"127.0.0.1">>,
 		customer_id = <<"system-id">>,
 		user_id = <<"user">>,

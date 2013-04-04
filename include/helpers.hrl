@@ -18,12 +18,6 @@
 		lists:map(fun(Addr) -> ?msisdn_addr_to_str(Addr) end, Addrs)
 	end, [])).
 
-%% converts binary uuid representation to pritty string
--define(bin_uuid_to_str(UUID),
-	apply(fun() ->
-		adto_uuid:to_string(UUID)
-	end, [])).
-
 %% converts binary string representation to list
 -define(bin_to_str(Bin),
 	apply(fun() ->

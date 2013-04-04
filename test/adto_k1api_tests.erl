@@ -37,8 +37,8 @@ k1api_dto_test_()->
 
 subscribe_sms_receipts_request() ->
 	DTO = #k1api_subscribe_sms_receipts_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
 		url = <<"url">>,
 		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
@@ -53,7 +53,7 @@ subscribe_sms_receipts_request() ->
 
 subscribe_sms_receipts_response() ->
 	DTO = #k1api_subscribe_sms_receipts_response_dto{
-		id = uuid:newid()
+		id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_subscribe_sms_receipts_response_dto{}, Bin).
@@ -64,10 +64,10 @@ subscribe_sms_receipts_response() ->
 
 unsubscribe_sms_receipts_request() ->
 	DTO = #k1api_unsubscribe_sms_receipts_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
-		subscription_id = uuid:newid()
+		subscription_id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_request_dto{}, Bin).
@@ -78,7 +78,7 @@ unsubscribe_sms_receipts_request() ->
 
 unsubscribe_sms_receipts_response() ->
 	DTO = #k1api_unsubscribe_sms_receipts_response_dto{
-		id = uuid:newid()
+		id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_sms_receipts_response_dto{}, Bin).
@@ -89,7 +89,7 @@ unsubscribe_sms_receipts_response() ->
 
 sms_delivery_receipt_notification() ->
 	DTO = #k1api_sms_delivery_receipt_notification_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		status = submitted,
 		callback_data = <<"callback">>,
@@ -104,7 +104,7 @@ sms_delivery_receipt_notification() ->
 
 auth_request() ->
 	DTO = #k1api_auth_request_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		customer_id = <<"test-sys-id">>,
 		user_id = <<"user">>,
 		password = <<"password">>
@@ -119,28 +119,28 @@ auth_request() ->
 
 auth_response() ->
 	Provider = #provider_dto{
-		id = uuid:newid(),
-		gateway = uuid:newid(),
-		bulk_gateway = uuid:newid(),
+		id = uuid:generate(),
+		gateway = uuid:generate(),
+		bulk_gateway = uuid:generate(),
 		receipts_supported = true
 	},
 	Network = #network_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		country_code = <<"375">>,
 		numbers_len = 12,
 		prefixes = [<<"33">>, <<"44">>],
-		provider_id = uuid:newid()
+		provider_id = uuid:generate()
 	},
 	DTO = #k1api_auth_response_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		system_id = <<"system-id">>,
-		uuid = uuid:newid(),
+		uuid = uuid:generate(),
 		billing_type = prepaid, %% postpaid
 		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
 		default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		networks = [Network],
 		providers = [Provider],
-		default_provider_id = uuid:newid(),
+		default_provider_id = uuid:generate(),
 		receipts_allowed = true,
 		no_retry = true,
 		default_validity = 12345,
@@ -155,10 +155,10 @@ auth_response() ->
 
 sms_delivery_status_request() ->
 	DTO = #k1api_sms_delivery_status_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
-		sms_request_id = uuid:newid(),
+		sms_request_id = uuid:generate(),
 		address = #addr{addr = <<"375269090909">>, ton = 1, npi = 1}
 	},
 	?assertEqual(DTO, decode(#k1api_sms_delivery_status_request_dto{}, encode(DTO))).
@@ -188,7 +188,7 @@ sms_delivery_status_response() ->
 		status = Status
 	} || Status <- statuses()],
 	DTO = #k1api_sms_delivery_status_response_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		statuses = StatusesDTO
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -201,8 +201,8 @@ sms_delivery_status_response() ->
 %% test with defined optional parameter batch_size
 retrieve_sms_request() ->
 	DTO = #k1api_retrieve_sms_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
 		dest_addr = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = 5
@@ -213,8 +213,8 @@ retrieve_sms_request() ->
 %% test with UNdefined optional parameter batch_size
 retrieve_sms_request2() ->
 	DTO = #k1api_retrieve_sms_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
 		dest_addr = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
 		batch_size = undefined
@@ -235,7 +235,7 @@ retrieve_sms_response() ->
 		message = <<"message">>
 	},
 	DTO = #k1api_retrieve_sms_response_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		messages = [MessageDTO],
 		total = 5
 	},
@@ -249,7 +249,7 @@ retrieve_sms_response() ->
 
 remove_retrieved_sms_request() ->
 	DTO = #k1api_remove_retrieved_sms_request_dto{
-		id = uuid:newid(),
+		id = uuid:generate(),
 		message_ids = [<<"123">>, <<"456">>]
 	},
 	{ok, Bin} = adto:encode(DTO),
@@ -261,8 +261,8 @@ remove_retrieved_sms_request() ->
 
 subscribe_incoming_sms_request() ->
 	DTO = #k1api_subscribe_incoming_sms_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
 		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
 		notify_url = <<"some_url">>,
@@ -280,25 +280,25 @@ subscribe_incoming_sms_request() ->
 
 subscribe_incoming_sms_response() ->
 	DTO = #k1api_subscribe_incoming_sms_response_dto{
-		id = uuid:newid(),
-		subscription_id = uuid:newid()
+		id = uuid:generate(),
+		subscription_id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_subscribe_incoming_sms_response_dto{}, Bin).
 
 unsubscribe_incoming_sms_request() ->
 	DTO = #k1api_unsubscribe_incoming_sms_request_dto{
-		id = uuid:newid(),
-		customer_id = uuid:newid(),
+		id = uuid:generate(),
+		customer_id = uuid:generate(),
 		user_id = <<"user">>,
-		subscription_id = uuid:newid()
+		subscription_id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_incoming_sms_request_dto{}, Bin).
 
 unsubscribe_incoming_sms_response() ->
 	DTO = #k1api_unsubscribe_incoming_sms_response_dto{
-		id = uuid:newid()
+		id = uuid:generate()
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_unsubscribe_incoming_sms_response_dto{}, Bin).

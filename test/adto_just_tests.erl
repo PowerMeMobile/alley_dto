@@ -91,7 +91,7 @@ just_delivery_receipt() ->
 	DTO = #just_delivery_receipt_dto{
 		gateway_id = uuid:generate(),
 		receipts = [ReceiptDTO],
-		timestamp = 1346067785681000
+		timestamp = <<"120827114305">>
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#just_delivery_receipt_dto{}, Bin).

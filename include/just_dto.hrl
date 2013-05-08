@@ -104,7 +104,7 @@
 -record(just_delivery_receipt_dto, {
 	gateway_id 		:: uuid_(),
 	receipts 		:: [#just_receipt_dto{}],
-	timestamp 		:: integer() % % 1346067785681000
+	timestamp 		:: utc_time()
 }).
 
 -type just_dto() ::

@@ -107,7 +107,7 @@ encode(DTO = #just_delivery_receipt_dto{}) ->
 	Asn = #'ReceiptBatch'{
 		gatewayId = binary_to_list(GtwID),
 		receipts = just_receipt_to_asn(Receipts),
-		timestamp = Timestamp
+		timestamp = binary_to_list(Timestamp)
 	},
 	case 'JustAsn':encode('ReceiptBatch', Asn) of
 		{ok, DeepList} -> {ok, list_to_binary(DeepList)};
@@ -222,7 +222,7 @@ decode(#just_delivery_receipt_dto{}, Bin) ->
 			DTO = #just_delivery_receipt_dto{
 				gateway_id = list_to_binary(GtwID),
 				receipts = just_receipt_to_dto(Receipts),
-				timestamp = Timestamp
+				timestamp = list_to_binary(Timestamp)
 			},
 			{ok, DTO};
 		{error, Error} -> {error, Error}

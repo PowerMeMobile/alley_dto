@@ -13,6 +13,9 @@
 %% Encode Functions
 %% ===================================================================
 
+-spec encode(message_type_dto()) ->
+	{ok, binary()} |
+	{error, Reason :: any()}.
 encode(DTO = #just_sms_request_dto{}) ->
 	#just_sms_request_dto{
 		id = ID,
@@ -118,6 +121,9 @@ encode(_) ->
 %% Decode Functions
 %% ===================================================================
 
+-spec decode(message_type_dto(), binary()) ->
+	{ok, message_type_dto()} |
+	{error, Reason :: any()}.
 decode(#just_sms_request_dto{}, Bin) ->
 	case 'JustAsn':decode('SmsRequest', Bin) of
 		{ok, SmsRequest = #'SmsRequest'{}} ->

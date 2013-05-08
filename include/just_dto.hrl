@@ -38,7 +38,7 @@
 	encoding 		:: jsms_req_encoding(),
 	params 			:: jsms_req_params(),
 	source_addr 	:: addr(),
-	dest_addrs	 	:: {regular, addr()} | {part, addr()},
+	dest_addrs	 	:: {regular, [addr()]} | {part, [addr()]},
 	message_ids 	:: [binary()]
 }).
 

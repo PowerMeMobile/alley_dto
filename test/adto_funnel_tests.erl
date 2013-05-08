@@ -196,8 +196,8 @@ incoming_sms(Encoding) ->
 delivery_receipt() ->
 	ReceiptDTO = #funnel_delivery_receipt_container_dto{
 		message_id = <<"614">>,
-		submit_date = {1355,224026, 0},
-		done_date = {1355,224026, 0},
+		submit_date = <<"120827114232">>,
+		done_date = <<"120827114232">>,
 		message_state = delivered,
 		source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
 		dest = #addr{addr = <<"375259090909">>, ton = 1, npi = 1}

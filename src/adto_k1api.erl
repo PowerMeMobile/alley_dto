@@ -658,34 +658,35 @@ sms_statuses_pb_to_dto(StatusesPB = #smsstatus{}) ->
 sms_statuses_pb_to_dto(Statuses) ->
 	[sms_statuses_pb_to_dto(Status) || Status <- Statuses].
 
-status_name_dto_to_pb(submitted) -> 				'SUBMITTED';
-status_name_dto_to_pb(success_waiting_delivery) ->	'SUCCESS_WAITING_DELIVERY';
-status_name_dto_to_pb(success_no_delivery) ->		'SUCCESS_NO_DELIVERY';
-status_name_dto_to_pb(failure) ->					'FAILURE';
-status_name_dto_to_pb(enroute) ->					'ENROUTE';
-status_name_dto_to_pb(delivered) ->					'DELIVERED';
-status_name_dto_to_pb(expired) ->					'EXPIRED';
-status_name_dto_to_pb(deleted) ->					'DELETED';
-status_name_dto_to_pb(undeliverable) ->				'UNDELIVERABLE';
-status_name_dto_to_pb(accepted) ->					'ACCEPTED';
-status_name_dto_to_pb(unknown) ->					'UNKNOWN';
-status_name_dto_to_pb(rejected) ->					'REJECTED';
-status_name_dto_to_pb(unrecognized) ->				'UNRECOGNIZED'.
+status_name_dto_to_pb(<<"pending">>) ->						'SUCCESS_NO_DELIVERY';
+status_name_dto_to_pb(<<"submitted">>) -> 					'SUBMITTED';
+status_name_dto_to_pb(<<"success_waiting_delivery">>) ->	'SUCCESS_WAITING_DELIVERY';
+status_name_dto_to_pb(<<"success_no_delivery">>) ->			'SUCCESS_NO_DELIVERY';
+status_name_dto_to_pb(<<"failure">>) ->						'FAILURE';
+status_name_dto_to_pb(<<"enroute">>) ->						'ENROUTE';
+status_name_dto_to_pb(<<"delivered">>) ->					'DELIVERED';
+status_name_dto_to_pb(<<"expired">>) ->						'EXPIRED';
+status_name_dto_to_pb(<<"deleted">>) ->						'DELETED';
+status_name_dto_to_pb(<<"undeliverable">>) ->				'UNDELIVERABLE';
+status_name_dto_to_pb(<<"accepted">>) ->					'ACCEPTED';
+status_name_dto_to_pb(<<"unknown">>) ->						'UNKNOWN';
+status_name_dto_to_pb(<<"rejected">>) ->					'REJECTED';
+status_name_dto_to_pb(<<"unrecognized">>) ->				'UNRECOGNIZED'.
 
 
-status_name_pb_to_dto('SUBMITTED') -> 					submitted;
-status_name_pb_to_dto('SUCCESS_WAITING_DELIVERY') -> 	success_waiting_delivery;
-status_name_pb_to_dto('SUCCESS_NO_DELIVERY') -> 		success_no_delivery;
-status_name_pb_to_dto('FAILURE') -> 					failure;
-status_name_pb_to_dto('ENROUTE') -> 					enroute;
-status_name_pb_to_dto('DELIVERED') -> 					delivered;
-status_name_pb_to_dto('EXPIRED') -> 					expired;
-status_name_pb_to_dto('DELETED') -> 					deleted;
-status_name_pb_to_dto('UNDELIVERABLE') -> 				undeliverable;
-status_name_pb_to_dto('ACCEPTED') -> 					accepted;
-status_name_pb_to_dto('UNKNOWN') -> 					unknown;
-status_name_pb_to_dto('REJECTED') -> 					rejected;
-status_name_pb_to_dto('UNRECOGNIZED') -> 				unrecognized.
+status_name_pb_to_dto('SUBMITTED') -> 					<<"submitted">>;
+status_name_pb_to_dto('SUCCESS_WAITING_DELIVERY') -> 	<<"success_waiting_delivery">>;
+status_name_pb_to_dto('SUCCESS_NO_DELIVERY') -> 		<<"success_no_delivery">>;
+status_name_pb_to_dto('FAILURE') -> 					<<"failure">>;
+status_name_pb_to_dto('ENROUTE') -> 					<<"enroute">>;
+status_name_pb_to_dto('DELIVERED') -> 					<<"delivered">>;
+status_name_pb_to_dto('EXPIRED') -> 					<<"expired">>;
+status_name_pb_to_dto('DELETED') -> 					<<"deleted">>;
+status_name_pb_to_dto('UNDELIVERABLE') -> 				<<"undeliverable">>;
+status_name_pb_to_dto('ACCEPTED') -> 					<<"accepted">>;
+status_name_pb_to_dto('UNKNOWN') -> 					<<"unknown">>;
+status_name_pb_to_dto('REJECTED') -> 					<<"rejected">>;
+status_name_pb_to_dto('UNRECOGNIZED') -> 				<<"unrecognized">>.
 
 
 retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->

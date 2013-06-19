@@ -91,7 +91,7 @@ sms_delivery_receipt_notification() ->
 	DTO = #k1api_sms_delivery_receipt_notification_dto{
 		id = uuid:generate(),
 		dest_addr = #addr{addr = <<"123456">>, ton = 1, npi = 1},
-		status = submitted,
+		status = <<"submitted">>,
 		callback_data = <<"callback">>,
 		url = <<"url">>
 	},
@@ -168,19 +168,21 @@ sms_delivery_status_request() ->
 %% ===================================================================
 
 statuses() ->
-	[submitted,
-	success_waiting_delivery,
-	success_no_delivery,
-	failure,
-	enroute,
-	delivered,
-	expired,
-	deleted,
-	undeliverable,
-	accepted,
-	unknown,
-	rejected,
-	unrecognized].
+	[
+		<<"submitted">>,
+		<<"success_waiting_delivery">>,
+		<<"success_no_delivery">>,
+		<<"failure">>,
+		<<"enroute">>,
+		<<"delivered">>,
+		<<"expired">>,
+		<<"deleted">>,
+		<<"undeliverable">>,
+		<<"accepted">>,
+		<<"unknown">>,
+		<<"rejected">>,
+		<<"unrecognized">>
+	].
 
 sms_delivery_status_response() ->
 	StatusesDTO = [#k1api_sms_status_dto{

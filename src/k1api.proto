@@ -160,6 +160,11 @@ message SmsDeliveryReceiptNotification {
 	optional bytes callback_data = 5;
 }
 
+// customer_id -> customer_system_id
+message CleanAuthCacheReq {
+	required bytes customer_id = 1;
+}
+
 // Misc ---------------------
 
 message SmsStatus {

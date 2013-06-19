@@ -195,6 +195,10 @@
 	url 			:: binary()
 }).
 
+-record(k1api_clean_auth_cache_req_dto, {
+	customer_id 	:: binary() %% system id
+}).
+
 -type k1api_dto() ::
 	%% k1api auth
 	#k1api_auth_request_dto{} 						|
@@ -221,6 +225,9 @@
 	#k1api_subscribe_sms_receipts_response_dto{} 	|
 	#k1api_unsubscribe_sms_receipts_request_dto{} 	|
 	#k1api_unsubscribe_sms_receipts_response_dto{} 	|
-	#k1api_sms_delivery_receipt_notification_dto{}.
+	#k1api_sms_delivery_receipt_notification_dto{} 	|
+
+	%% k1api clean auth cache
+	#k1api_clean_auth_cache_req_dto{}.
 
 -endif. % k1api_dto_hrl

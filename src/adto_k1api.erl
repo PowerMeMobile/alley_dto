@@ -299,6 +299,16 @@ decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin) ->
 	},
 	{ok, DTO};
 
+decode(#k1api_clean_auth_cache_req_dto{}, Bin) ->
+	PB = k1api_pb:decode_cleanauthcachereq(Bin),
+	#cleanauthcachereq{
+		customer_id = CustomerID
+	} = PB,
+	DTO = #k1api_clean_auth_cache_req_dto{
+		customer_id = CustomerID
+	},
+	{ok, DTO};
+
 decode(Type, _Message) ->
 	erlang:error({k1api_decode_not_supported, Type}).
 
@@ -592,6 +602,16 @@ encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
 		url = Url
 	},
 	Bin = k1api_pb:encode_smsdeliveryreceiptnotification(PB),
+	{ok, Bin};
+
+encode(DTO = #k1api_clean_auth_cache_req_dto{}) ->
+	#k1api_clean_auth_cache_req_dto{
+		customer_id = CustomerID
+	} = DTO,
+	PB = #cleanauthcachereq{
+		customer_id = CustomerID
+	},
+	Bin = k1api_pb:encode_cleanauthcachereq(PB),
 	{ok, Bin};
 
 encode(Message) ->

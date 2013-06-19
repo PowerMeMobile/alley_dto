@@ -29,7 +29,9 @@ k1api_dto_test_()->
 	?_test(unsubscribe_sms_receipts_response()),
 	?_test(sms_delivery_receipt_notification()),
 
-	?_test(incoming_sms_request())].
+	?_test(incoming_sms_request()),
+
+	?_test(clean_auth_cache_req())].
 
 %% ===================================================================
 %% k1api Subscribe Sms Receipts Request
@@ -329,6 +331,17 @@ bad_type_encode() ->
 bad_type_decode() ->
 	BadDTO = unsupported_type,
 	?assertError({k1api_decode_not_supported,unsupported_type} , adto_k1api:decode(BadDTO, <<>>)).
+
+%% ===================================================================
+%% CleanAuthCachReq
+%% ===================================================================
+
+clean_auth_cache_req() ->
+	DTO = #k1api_clean_auth_cache_req_dto{
+		customer_id = <<"customer_id">>
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_clean_auth_cache_req_dto{}, Bin).
 
 %% ===================================================================
 %% Internals

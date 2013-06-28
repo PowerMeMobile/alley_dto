@@ -135,8 +135,8 @@ auth_response() ->
 	},
 	DTO = #k1api_auth_response_dto{
 		id = uuid:generate(),
-		system_id = <<"system-id">>,
-		uuid = uuid:generate(),
+		customer_uuid = uuid:generate(),
+		customer_id = <<"system-id">>,
 		billing_type = prepaid, %% postpaid
 		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
 		default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},

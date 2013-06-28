@@ -30,9 +30,9 @@ auth_req_test_() ->
 %% smpp types test
 	TypeTestPList =
 	[{connection_id, uuid:generate()},
-	{ip, <<"127.0.0.1">>},
+	{remote_ip, <<"127.0.0.1">>},
 	{customer_id, <<"test_id">>},
-	{user_id, <<"user_id">>},
+	{user_id, <<"user">>},
 	{password, <<"password">>},
 	{is_cached, true}],
 	ValidTypes = [receiver, transceiver, transmitter],
@@ -42,9 +42,9 @@ auth_req_test_() ->
 %% invalid smpp types test
 	InvTypeTestPList =
 	[{connection_id, uuid:generate()},
-	{ip, <<"127.0.0.1">>},
+	{remote_ip, <<"127.0.0.1">>},
 	{customer_id, <<"test_id">>},
-	{user_id, <<"user_id">>},
+	{user_id, <<"user">>},
 	{password, <<"password">>},
 	{is_cached, true}],
 	InvalidTypes = [k1api, eoneapi, oneapi, 1, "list", <<"bin">>],
@@ -58,9 +58,9 @@ auth_req_test_() ->
 auth_req(PList) ->
 	DTO = #funnel_auth_request_dto{
 		connection_id = ?gv(connection_id, PList),
-		ip = ?gv(ip, PList),
+		remote_ip = ?gv(remote_ip, PList),
 		customer_id = ?gv(customer_id, PList),
-		user_id = ?gv(customer_id, PList),
+		user_id = ?gv(user_id, PList),
 		password = ?gv(password, PList),
 		type = ?gv(type, PList),
 		is_cached = ?gv(is_cached, PList),
@@ -89,8 +89,8 @@ success_auth_response() ->
 		provider_id = uuid:generate()
 	},
 	CustomerDTO = #funnel_auth_response_customer_dto{
-		id = <<"system-id">>,
-		uuid = uuid:generate(),
+		customer_id = <<"system-type">>,
+		customer_uuid = uuid:generate(),
 		priority = 0,
 		rps = 100,
 		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
@@ -140,8 +140,8 @@ stopped_event() ->
 client_online_event() ->
 	DTO = #funnel_client_online_event_dto{
 		connection_id = uuid:generate(),
-		customer_id = <<"system_id">>,
-		user_id = <<"user_id">>,
+		customer_id = <<"system_type">>,
+		user_id = <<"user">>,
 		type = transmitter,
 		connected_at = <<"120827114232">>,
 		timestamp = <<"120827114232">>
@@ -152,8 +152,8 @@ client_online_event() ->
 client_offline_event() ->
 	DTO = #funnel_client_offline_event_dto{
 		connection_id = uuid:generate(),
-		customer_id = <<"system_id">>,
-		user_id = <<"user_id">>,
+		customer_id = <<"system_type">>,
+		user_id = <<"user">>,
 		type = transmitter,
 		connected_at = <<"120827114232">>,
 		msgs_received = 1,
@@ -235,7 +235,7 @@ connections_resp() ->
 	Connection = #funnel_connection_dto{
 		connection_id = uuid:generate(),
 		remote_ip = <<"127.0.0.1">>,
-		customer_id = <<"system-id">>,
+		customer_id = <<"system-type">>,
 		user_id = <<"user">>,
 		connected_at = <<"120827114232">>,
 		type = transmitter,

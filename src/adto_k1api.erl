@@ -196,7 +196,7 @@ decode(#k1api_auth_response_dto{}, Bin) ->
 	 #authresp{
 		id = ID,
 		system_id = SystemID,
-		uuid = UUID,
+		uuid = CustomerUUID,
 		billing_type = BillingType,
 		allowed_sources = AllowedSources,
 		default_source = DefaultSource,
@@ -210,8 +210,8 @@ decode(#k1api_auth_response_dto{}, Bin) ->
 	} = PB,
 	DTO = #k1api_auth_response_dto{
 		id = ID,
-		system_id = SystemID,
-		uuid = UUID,
+		customer_id = SystemID,
+		customer_uuid = CustomerUUID,
 		billing_type = BillingType,
 		allowed_sources = addr_pb_to_dto(AllowedSources),
 		default_source = addr_pb_to_dto(DefaultSource),
@@ -499,8 +499,8 @@ encode(DTO = #k1api_auth_request_dto{}) ->
 encode(DTO = #k1api_auth_response_dto{}) ->
 	#k1api_auth_response_dto{
 		id = ID,
-		system_id = SystemID,
-		uuid = UUID,
+		customer_uuid = CustomerUUID,
+		customer_id = CustomerID,
 		billing_type = BillingType,
 		allowed_sources = AllowedSources,
 		default_source = DefaultSource,
@@ -514,8 +514,8 @@ encode(DTO = #k1api_auth_response_dto{}) ->
 	} = DTO,
 	PB = #authresp{
 		id = ID,
-		system_id = SystemID,
-		uuid = UUID,
+		system_id = CustomerID,
+		uuid = CustomerUUID,
 		billing_type = BillingType,
 		allowed_sources = addr_to_pb(AllowedSources),
 		default_source = addr_to_pb(DefaultSource),

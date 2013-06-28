@@ -4,7 +4,7 @@
 -include("adto_types.hrl").
 
 -record(fun_precise_time_dto, {
-	time 				:: utc_time(),
+	time 				:: utc_time_dto(),
 	milliseconds 		:: integer()
 }).
 
@@ -13,12 +13,12 @@
 %% ===================================================================
 
 -record(funnel_auth_request_dto, {
-	connection_id 		:: uuid_(),
-	ip 					:: binary(), %% <<"127.0.0.1">>
-	customer_id 		:: binary(), %% <<"system-id">>
-	user_id 			:: binary(), %% <<"user">>
-	password 			:: binary(), %% <<"password">>
-	type 				:: smpp_type_dto(),
+	connection_id 		:: uuid_dto(),
+	remote_ip			:: binary(),
+	customer_id 		:: binary(), %% system-type
+	user_id 			:: binary(), %% system-id
+	password 			:: binary(),
+	type 				:: bind_type_dto(),
 	is_cached 			:: boolean(),
 	timestamp 			:: #fun_precise_time_dto{},
 	expiration 			:: #fun_precise_time_dto{}
@@ -29,20 +29,20 @@
 %% ===================================================================
 
 -record(funnel_auth_response_customer_dto, {
-	id 					:: binary(), %% <<"system-id">>
-	uuid 				:: uuid_(),
+	customer_id			:: binary(), %% system-type
+	customer_uuid		:: uuid_dto(),
 	priority 			:: integer(),
 	rps 				:: integer() | undefined,
 	allowed_sources 	:: [addr()],
 	default_source 		:: addr() | undefined,
 	networks 			:: [#network_dto{}],
 	providers 			:: [#provider_dto{}],
-	default_provider_id :: uuid_() | undefined,
+	default_provider_id :: uuid_dto() | undefined,
 	receipts_allowed 	:: boolean(),
 	no_retry 			:: boolean(),
 	default_validity 	:: binary(), %% <<"000003000000000R">>
 	max_validity 		:: integer(), 	%% in seconds (relative)
-	billing_type 		:: billing_type_()
+	billing_type 		:: billing_type_dto()
 }).
 
 -type funnel_auth_response_result() ::
@@ -50,7 +50,7 @@
 	{customer, #funnel_auth_response_customer_dto{}}.
 
 -record(funnel_auth_response_dto, {
-	connection_id 		:: uuid_(),
+	connection_id 		:: uuid_dto(),
 	result 				:: funnel_auth_response_result()
 }).
 
@@ -59,33 +59,33 @@
 %% ===================================================================
 
 -record(funnel_started_event_dto, {
-	timestamp 		:: utc_time()
+	timestamp 		:: utc_time_dto()
 }).
 
 -record(funnel_stopped_event_dto, {
-	timestamp 		:: utc_time()
+	timestamp 		:: utc_time_dto()
 }).
 
 -record(funnel_client_online_event_dto, {
-	connection_id 	:: uuid_(),
-	customer_id 	:: binary(), %% <<"system_id">>
-	user_id 		:: binary(), %% <<"user_id>>
-	type 			:: smpp_type_dto(),
-	connected_at 	:: utc_time(),
-	timestamp 		:: utc_time()
+	connection_id 	:: uuid_dto(),
+	customer_id 	:: binary(), %% system-type
+	user_id 		:: binary(), %% system-id
+	type 			:: bind_type_dto(),
+	connected_at 	:: utc_time_dto(),
+	timestamp 		:: utc_time_dto()
 }).
 
 -record(funnel_client_offline_event_dto, {
-	connection_id 	:: uuid_(),
-	customer_id 	:: binary(), %% <<"system_id">>
-	user_id 		:: binary(), %% <<"user_id">>
-	type 			:: smpp_type_dto(),
-	connected_at 	:: utc_time(),
+	connection_id 	:: uuid_dto(),
+	customer_id 	:: binary(), %% system-type
+	user_id 		:: binary(), %% system-id
+	type 			:: bind_type_dto(),
+	connected_at 	:: utc_time_dto(),
 	msgs_received 	:: integer(),
 	msgs_sent 		:: integer(),
 	errors 			:: [#error_dto{}],
 	reason 			:: normal | closed | unbound | other,
-	timestamp 		:: utc_time()
+	timestamp 		:: utc_time_dto()
 }).
 
 %% ===================================================================
@@ -105,7 +105,7 @@
 }).
 
 -record(funnel_incoming_sms_dto, {
-	id 				:: uuid_(),
+	id 				:: uuid_dto(),
 	messages 		:: [#funnel_incoming_sms_message_dto{}]
 }).
 
@@ -132,7 +132,7 @@
 }).
 
 -record(funnel_delivery_receipt_dto, {
-	id 				:: uuid_(),
+	id 				:: uuid_dto(),
 	receipts 		:: [#funnel_delivery_receipt_dto{}]
 }).
 
@@ -141,7 +141,7 @@
 %% ===================================================================
 
 -record(funnel_ack_dto, {
-	id 				:: uuid_()
+	id 				:: uuid_dto()
 }).
 
 %% ===================================================================
@@ -152,12 +152,12 @@
 }).
 
 -record(funnel_connection_dto, {
-	connection_id 	:: uuid_(),
-	remote_ip 		:: binary(), %% <<"127.0.0.1">>
-	customer_id 	:: binary(), %% system (smpp) id
-	user_id 		:: binary(),
+	connection_id 	:: uuid_dto(),
+	remote_ip 		:: binary(),
+	customer_id 	:: binary(), %% system-type
+	user_id 		:: binary(), %% system-id
+	type			:: bind_type_dto(),
 	connected_at 	:: binary(),
-	type 			:: smpp_type_dto(),
 	msgs_received 	:: integer(),
 	msgs_sent 		:: integer(),
 	errors 			:: [#error_dto{}]

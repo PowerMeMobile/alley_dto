@@ -7,8 +7,8 @@
 		case Addr of
 			undefined -> undefined;
 			_ ->
-				NewAddr = binary_to_list(Addr#addr_dto.addr),
-				Addr#addr_dto{addr = NewAddr}
+				NewAddr = binary_to_list(Addr#addr.addr),
+				Addr#addr{addr = NewAddr}
 		end
 	 end, [])).
 

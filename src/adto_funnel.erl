@@ -33,7 +33,7 @@ decode(#funnel_auth_request_dto{}, Bin) ->
 			} = Asn,
 			DTO = #funnel_auth_request_dto{
 				connection_id = list_to_binary(ConnectionID),
-				ip = list_to_binary(IP),
+				remote_ip = list_to_binary(IP),
 				customer_id = list_to_binary(CustomerID),
 				user_id = list_to_binary(UserID),
 				password = list_to_binary(Password),
@@ -236,7 +236,7 @@ decode(Type, _Message) ->
 encode(DTO = #funnel_auth_request_dto{}) ->
 	#funnel_auth_request_dto{
 		connection_id = ConnectionID,
-		ip = IP,
+		remote_ip = IP,
 		customer_id = CustomerID,
 		user_id = UserID,
 		password = Password,
@@ -267,8 +267,8 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
 		result = {customer, CustomerDTO}
 	} = DTO,
 	#funnel_auth_response_customer_dto{
-		id = SystemID,
-		uuid = UUID,
+		customer_id = CustomerID,
+		customer_uuid = CustomerUUID,
 		priority = Priority,
 		rps = RPS,
 		allowed_sources = AllowedSources,
@@ -283,8 +283,8 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
 		billing_type = BillingType
 	} = CustomerDTO,
 	CustomerAsn = #'Customer'{
-		id = binary_to_list(SystemID),
-		uuid = binary_to_list(UUID),
+		id = binary_to_list(CustomerID),
+		uuid = binary_to_list(CustomerUUID),
 		priority = Priority,
 		rps = to_optional_asn(RPS),
 		allowedSources = [addr_to_asn(Source) || Source <- AllowedSources],
@@ -639,8 +639,8 @@ providers_to_dto(Providers) ->
 
 funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
 	#'Customer'{
-		id = SystemID,
-		uuid = UUID,
+		id = CustomerID,
+		uuid = CustomerUUID,
 		priority = Priority,
 		rps = RPS,
 		allowedSources = AllowedSources,
@@ -655,8 +655,8 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
 		billingType = BillingType
 	} = CustomerAsn,
 	CustomerDTO = #funnel_auth_response_customer_dto{
-		id = list_to_binary(SystemID),
-		uuid = list_to_binary(UUID),
+		customer_id = list_to_binary(CustomerID),
+		customer_uuid = list_to_binary(CustomerUUID),
 		priority = Priority,
 		rps = from_optional_asn(RPS),
 		allowed_sources = [addr_to_dto(Source) || Source <- AllowedSources],

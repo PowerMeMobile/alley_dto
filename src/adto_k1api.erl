@@ -681,6 +681,7 @@ sms_statuses_pb_to_dto(Statuses) ->
 
 status_name_dto_to_pb(AtomStateName) when is_atom(AtomStateName) ->
 	status_name_dto_to_pb(atom_to_binary(AtomStateName, utf8));
+status_name_dto_to_pb(<<"sent">>) ->						'SUBMITTED';
 status_name_dto_to_pb(<<"pending">>) ->						'SUCCESS_NO_DELIVERY';
 status_name_dto_to_pb(<<"submitted">>) -> 					'SUBMITTED';
 status_name_dto_to_pb(<<"success_waiting_delivery">>) ->	'SUCCESS_WAITING_DELIVERY';

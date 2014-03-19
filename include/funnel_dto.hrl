@@ -46,12 +46,12 @@
 }).
 
 -type funnel_auth_response_result() ::
-	{error, binary()} |
-	{customer, #funnel_auth_response_customer_dto{}}.
+	{customer, #funnel_auth_response_customer_dto{}} |
+	{error, binary()}.
 
 -record(funnel_auth_response_dto, {
-	connection_id 		:: uuid_(),
-	result 				:: funnel_auth_response_result()
+	connection_id :: uuid_(),
+	result        :: funnel_auth_response_result()
 }).
 
 %% ===================================================================

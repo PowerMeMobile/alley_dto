@@ -2,60 +2,60 @@
 
 // Auth
 message AuthReq {
-	required bytes id = 1;				// request uuid <<12,34...
-	required bytes customer_id = 2;		// customer system id <<"system-id">>
-	required bytes user_id = 3;	 		// <<"user">>
-	required bytes password = 4;		// <<"password">>
+    required bytes id = 1;              // request uuid <<12,34...
+    required bytes customer_id = 2;     // customer system id <<"system-id">>
+    required bytes user_id = 3;         // <<"user">>
+    required bytes password = 4;        // <<"password">>
 }
 
 message Provider {
-	required bytes id = 1;				// request uuid <<12,34...
-	required bytes gateway = 2;			// gateway uuid <<12,34..
-	required bytes bulk_gateway = 3;	// --||--
-	required bool receipts_supported = 4;
+    required bytes id = 1;              // request uuid <<12,34...
+    required bytes gateway = 2;         // gateway uuid <<12,34..
+    required bytes bulk_gateway = 3;    // --||--
+    required bool receipts_supported = 4;
 }
 
 message Network {
-	required bytes id = 1;				// request uuid <<12,34...
-	required bytes country_code = 2;	// <<"375">>
-	required uint32 numbers_len = 3;
-	repeated bytes prefixes = 4;		// <<"29">>
-	required bytes provider_id = 5;		// provider uuid <<12,34...
+    required bytes id = 1;              // request uuid <<12,34...
+    required bytes country_code = 2;    // <<"375">>
+    required uint32 numbers_len = 3;
+    repeated bytes prefixes = 4;        // <<"29">>
+    required bytes provider_id = 5;     // provider uuid <<12,34...
 }
 
 enum BillingType {
-	prepaid = 1;
-	postpaid = 2;
+    prepaid = 1;
+    postpaid = 2;
 }
 
 message AuthResp {
-	required bytes id = 1;					// request uuid <<12,34...
-	required bytes system_id = 2;			// <<"system-id">>
-	required bytes uuid = 3;   				// customer uuid
-	required BillingType billing_type = 4;
-	repeated FullAddr allowed_sources = 5;
-	optional FullAddr default_source = 6;
-	repeated Network networks = 7;
-	repeated Provider providers = 8;
-	optional bytes default_provider_id = 9;	// provider uuid
-	required bool receipts_allowed = 10;
-	required bool no_retry = 11;
-	required uint32 default_validity = 12;	// seconds
-	required uint32 max_validity = 13; 		// seconds
+    required bytes id = 1;                  // request uuid <<12,34...
+    required bytes system_id = 2;           // <<"system-id">>
+    required bytes uuid = 3;                // customer uuid
+    required BillingType billing_type = 4;
+    repeated FullAddr allowed_sources = 5;
+    optional FullAddr default_source = 6;
+    repeated Network networks = 7;
+    repeated Provider providers = 8;
+    optional bytes default_provider_id = 9; // provider uuid
+    required bool receipts_allowed = 10;
+    required bool no_retry = 11;
+    required uint32 default_validity = 12;  // seconds
+    required uint32 max_validity = 13;      // seconds
 }
 
 // Query delivery status
 message SmsDeliveryStatusReq {
-	required bytes id = 1;	   			// uuid <<12,42...
-	required bytes customer_id = 2;		// uuid <<12,42...
-	required bytes user_id = 3;    		// string, <<"user id">>
-	required bytes sms_request_id = 4;  // uuid <<12..
-	required FullAddr address = 5;
+    required bytes id = 1;              // uuid <<12,42...
+    required bytes customer_id = 2;     // uuid <<12,42...
+    required bytes user_id = 3;         // string, <<"user id">>
+    required bytes sms_request_id = 4;  // uuid <<12..
+    required FullAddr address = 5;
 }
 
 message SmsDeliveryStatusResp {
-	required bytes id = 1;					// uuid from request <<12...
-	repeated SmsStatus statuses = 2;
+    required bytes id = 1;                  // uuid from request <<12...
+    repeated SmsStatus statuses = 2;
 }
 
 // Retrieve sms messages
@@ -64,123 +64,123 @@ message RetrieveSmsReq {
    required bytes id = 1;
    required bytes customer_id = 2;
    required bytes user_id = 3;
-   required FullAddr dest_addr = 4;			// customer destination address
+   required FullAddr dest_addr = 4;         // customer destination address
    optional uint32 batch_size = 5;
 }
 
 message RetrieveSmsResp {
-	required bytes id = 1;
-	repeated RetrievedMessage messages = 2;
-	required uint32 total = 3; 			// total number of pending messages
+    required bytes id = 1;
+    repeated RetrievedMessage messages = 2;
+    required uint32 total = 3;          // total number of pending messages
 }
 
 message RetrievedMessage {
-	required uint32 datetime = 1;		// utc unix epoch seconds
-	required FullAddr sender_addr = 2;
-	required bytes message_id = 3;
-	required bytes message = 4;
+    required uint32 datetime = 1;       // utc unix epoch seconds
+    required FullAddr sender_addr = 2;
+    required bytes message_id = 3;
+    required bytes message = 4;
 }
 
 message RemoveRetrievedMessages {
-	required bytes id = 1;
-	repeated bytes message_ids = 2;
+    required bytes id = 1;
+    repeated bytes message_ids = 2;
 }
 
 // Incoming Sms Notifications
 
 message SubscribeIncomingSmsReq {
-	required bytes id = 1;
-	required bytes customer_id = 2;
-	required bytes user_id = 3;
-	required FullAddr dest_addr = 4;
-	required bytes notify_url = 5;
-	optional bytes criteria = 6;
-	optional bytes notification_format = 7;
-	optional bytes correlator = 8;
-	optional bytes callback_data = 9;
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required FullAddr dest_addr = 4;
+    required bytes notify_url = 5;
+    optional bytes criteria = 6;
+    optional bytes notification_format = 7;
+    optional bytes correlator = 8;
+    optional bytes callback_data = 9;
 }
 
 message SubscribeIncomingSmsResp {
-	required bytes id = 1;
-	required bytes subscription_id = 2;
+    required bytes id = 1;
+    required bytes subscription_id = 2;
 }
 
 message UnsubscribeIncomingSmsReq {
-	required bytes id = 1;
-	required bytes customer_id = 2;
-	required bytes user_id = 3;
-	required bytes subscription_id = 4;
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required bytes subscription_id = 4;
 }
 
 message UnsubscribeIncomingSmsResp {
-	required bytes id = 1;
+    required bytes id = 1;
 }
 
 message SmsNotificationReq {
-	required bytes callback_data = 1;
-	required uint32 datetime = 2;
-	required FullAddr dest_addr = 3;
-	required bytes message_id = 4;
-	required bytes message = 5;
-	required FullAddr sender_addr = 6;
-	required bytes notify_url = 7;
+    required bytes callback_data = 1;
+    required uint32 datetime = 2;
+    required FullAddr dest_addr = 3;
+    required bytes message_id = 4;
+    required bytes message = 5;
+    required FullAddr sender_addr = 6;
+    required bytes notify_url = 7;
 }
 
 // Sms Receipts Subscriptions
 
 message SmsReceiptsSubscribeReq {
-	required bytes id = 1;
-	required bytes customer_id = 2;
-	required bytes user_id = 3;
-	required FullAddr dest_addr = 4;
-	required bytes callback_data = 5;
-	required bytes url = 6;
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required FullAddr dest_addr = 4;
+    required bytes callback_data = 5;
+    required bytes url = 6;
 }
 
 message SmsReceiptsSubscribeResp {
-	required bytes id = 1;
+    required bytes id = 1;
 }
 
 message SmsReceiptsUnsubscribeReq {
-	required bytes id = 1;
-	required bytes customer_id = 2;
-	required bytes user_id = 3;
-	required bytes subscription_id = 4;
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required bytes subscription_id = 4;
 }
 
 message SmsReceiptsUnsubscribeResp {
-	required bytes id = 1;
+    required bytes id = 1;
 }
 
 message SmsDeliveryReceiptNotification {
-	required bytes id = 1;
-	required FullAddr dest_addr = 2;
-	required SmsStatuses status = 3;
-	required bytes url = 4;
-	optional bytes callback_data = 5;
+    required bytes id = 1;
+    required FullAddr dest_addr = 2;
+    required SmsStatuses status = 3;
+    required bytes url = 4;
+    optional bytes callback_data = 5;
 }
 
 // Misc ---------------------
 
 message SmsStatus {
-		required FullAddr address = 1;
-		required SmsStatuses status = 2;
+        required FullAddr address = 1;
+        required SmsStatuses status = 2;
 }
 
 enum SmsStatuses {
-	SUBMITTED = 1;					 // Kelly handled sms request
-	SUCCESS_WAITING_DELIVERY = 2; 	 // just sms response (success + registered_delivery true)
-	SUCCESS_NO_DELIVERY = 3;    	 // just sms response (success + registered_delivery false)
-	FAILURE	= 4;		  			 // just sms response
-    ENROUTE = 5;					 // just sms delivery receipt
-    DELIVERED = 6;					 // -//-
-	EXPIRED = 7;
+    SUBMITTED = 1;                   // Kelly handled sms request
+    SUCCESS_WAITING_DELIVERY = 2;    // just sms response (success + registered_delivery true)
+    SUCCESS_NO_DELIVERY = 3;         // just sms response (success + registered_delivery false)
+    FAILURE = 4;                     // just sms response
+    ENROUTE = 5;                     // just sms delivery receipt
+    DELIVERED = 6;                   // -//-
+    EXPIRED = 7;
     DELETED = 8;
-	UNDELIVERABLE = 9;
-	ACCEPTED = 10;
-	UNKNOWN = 11;
-	REJECTED = 12;
-	UNRECOGNIZED = 13;
+    UNDELIVERABLE = 9;
+    ACCEPTED = 10;
+    UNKNOWN = 11;
+    REJECTED = 12;
+    UNRECOGNIZED = 13;
 }
 
 

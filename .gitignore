@@ -1,5 +1,6 @@
 deps/
 ebin/
+priv/
 include/FunnelAsn.hrl
 include/JustAsn.hrl
 src/FunnelAsn.asn1db

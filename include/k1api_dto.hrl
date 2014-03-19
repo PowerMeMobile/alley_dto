@@ -143,9 +143,8 @@
 	password 			:: binary()
 }).
 
--record(k1api_auth_response_dto, {
-	id 					:: uuid_(),
-	system_id 			:: binary(), %% <<"system-id">>
+-record(k1api_auth_response_customer_dto, {
+	id 		        	:: binary(), %% customer id
 	uuid 				:: uuid_(),
 	billing_type 		:: billing_type_(),
 	allowed_sources 	:: [addr()],
@@ -157,6 +156,15 @@
 	no_retry 			:: boolean(),
 	default_validity 	:: integer(), %% seconds
 	max_validity 		:: integer() %% seconds
+}).
+
+-type k1api_auth_response_result() ::
+	{customer, #k1api_auth_response_customer_dto{}} |
+	{error, binary()}.
+
+-record(k1api_auth_response_dto, {
+	id     :: uuid_(),
+    result :: k1api_auth_response_result()
 }).
 
 %% ===================================================================

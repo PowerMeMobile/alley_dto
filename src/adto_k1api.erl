@@ -195,34 +195,52 @@ decode(#k1api_auth_response_dto{}, Bin) ->
 	PB = k1api_pb:decode_authresp(Bin),
 	 #authresp{
 		id = ID,
-		system_id = SystemID,
-		uuid = UUID,
-		billing_type = BillingType,
-		allowed_sources = AllowedSources,
-		default_source = DefaultSource,
-		networks = Networks,
-		providers = Providers,
-		default_provider_id = DefProviderID,
-		receipts_allowed = ReceiptsAllowed,
-		no_retry = NoRetry,
-		default_validity = DefValidity,
-		max_validity = MaxValidity
+        result = Result,
+        customer = Customer,
+        error = Error
 	} = PB,
-	DTO = #k1api_auth_response_dto{
-		id = ID,
-		system_id = SystemID,
-		uuid = UUID,
-		billing_type = BillingType,
-		allowed_sources = addr_pb_to_dto(AllowedSources),
-		default_source = addr_pb_to_dto(DefaultSource),
-		networks = network_pb_to_dto(Networks),
-		providers = provider_pb_to_dto(Providers),
-		default_provider_id = DefProviderID,
-		receipts_allowed = ReceiptsAllowed,
-		no_retry = NoRetry,
-		default_validity = DefValidity,
-		max_validity = MaxValidity
-	},
+    DTO = case Result of
+        customer ->
+            #authresp_customer{
+        		id = CustomerID,
+		        uuid = UUID,
+        		billing_type = BillingType,
+		        allowed_sources = AllowedSources,
+        		default_source = DefaultSource,
+		        networks = Networks,
+        		providers = Providers,
+		        default_provider_id = DefProviderID,
+        		receipts_allowed = ReceiptsAllowed,
+		        no_retry = NoRetry,
+        		default_validity = DefValidity,
+		        max_validity = MaxValidity
+            } = Customer,
+            #k1api_auth_response_dto{
+        		id = ID,
+                result = {customer, #k1api_auth_response_customer_dto{
+            		id = CustomerID,
+            		uuid = UUID,
+            		billing_type = BillingType,
+            		allowed_sources = addr_pb_to_dto(AllowedSources),
+            		default_source = addr_pb_to_dto(DefaultSource),
+            		networks = network_pb_to_dto(Networks),
+            		providers = provider_pb_to_dto(Providers),
+            		default_provider_id = DefProviderID,
+            		receipts_allowed = ReceiptsAllowed,
+            		no_retry = NoRetry,
+            		default_validity = DefValidity,
+            		max_validity = MaxValidity
+                }}
+            };
+        error ->
+            #authresp_error{
+                message = Message
+            } = Error,
+            #k1api_auth_response_dto{
+        		id = ID,
+                result = {error, Message}
+            }
+    end,
 	{ok, DTO};
 
 decode(#k1api_subscribe_sms_receipts_request_dto{}, Bin) ->
@@ -486,10 +504,12 @@ encode(DTO = #k1api_auth_request_dto{}) ->
 	Bin = k1api_pb:encode_authreq(PB),
 	{ok, Bin};
 
-encode(DTO = #k1api_auth_response_dto{}) ->
-	#k1api_auth_response_dto{
-		id = ID,
-		system_id = SystemID,
+encode(#k1api_auth_response_dto{
+    id = ID,
+    result = {customer, CustomerDTO}
+}) ->
+    #k1api_auth_response_customer_dto{
+        id = SystemID,
 		uuid = UUID,
 		billing_type = BillingType,
 		allowed_sources = AllowedSources,
@@ -501,10 +521,9 @@ encode(DTO = #k1api_auth_response_dto{}) ->
 		no_retry = NoRetry,
 		default_validity = DefValidity,
 		max_validity = MaxValidity
-	} = DTO,
-	PB = #authresp{
-		id = ID,
-		system_id = SystemID,
+    } = CustomerDTO,
+    CustomerPB = #authresp_customer{
+        id = SystemID,
 		uuid = UUID,
 		billing_type = BillingType,
 		allowed_sources = addr_to_pb(AllowedSources),
@@ -516,6 +535,25 @@ encode(DTO = #k1api_auth_response_dto{}) ->
 		no_retry = NoRetry,
 		default_validity = DefValidity,
 		max_validity = MaxValidity
+    },
+	PB = #authresp{
+		id = ID,
+        result = customer,
+        customer = CustomerPB
+	},
+	Bin = k1api_pb:encode_authresp(PB),
+	{ok, Bin};
+encode(#k1api_auth_response_dto{
+    id = ID,
+    result = {error, Message}
+}) ->
+    ErrorPB = #authresp_error{
+        message = Message
+    },
+	PB = #authresp{
+		id = ID,
+        result = error,
+        error = ErrorPB
 	},
 	Bin = k1api_pb:encode_authresp(PB),
 	{ok, Bin};

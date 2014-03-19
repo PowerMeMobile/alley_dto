@@ -8,7 +8,8 @@
 -spec k1api_dto_test_() -> ignore.
 k1api_dto_test_()->
 	[?_test(auth_request()),
-	?_test(auth_response()),
+	?_test(auth_customer_response()),
+    ?_test(auth_error_response()),
 	?_test(sms_delivery_status_request()),
 	?_test(sms_delivery_status_response()),
 	?_test(retrieve_sms_request()),
@@ -117,7 +118,7 @@ auth_request() ->
 %% k1api Auth Request
 %% ===================================================================
 
-auth_response() ->
+auth_customer_response() ->
 	Provider = #provider_dto{
 		id = uuid:generate(),
 		gateway = uuid:generate(),
@@ -131,9 +132,8 @@ auth_response() ->
 		prefixes = [<<"33">>, <<"44">>],
 		provider_id = uuid:generate()
 	},
-	DTO = #k1api_auth_response_dto{
-		id = uuid:generate(),
-		system_id = <<"system-id">>,
+    Customer = #k1api_auth_response_customer_dto{
+		id = <<"system-id">>,
 		uuid = uuid:generate(),
 		billing_type = prepaid, %% postpaid
 		allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
@@ -145,6 +145,18 @@ auth_response() ->
 		no_retry = true,
 		default_validity = 12345,
 		max_validity = 1234567
+    },
+	DTO = #k1api_auth_response_dto{
+		id = uuid:generate(),
+        result = {customer, Customer}
+	},
+	{ok, Bin} = adto:encode(DTO),
+	{ok, DTO} = adto:decode(#k1api_auth_response_dto{}, Bin).
+
+auth_error_response() ->
+	DTO = #k1api_auth_response_dto{
+		id = uuid:generate(),
+        result = {error, <<"Unknown customer">>}
 	},
 	{ok, Bin} = adto:encode(DTO),
 	{ok, DTO} = adto:decode(#k1api_auth_response_dto{}, Bin).

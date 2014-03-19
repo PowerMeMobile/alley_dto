@@ -2,11 +2,11 @@
 -define(addr_hrl, included).
 
 -record(addr, {
-	addr 		:: binary(),
-	ton 		:: integer(),
-	npi 		:: integer(),
-	ref_num		:: integer()
+    addr        :: binary(),
+    ton         :: integer(),
+    npi         :: integer(),
+    ref_num         :: integer()
 }).
--type addr()	:: #addr{}.
+-type addr()    :: #addr{}.
 
 -endif. % addr_hrl

@@ -1,10 +1,10 @@
 {application, alley_dto, [
-	{description, ""},
-	{vsn, git},
-	{registered, []},
-	{applications, [
-		kernel,
-		stdlib
-	]},
-	{env, []}
+    {description, ""},
+    {vsn, git},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []}
 ]}.

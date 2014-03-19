@@ -6,8 +6,8 @@
 -include("k1api_dto.hrl").
 
 -type message_type_dto() ::
-	k1api_dto() |
-	just_dto() |
-	funnel_dto().
+    k1api_dto() |
+    just_dto() |
+    funnel_dto().
 
 -endif. % adto_hrl

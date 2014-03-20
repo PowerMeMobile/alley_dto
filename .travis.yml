@@ -5,6 +5,7 @@ otp_release:
 branches:
   only:
     - master
+    - develop
 notifications:
   email:
     - d.klionsky@dev.powermemobile.com

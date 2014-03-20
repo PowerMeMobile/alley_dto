@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/PowerMeMobile/alley_dto.svg?branch=master)](https://travis-ci.org/PowerMeMobile/alley_dto)
+
 # Alley DTO
 
 This app is a set of DTO records that used by OpenAlley app

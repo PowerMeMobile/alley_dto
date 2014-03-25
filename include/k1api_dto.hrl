@@ -8,10 +8,10 @@
 %% ===================================================================
 
 -record(k1api_sms_delivery_status_request_dto, {
-    id              :: uuid_(),
-    customer_id     :: uuid_(),
+    id              :: uuid_dto(),
+    customer_id     :: uuid_dto(),
     user_id         :: binary(),
-    sms_request_id  :: uuid_(),
+    sms_request_id  :: uuid_dto(),
     address         :: addr()
 }).
 
@@ -40,7 +40,7 @@
 }).
 
 -record(k1api_sms_delivery_status_response_dto, {
-    id          :: uuid_(),
+    id          :: uuid_dto(),
     statuses    :: [#k1api_sms_status_dto{}]
 }).
 
@@ -49,8 +49,8 @@
 %% ===================================================================
 
 -record(k1api_retrieve_sms_request_dto, {
-    id          :: uuid_(),
-    customer_id :: uuid_(),
+    id          :: uuid_dto(),
+    customer_id :: uuid_dto(),
     user_id     :: binary(), %% <<"user_id">>
     dest_addr   :: addr(),
     batch_size  :: undefined | integer()
@@ -68,7 +68,7 @@
 }).
 
 -record(k1api_retrieve_sms_response_dto, {
-    id          :: uuid_(),
+    id          :: uuid_dto(),
     messages    :: [#k1api_retrieved_sms_dto{}],
     total       :: integer()
 }).
@@ -78,7 +78,7 @@
 %% ===================================================================
 
 -record(k1api_remove_retrieved_sms_request_dto, {
-    id          :: uuid_(),
+    id          :: uuid_dto(),
     message_ids :: [binary()] %% [<<"123">>]
 }).
 
@@ -87,8 +87,8 @@
 %% ===================================================================
 
 -record(k1api_subscribe_incoming_sms_request_dto, {
-    id                  :: uuid_(),
-    customer_id         :: uuid_(),
+    id                  :: uuid_dto(),
+    customer_id         :: uuid_dto(),
     user_id             :: binary(),
     dest_addr           :: addr(),
     notify_url          :: binary(),
@@ -99,8 +99,8 @@
 }).
 
 -record(k1api_subscribe_incoming_sms_response_dto, {
-    id                  :: uuid_(),
-    subscription_id     :: uuid_()
+    id                  :: uuid_dto(),
+    subscription_id     :: uuid_dto()
 }).
 
 %% ===================================================================
@@ -108,14 +108,14 @@
 %% ===================================================================
 
 -record(k1api_unsubscribe_incoming_sms_request_dto, {
-    id                  :: uuid_(),
-    customer_id         :: uuid_(),
+    id                  :: uuid_dto(),
+    customer_id         :: uuid_dto(),
     user_id             :: binary(),
-    subscription_id     :: uuid_()
+    subscription_id     :: uuid_dto()
 }).
 
 -record(k1api_unsubscribe_incoming_sms_response_dto, {
-    id                  :: uuid_()
+    id                  :: uuid_dto()
 }).
 
 %% ===================================================================
@@ -137,7 +137,7 @@
 %% ===================================================================
 
 -record(k1api_auth_request_dto, {
-    id                  :: uuid_(),
+    id                  :: uuid_dto(),
     customer_id         :: binary(), %% <<"system_id">>
     user_id             :: binary(),
     password            :: binary()
@@ -145,13 +145,13 @@
 
 -record(k1api_auth_response_customer_dto, {
     id                  :: binary(), %% customer id
-    uuid                :: uuid_(),
-    billing_type        :: billing_type_(),
+    uuid                :: uuid_dto(),
+    billing_type        :: billing_type_dto(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [network_dto()],
     providers           :: [provider_dto()],
-    default_provider_id :: uuid_() | undefined,
+    default_provider_id :: uuid_dto() | undefined,
     receipts_allowed    :: boolean(),
     no_retry            :: boolean(),
     default_validity    :: integer(), %% seconds
@@ -163,7 +163,7 @@
     {error, binary()}.
 
 -record(k1api_auth_response_dto, {
-    id     :: uuid_(),
+    id     :: uuid_dto(),
     result :: k1api_auth_response_result()
 }).
 
@@ -172,8 +172,8 @@
 %% ===================================================================
 
 -record(k1api_subscribe_sms_receipts_request_dto, {
-    id              :: uuid_(),
-    customer_id     :: uuid_(),
+    id              :: uuid_dto(),
+    customer_id     :: uuid_dto(),
     user_id         :: binary(), %% <<"user">>
     url             :: binary(),
     dest_addr       :: addr(),
@@ -181,22 +181,22 @@
 }).
 
 -record(k1api_subscribe_sms_receipts_response_dto, {
-    id              :: uuid_()
+    id              :: uuid_dto()
 }).
 
 -record(k1api_unsubscribe_sms_receipts_request_dto, {
-    id              :: uuid_(),
-    customer_id     :: uuid_(),
+    id              :: uuid_dto(),
+    customer_id     :: uuid_dto(),
     user_id         :: binary(),
-    subscription_id :: uuid_()
+    subscription_id :: uuid_dto()
 }).
 
 -record(k1api_unsubscribe_sms_receipts_response_dto, {
-    id              :: uuid_()
+    id              :: uuid_dto()
 }).
 
 -record(k1api_sms_delivery_receipt_notification_dto, {
-    id              :: uuid_(),
+    id              :: uuid_dto(),
     dest_addr       :: addr(),
     status          :: k1api_sms_status(),
     callback_data   :: binary(),

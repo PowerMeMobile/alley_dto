@@ -5,7 +5,7 @@
     addr        :: binary(),
     ton         :: integer(),
     npi         :: integer(),
-    ref_num         :: integer()
+    ref_num     :: integer()
 }).
 -type addr()    :: #addr{}.
 

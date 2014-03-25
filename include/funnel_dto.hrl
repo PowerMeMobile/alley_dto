@@ -13,7 +13,7 @@
 %% ===================================================================
 
 -record(funnel_auth_request_dto, {
-    connection_id       :: uuid_(),
+    connection_id       :: uuid_dto(),
     ip                  :: binary(), %% <<"127.0.0.1">>
     customer_id         :: binary(), %% <<"system-id">>
     user_id             :: binary(), %% <<"user">>
@@ -30,19 +30,19 @@
 
 -record(funnel_auth_response_customer_dto, {
     id                  :: binary(), %% <<"system-id">>
-    uuid                :: uuid_(),
+    uuid                :: uuid_dto(),
     priority            :: integer(),
     rps                 :: integer() | undefined,
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [#network_dto{}],
     providers           :: [#provider_dto{}],
-    default_provider_id :: uuid_() | undefined,
+    default_provider_id :: uuid_dto() | undefined,
     receipts_allowed    :: boolean(),
     no_retry            :: boolean(),
     default_validity    :: binary(), %% <<"000003000000000R">>
     max_validity        :: integer(),   %% in seconds (relative)
-    billing_type        :: billing_type_()
+    billing_type        :: billing_type_dto()
 }).
 
 -type funnel_auth_response_result() ::
@@ -50,7 +50,7 @@
     {error, binary()}.
 
 -record(funnel_auth_response_dto, {
-    connection_id :: uuid_(),
+    connection_id :: uuid_dto(),
     result        :: funnel_auth_response_result()
 }).
 
@@ -67,7 +67,7 @@
 }).
 
 -record(funnel_client_online_event_dto, {
-    connection_id   :: uuid_(),
+    connection_id   :: uuid_dto(),
     customer_id     :: binary(), %% <<"system_id">>
     user_id         :: binary(), %% <<"user_id>>
     type            :: smpp_type_dto(),
@@ -76,7 +76,7 @@
 }).
 
 -record(funnel_client_offline_event_dto, {
-    connection_id   :: uuid_(),
+    connection_id   :: uuid_dto(),
     customer_id     :: binary(), %% <<"system_id">>
     user_id         :: binary(), %% <<"user_id">>
     type            :: smpp_type_dto(),
@@ -105,7 +105,7 @@
 }).
 
 -record(funnel_incoming_sms_dto, {
-    id              :: uuid_(),
+    id              :: uuid_dto(),
     messages        :: [#funnel_incoming_sms_message_dto{}]
 }).
 
@@ -132,7 +132,7 @@
 }).
 
 -record(funnel_delivery_receipt_dto, {
-    id              :: uuid_(),
+    id              :: uuid_dto(),
     receipts        :: [#funnel_delivery_receipt_dto{}]
 }).
 
@@ -141,7 +141,7 @@
 %% ===================================================================
 
 -record(funnel_ack_dto, {
-    id              :: uuid_()
+    id              :: uuid_dto()
 }).
 
 %% ===================================================================
@@ -152,7 +152,7 @@
 }).
 
 -record(funnel_connection_dto, {
-    connection_id   :: uuid_(),
+    connection_id   :: uuid_dto(),
     remote_ip       :: binary(), %% <<"127.0.0.1">>
     customer_id     :: binary(), %% system (smpp) id
     user_id         :: binary(),

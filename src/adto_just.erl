@@ -476,7 +476,11 @@ try_split_single(RawID, ClientType) ->
         [_] ->
             {RawID, ClientType};
         ["k1api", ID] ->
-            {ID, k1api}
+            {ID, k1api};
+        ["mm", ID] ->
+            {ID, mm};
+        ["soap", ID] ->
+            {ID, soap}
     end.
 
 sms_req_enc_to_asn(Encoding) when

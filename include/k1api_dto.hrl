@@ -140,7 +140,8 @@
     id                  :: uuid_dto(),
     customer_id         :: binary(), %% <<"system_id">>
     user_id             :: binary(),
-    password            :: binary()
+    password            :: binary(),
+    connection_type     :: binary()
 }).
 
 -record(k1api_auth_response_customer_dto, {

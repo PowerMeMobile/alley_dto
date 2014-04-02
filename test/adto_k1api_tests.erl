@@ -108,7 +108,8 @@ auth_request() ->
         id = uuid:generate(),
         customer_id = <<"test-sys-id">>,
         user_id = <<"user">>,
-        password = <<"password">>
+        password = <<"password">>,
+        connection_type = <<"oneapi">>
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_auth_request_dto{}, Bin).

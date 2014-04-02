@@ -181,13 +181,15 @@ decode(#k1api_auth_request_dto{}, Bin) ->
         id = ID,
         customer_id = CustomerID,
         user_id = UserID,
-        password = Password
+        password = Password,
+        connection_type = ConnType
     } = PB,
     DTO = #k1api_auth_request_dto{
         id = ID,
         customer_id = CustomerID,
         user_id = UserID,
-        password = Password
+        password = Password,
+        connection_type = ConnType
     },
     {ok, DTO};
 
@@ -493,13 +495,15 @@ encode(DTO = #k1api_auth_request_dto{}) ->
         id = ID,
         customer_id = CustomerID,
         user_id = UserID,
-        password = Password
+        password = Password,
+        connection_type = ConnType
     } = DTO,
     PB = #authreq{
         id = ID,
         customer_id = CustomerID,
         user_id = UserID,
-        password = Password
+        password = Password,
+        connection_type = ConnType
     },
     Bin = k1api_pb:encode_authreq(PB),
     {ok, Bin};

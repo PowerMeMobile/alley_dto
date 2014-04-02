@@ -6,11 +6,17 @@
 //
 
 message AuthReq {
+    enum ConnectionType {
+        oneapi = 1;
+        soap = 2;
+        mm = 3;
+    }
+
     required bytes id = 1;               // request uuid <<12,34...
     required bytes customer_id = 2;      // customer system id <<"system-id">>
     required bytes user_id = 3;          // <<"user">>
     required bytes password = 4;         // <<"password">>,
-    required bytes connection_type = 5;  // <<"oneapi">> | <<"soap">> | <<"mm">>
+    required ConnectionType connection_type = 5;
 }
 
 message AuthResp {

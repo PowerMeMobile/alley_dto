@@ -475,8 +475,8 @@ try_split_single(RawID, ClientType) ->
     case string:tokens(RawID, "@") of
         [_] ->
             {RawID, ClientType};
-        ["k1api", ID] ->
-            {ID, k1api};
+        ["oneapi", ID] ->
+            {ID, oneapi};
         ["mm", ID] ->
             {ID, mm};
         ["soap", ID] ->

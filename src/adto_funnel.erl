@@ -280,7 +280,7 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         no_retry = NoRetry,
         default_validity = DefaultValidity,
         max_validity = MaxValidity,
-        billing_type = BillingType
+        pay_type = PayType
     } = CustomerDTO,
     CustomerAsn = #'Customer'{
         id = binary_to_list(SystemID),
@@ -296,7 +296,7 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         noRetry = NoRetry,
         defaultValidity = binary_to_list(DefaultValidity),
         maxValidity = MaxValidity,
-        billingType = BillingType
+        payType = PayType
     },
     Asn = #'BindResponse'{
         connectionId = binary_to_list(ConnectionID),
@@ -652,7 +652,7 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
         noRetry = NoRetry,
         defaultValidity = DefaultValidity,
         maxValidity = MaxValidity,
-        billingType = BillingType
+        payType = PayType
     } = CustomerAsn,
     CustomerDTO = #funnel_auth_response_customer_dto{
         id = list_to_binary(SystemID),
@@ -668,7 +668,7 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
         no_retry = NoRetry,
         default_validity = list_to_binary(DefaultValidity),
         max_validity = MaxValidity,
-        billing_type = BillingType
+        pay_type = PayType
     },
     {customer, CustomerDTO};
 

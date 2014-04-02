@@ -102,7 +102,7 @@ success_auth_response() ->
         no_retry = true,
         default_validity = <<"000003000000000R">>,
         max_validity = 1234567,
-        billing_type = prepaid
+        pay_type = prepaid
     },
     DTO = #funnel_auth_response_dto{
         connection_id = uuid:generate(),

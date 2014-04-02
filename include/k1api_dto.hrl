@@ -146,7 +146,7 @@
 -record(k1api_auth_response_customer_dto, {
     id                  :: binary(), %% customer id
     uuid                :: uuid_dto(),
-    billing_type        :: billing_type_dto(),
+    pay_type            :: pay_type_dto(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [network_dto()],

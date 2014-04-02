@@ -19,14 +19,14 @@ message AuthResp {
     }
 
     message Customer {
-        enum BillingType {
+        enum PayType {
             prepaid = 1;
             postpaid = 2;
         }
 
         required bytes id = 1;               // customer id
         required bytes uuid = 2;             // customer uuid
-        required BillingType billing_type = 3;
+        required PayType pay_type = 3;
         repeated FullAddr allowed_sources = 4;
         optional FullAddr default_source = 5;
         repeated Network networks = 6;

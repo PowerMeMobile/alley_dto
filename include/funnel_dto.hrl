@@ -42,7 +42,7 @@
     no_retry            :: boolean(),
     default_validity    :: binary(), %% <<"000003000000000R">>
     max_validity        :: integer(),   %% in seconds (relative)
-    billing_type        :: billing_type_dto()
+    pay_type            :: pay_type_dto()
 }).
 
 -type funnel_auth_response_result() ::

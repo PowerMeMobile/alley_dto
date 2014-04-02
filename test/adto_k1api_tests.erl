@@ -135,7 +135,7 @@ auth_customer_response() ->
     Customer = #k1api_auth_response_customer_dto{
         id = <<"system-id">>,
         uuid = uuid:generate(),
-        billing_type = prepaid, %% postpaid
+        pay_type = prepaid, %% postpaid
         allowed_sources = [#addr{addr = <<"375259090909">>, ton = 1, npi = 1}],
         default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
         networks = [Network],

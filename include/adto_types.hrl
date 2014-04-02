@@ -4,7 +4,7 @@
 -include("addr.hrl").
 
 -type client_type_dto()  :: funnel | oneapi | soap | mm.
--type billing_type_dto() :: prepaid | postpaid.
+-type pay_type_dto()     :: prepaid | postpaid.
 -type uuid_dto()         :: binary(). %% <<"12fd794d-9e32-4cf6...
 -type utc_time()         :: binary(). %% <<"120827114232">>
 -type smpp_type_dto()    :: receiver | transceiver | transmitter.

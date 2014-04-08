@@ -26,8 +26,8 @@
 
 -record(provider_dto, {
     id                  :: uuid_dto(),
-    gateway             :: uuid_dto(),
-    bulk_gateway        :: uuid_dto(),
+    gateway_id          :: uuid_dto(),
+    bulk_gateway_id     :: uuid_dto(),
     receipts_supported  :: boolean()
 }).
 -type provider_dto()    :: #provider_dto{}.

@@ -814,14 +814,14 @@ network_pb_to_dto(List) ->
 provider_dto_to_pb(Provider = #provider_dto{}) ->
     #provider_dto{
         id = ID,
-        gateway = GtwID,
-        bulk_gateway = BuldGtwID,
+        gateway_id = GtwID,
+        bulk_gateway_id = BulkGtwID,
         receipts_supported = Receipts
     } = Provider,
     #provider{
         id = ID,
-        gateway = GtwID,
-        bulk_gateway = BuldGtwID,
+        gateway_id = GtwID,
+        bulk_gateway_id = BulkGtwID,
         receipts_supported = Receipts
     };
 provider_dto_to_pb(List) ->
@@ -830,14 +830,14 @@ provider_dto_to_pb(List) ->
 provider_pb_to_dto(Provider = #provider{}) ->
     #provider{
         id = ID,
-        gateway = GtwID,
-        bulk_gateway = BuldGtwID,
+        gateway_id = GtwID,
+        bulk_gateway_id = BulkGtwID,
         receipts_supported = Receipts
     } = Provider,
     #provider_dto{
         id = ID,
-        gateway = GtwID,
-        bulk_gateway = BuldGtwID,
+        gateway_id = GtwID,
+        bulk_gateway_id = BulkGtwID,
         receipts_supported = Receipts
     };
 provider_pb_to_dto(List) ->

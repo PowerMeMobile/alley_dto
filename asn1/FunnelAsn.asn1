@@ -43,8 +43,8 @@ Customer ::= SEQUENCE {
 
 Provider ::= SEQUENCE {
     id                [0] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    gateway           [1] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    bulkGateway       [2] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    gatewayId         [1] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    bulkGatewayId     [2] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
     receiptsSupported [3] BOOLEAN
 }
 

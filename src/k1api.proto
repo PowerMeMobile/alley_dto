@@ -1,10 +1,6 @@
-// k1api
-
-
 //
 // Authentication
 //
-
 message AuthReq {
     enum ConnectionType {
         oneapi = 1;
@@ -56,11 +52,10 @@ message AuthResp {
     optional Error error = 4;
 }
 
-
 message Provider {
-    required bytes id = 1;               // request uuid <<12,34...
-    required bytes gateway = 2;          // gateway uuid <<12,34..
-    required bytes bulk_gateway = 3;     // --||--
+    required bytes id = 1;                  // request uuid <<12,34...
+    required bytes gateway_id = 2;          // gateway uuid <<12,34..
+    required bytes bulk_gateway_id = 3;     // --||--
     required bool receipts_supported = 4;
 }
 
@@ -78,9 +73,9 @@ message FullAddr {
     required uint32 npi = 3;
 }
 
-
-
+//
 // Query delivery status
+//
 message SmsDeliveryStatusReq {
     required bytes id = 1;                  // uuid <<12,42...
     required bytes customer_id = 2;         // uuid <<12,42...
@@ -94,8 +89,9 @@ message SmsDeliveryStatusResp {
     repeated SmsStatus statuses = 2;
 }
 
+//
 // Retrieve sms messages
-
+//
 message RetrieveSmsReq {
    required bytes id = 1;
    required bytes customer_id = 2;
@@ -122,8 +118,9 @@ message RemoveRetrievedMessages {
     repeated bytes message_ids = 2;
 }
 
+//
 // Incoming Sms Notifications
-
+//
 message SubscribeIncomingSmsReq {
     required bytes id = 1;
     required bytes customer_id = 2;
@@ -162,8 +159,9 @@ message SmsNotificationReq {
     required bytes notify_url = 7;
 }
 
+//
 // Sms Receipts Subscriptions
-
+//
 message SmsReceiptsSubscribeReq {
     required bytes id = 1;
     required bytes customer_id = 2;
@@ -196,11 +194,12 @@ message SmsDeliveryReceiptNotification {
     optional bytes callback_data = 5;
 }
 
-// Misc ---------------------
-
+//
+// Misc
+//
 message SmsStatus {
-        required FullAddr address = 1;
-        required SmsStatuses status = 2;
+    required FullAddr address = 1;
+    required SmsStatuses status = 2;
 }
 
 enum SmsStatuses {

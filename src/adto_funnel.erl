@@ -606,14 +606,14 @@ networks_to_dto(Networks) ->
 providers_to_asn(Provider = #provider_dto{}) ->
     #provider_dto{
         id = ID,
-        gateway = GtwID,
-        bulk_gateway = BulkGtwID,
+        gateway_id = GtwID,
+        bulk_gateway_id = BulkGtwID,
         receipts_supported = ReceiptsSupported
     } = Provider,
     #'Provider'{
         id = binary_to_list(ID),
-        gateway = binary_to_list(GtwID),
-        bulkGateway = binary_to_list(BulkGtwID),
+        gatewayId = binary_to_list(GtwID),
+        bulkGatewayId = binary_to_list(BulkGtwID),
         receiptsSupported = ReceiptsSupported
     };
 providers_to_asn(Providers) ->
@@ -622,14 +622,14 @@ providers_to_asn(Providers) ->
 providers_to_dto(Provider = #'Provider'{}) ->
     #'Provider'{
         id = ID,
-        gateway = GtwID,
-        bulkGateway = BulkGtwID,
+        gatewayId = GtwID,
+        bulkGatewayId = BulkGtwID,
         receiptsSupported = ReceiptsSupported
     } = Provider,
     #provider_dto{
         id = list_to_binary(ID),
-        gateway = list_to_binary(GtwID),
-        bulk_gateway = list_to_binary(BulkGtwID),
+        gateway_id = list_to_binary(GtwID),
+        bulk_gateway_id = list_to_binary(BulkGtwID),
         receipts_supported = ReceiptsSupported
     };
 providers_to_dto(Providers) ->

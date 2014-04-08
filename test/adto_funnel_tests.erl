@@ -77,8 +77,8 @@ auth_req(PList) ->
 success_auth_response() ->
     Provider = #provider_dto{
         id = uuid:generate(),
-        gateway = uuid:generate(),
-        bulk_gateway = uuid:generate(),
+        gateway_id = uuid:generate(),
+        bulk_gateway_id = uuid:generate(),
         receipts_supported = true
     },
     Network = #network_dto{

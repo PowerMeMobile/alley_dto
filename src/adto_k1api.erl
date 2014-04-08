@@ -775,14 +775,14 @@ network_dto_to_pb(Network = #network_dto{}) ->
     #network_dto{
         id = ID,
         country_code = CountryCode,
-        numbers_len = NumberLen,
+        number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID
     } = Network,
     #network{
         id = ID,
         country_code = CountryCode,
-        numbers_len = NumberLen,
+        number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID
     };
@@ -793,14 +793,14 @@ network_pb_to_dto(Network = #network{}) ->
     #network{
         id = ID,
         country_code = CountryCode,
-        numbers_len = NumberLen,
+        number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID
     } = Network,
     #network_dto{
         id = ID,
         country_code = CountryCode,
-        numbers_len = NumberLen,
+        number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID
     };

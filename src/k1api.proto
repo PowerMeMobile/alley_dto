@@ -62,7 +62,7 @@ message Provider {
 message Network {
     required bytes id = 1;               // request uuid <<12,34...
     required bytes country_code = 2;     // <<"375">>
-    required uint32 numbers_len = 3;
+    required uint32 number_len = 3;
     repeated bytes prefixes = 4;         // <<"29">>
     required bytes provider_id = 5;      // provider uuid <<12,34...
 }

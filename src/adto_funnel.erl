@@ -569,14 +569,14 @@ networks_to_asn(Network = #network_dto{}) ->
     #network_dto{
         id = ID,
         country_code = CountryCode,
-        numbers_len = NumbersLength,
+        number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID
     } = Network,
     #'Network'{
         id = binary_to_list(ID),
         countryCode = binary_to_list(CountryCode),
-        numbersLen = NumbersLength,
+        numberLen = NumberLen,
         prefixes = [binary_to_list(Prefix) || Prefix <- Prefixes],
         providerId = binary_to_list(ProviderID)
     };
@@ -587,14 +587,14 @@ networks_to_dto(Network = #'Network'{}) ->
     #'Network'{
         id = ID,
         countryCode = CountryCode,
-        numbersLen = NumbersLength,
+        numberLen = NumberLen,
         prefixes = Prefixes,
         providerId = ProviderID
     } = Network,
     #network_dto{
         id = list_to_binary(ID),
         country_code = list_to_binary(CountryCode),
-        numbers_len = NumbersLength,
+        number_len = NumberLen,
         prefixes = [list_to_binary(Prefix) || Prefix <- Prefixes],
         provider_id = list_to_binary(ProviderID)
     };

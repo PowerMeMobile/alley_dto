@@ -18,7 +18,7 @@
 -record(network_dto, {
     id                  :: uuid_dto(),
     country_code        :: binary(), %% <<"375">>
-    numbers_len         :: integer(),
+    number_len          :: pos_integer(),
     prefixes            :: [binary()], %% [<<"44">>, <<"33">>]
     provider_id         :: uuid_dto()
 }).

@@ -129,7 +129,7 @@ auth_customer_response() ->
     Network = #network_dto{
         id = uuid:generate(),
         country_code = <<"375">>,
-        numbers_len = 12,
+        number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
         provider_id = uuid:generate()
     },

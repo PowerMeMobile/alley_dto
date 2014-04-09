@@ -777,14 +777,22 @@ network_dto_to_pb(Network = #network_dto{}) ->
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
-        provider_id = ProviderID
+        provider_id = ProviderID,
+        country = Country,
+        gmt_diff = GMTDiff,
+        dst = DST,
+        sms_cost = SmsCost
     } = Network,
     #network{
         id = ID,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
-        provider_id = ProviderID
+        provider_id = ProviderID,
+        country = Country,
+        gmt_diff = GMTDiff,
+        dst = DST,
+        sms_cost = SmsCost
     };
 network_dto_to_pb(List) ->
     [network_dto_to_pb(Item) || Item <- List].
@@ -795,14 +803,22 @@ network_pb_to_dto(Network = #network{}) ->
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
-        provider_id = ProviderID
+        provider_id = ProviderID,
+        country = Country,
+        gmt_diff = GMTDiff,
+        dst = DST,
+        sms_cost = SmsCost
     } = Network,
     #network_dto{
         id = ID,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
-        provider_id = ProviderID
+        provider_id = ProviderID,
+        country = Country,
+        gmt_diff = GMTDiff,
+        dst = DST,
+        sms_cost = SmsCost
     };
 network_pb_to_dto(List) ->
     [network_pb_to_dto(Item) || Item <- List].

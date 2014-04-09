@@ -65,6 +65,11 @@ message Network {
     required uint32 number_len = 3;
     repeated bytes prefixes = 4;         // <<"29">>
     required bytes provider_id = 5;      // provider uuid <<12,34...
+
+    optional bytes country = 6;
+    optional bytes gmt_diff = 7;
+    optional bytes dst = 8;
+    optional float sms_cost = 9;
 }
 
 message FullAddr {
@@ -195,18 +200,6 @@ message SmsDeliveryReceiptNotification {
 }
 
 message CoverageResp {
-    message Network {
-        required bytes id = 1;
-        required bytes country = 2;
-        required bytes hex_code = 3;
-        required bytes country_code = 4;
-        required uint32 number_len = 5;
-        repeated bytes prefixes = 6;
-        required bytes gmt_diff = 7;
-        required bytes dst = 8;
-        required float sms_cost = 9;
-    }
-
     repeated Network networks = 1;
 }
 

@@ -20,7 +20,12 @@
     country_code        :: binary(), %% <<"375">>
     number_len          :: pos_integer(),
     prefixes            :: [binary()], %% [<<"44">>, <<"33">>]
-    provider_id         :: uuid_dto()
+    provider_id         :: uuid_dto(),
+
+    country             :: binary(),
+    gmt_diff            :: binary(),
+    dst                 :: binary(),
+    sms_cost            :: float()
 }).
 -type network_dto()     :: #network_dto{}.
 

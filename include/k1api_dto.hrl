@@ -204,6 +204,14 @@
     url             :: binary()
 }).
 
+%% ===================================================================
+%% k1api Kelly API
+%% ===================================================================
+
+-record(k1api_coverage_response_dto, {
+    networks        :: [network_dto()]
+}).
+
 -type k1api_dto() ::
     %% k1api auth
     #k1api_auth_request_dto{}                       |
@@ -230,6 +238,9 @@
     #k1api_subscribe_sms_receipts_response_dto{}    |
     #k1api_unsubscribe_sms_receipts_request_dto{}   |
     #k1api_unsubscribe_sms_receipts_response_dto{}  |
-    #k1api_sms_delivery_receipt_notification_dto{}.
+    #k1api_sms_delivery_receipt_notification_dto{}  |
+
+    %% k1api kelly api
+    #k1api_coverage_response_dto{}.
 
 -endif. % k1api_dto_hrl

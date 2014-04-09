@@ -74,7 +74,8 @@ module(K1apiDTO) when
     orelse  is_record(K1apiDTO, k1api_subscribe_sms_receipts_response_dto)
     orelse  is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_request_dto)
     orelse  is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_response_dto)
-    orelse  is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto) ->
+    orelse  is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto)
+    orelse  is_record(K1apiDTO, k1api_coverage_response_dto) ->
     k1api();
 
 module(Type) ->

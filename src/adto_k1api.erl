@@ -319,6 +319,16 @@ decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin) ->
     },
     {ok, DTO};
 
+decode(#k1api_coverage_response_dto{}, Bin) ->
+    PB = k1api_pb:decode_coverageresp(Bin),
+    #coverageresp{
+        networks = Networks
+    } = PB,
+    DTO = #k1api_coverage_response_dto{
+        networks = network_pb_to_dto(Networks)
+    },
+    {ok, DTO};
+
 decode(Type, _Message) ->
     erlang:error({k1api_decode_not_supported, Type}).
 
@@ -636,9 +646,18 @@ encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
     Bin = k1api_pb:encode_smsdeliveryreceiptnotification(PB),
     {ok, Bin};
 
+encode(DTO = #k1api_coverage_response_dto{}) ->
+    #k1api_coverage_response_dto{
+        networks = Networks
+    } = DTO,
+    PB = #coverageresp{
+        networks = network_dto_to_pb(Networks)
+    },
+    Bin = k1api_pb:encode_coverageresp(PB),
+    {ok, Bin};
+
 encode(Message) ->
     erlang:error({k1api_encode_not_supported, Message}).
-
 
 %% ===================================================================
 %% Internal

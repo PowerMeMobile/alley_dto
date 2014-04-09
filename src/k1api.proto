@@ -194,6 +194,22 @@ message SmsDeliveryReceiptNotification {
     optional bytes callback_data = 5;
 }
 
+message CoverageResp {
+    message Network {
+        required bytes id = 1;
+        required bytes country = 2;
+        required bytes hex_code = 3;
+        required bytes country_code = 4;
+        required uint32 number_len = 5;
+        repeated bytes prefixes = 6;
+        required bytes gmt_diff = 7;
+        required bytes dst = 8;
+        required float sms_cost = 9;
+    }
+
+    repeated Network networks = 1;
+}
+
 //
 // Misc
 //

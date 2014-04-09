@@ -793,6 +793,7 @@ retrieved_messages_to_dto(MessagesPB) ->
 network_dto_to_pb(Network = #network_dto{}) ->
     #network_dto{
         id = ID,
+        name = Name,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
@@ -804,6 +805,7 @@ network_dto_to_pb(Network = #network_dto{}) ->
     } = Network,
     #network{
         id = ID,
+        name = Name,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
@@ -819,6 +821,7 @@ network_dto_to_pb(List) ->
 network_pb_to_dto(Network = #network{}) ->
     #network{
         id = ID,
+        name = Name,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
@@ -830,6 +833,7 @@ network_pb_to_dto(Network = #network{}) ->
     } = Network,
     #network_dto{
         id = ID,
+        name = Name,
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,

@@ -66,10 +66,11 @@ message Network {
     repeated bytes prefixes = 4;         // <<"29">>
     required bytes provider_id = 5;      // provider uuid <<12,34...
 
-    optional bytes country = 6;
-    optional bytes gmt_diff = 7;
-    optional bytes dst = 8;
-    optional float sms_cost = 9;
+    optional bytes name = 6;
+    optional bytes country = 7;
+    optional bytes gmt_diff = 8;
+    optional bytes dst = 9;
+    optional float sms_cost = 10;
 }
 
 message FullAddr {

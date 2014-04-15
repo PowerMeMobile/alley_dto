@@ -208,7 +208,15 @@
 %% k1api Kelly API
 %% ===================================================================
 
+-record(k1api_coverage_request_dto, {
+    id              :: uuid_dto(),
+    customer_id     :: binary(),
+    user_id         :: binary(),
+    version         :: binary()
+}).
+
 -record(k1api_coverage_response_dto, {
+    id              :: uuid_dto(),
     networks        :: [network_dto()]
 }).
 
@@ -241,6 +249,7 @@
     #k1api_sms_delivery_receipt_notification_dto{}  |
 
     %% k1api kelly api
+    #k1api_coverage_request_dto{}                   |
     #k1api_coverage_response_dto{}.
 
 -endif. % k1api_dto_hrl

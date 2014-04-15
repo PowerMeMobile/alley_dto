@@ -319,12 +319,30 @@ decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin) ->
     },
     {ok, DTO};
 
+decode(#k1api_coverage_request_dto{}, Bin) ->
+    PB = k1api_pb:decode_coveragereq(Bin),
+    #coveragereq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    } = PB,
+    DTO = #k1api_coverage_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    },
+    {ok, DTO};
+
 decode(#k1api_coverage_response_dto{}, Bin) ->
     PB = k1api_pb:decode_coverageresp(Bin),
     #coverageresp{
+        id = Id,
         networks = Networks
     } = PB,
     DTO = #k1api_coverage_response_dto{
+        id = Id,
         networks = network_pb_to_dto(Networks)
     },
     {ok, DTO};
@@ -646,11 +664,29 @@ encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
     Bin = k1api_pb:encode_smsdeliveryreceiptnotification(PB),
     {ok, Bin};
 
+encode(DTO = #k1api_coverage_request_dto{}) ->
+    #k1api_coverage_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    } = DTO,
+    PB = #coveragereq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    },
+    Bin = k1api_pb:encode_coveragereq(PB),
+    {ok, Bin};
+
 encode(DTO = #k1api_coverage_response_dto{}) ->
     #k1api_coverage_response_dto{
+        id = Id,
         networks = Networks
     } = DTO,
     PB = #coverageresp{
+        id = Id,
         networks = network_dto_to_pb(Networks)
     },
     Bin = k1api_pb:encode_coverageresp(PB),

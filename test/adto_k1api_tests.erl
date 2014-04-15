@@ -6,8 +6,8 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -spec k1api_dto_test_() -> ignore.
-k1api_dto_test_()->
-    [?_test(auth_request()),
+k1api_dto_test_()-> [
+    ?_test(auth_request()),
     ?_test(auth_customer_response()),
     ?_test(auth_error_response()),
     ?_test(sms_delivery_status_request()),
@@ -30,7 +30,11 @@ k1api_dto_test_()->
     ?_test(unsubscribe_sms_receipts_response()),
     ?_test(sms_delivery_receipt_notification()),
 
-    ?_test(incoming_sms_request())].
+    ?_test(incoming_sms_request()),
+
+    ?_test(coverage_request()),
+    ?_test(coverage_response())
+].
 
 %% ===================================================================
 %% k1api Subscribe Sms Receipts Request
@@ -113,7 +117,6 @@ auth_request() ->
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_auth_request_dto{}, Bin).
-
 
 %% ===================================================================
 %% k1api Auth Request
@@ -330,6 +333,35 @@ incoming_sms_request() ->
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_sms_notification_request_dto{}, Bin).
+
+%% ===================================================================
+%% Kelly API
+%% ===================================================================
+
+coverage_request() ->
+    DTO = #k1api_coverage_request_dto{
+        id = uuid:generate(),
+        customer_id = <<"0">>,
+        user_id = <<"user">>,
+        version = <<"1.0">>
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_coverage_request_dto{}, Bin).
+
+coverage_response() ->
+    Network = #network_dto{
+        id = uuid:generate(),
+        country_code = <<"375">>,
+        number_len = 12,
+        prefixes = [<<"33">>, <<"44">>],
+        provider_id = uuid:generate()
+    },
+    DTO = #k1api_coverage_response_dto{
+        id = uuid:generate(),
+        networks = [Network]
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_coverage_response_dto{}, Bin).
 
 %% ===================================================================
 %% Bad Type Request

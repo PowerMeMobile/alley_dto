@@ -200,8 +200,16 @@ message SmsDeliveryReceiptNotification {
     optional bytes callback_data = 5;
 }
 
+message CoverageReq {
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required bytes version = 4;
+}
+
 message CoverageResp {
-    repeated Network networks = 1;
+    required bytes id = 1;
+    repeated Network networks = 2;
 }
 
 //

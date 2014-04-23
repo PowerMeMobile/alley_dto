@@ -257,7 +257,7 @@ encode(DTO = #funnel_auth_request_dto{}) ->
         expiration = precise_time_to_asn(Expiration)
     },
     case 'FunnelAsn':encode('BindRequest', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -303,7 +303,7 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         result = {customer, CustomerAsn}
     },
     case 'FunnelAsn':encode('BindResponse', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -317,7 +317,7 @@ encode(DTO = #funnel_auth_response_dto{result = {error, _}}) ->
         result = {error, Error}
     },
     case 'FunnelAsn':encode('BindResponse', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -329,7 +329,7 @@ encode(DTO = #funnel_started_event_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'FunnelAsn':encode('ServerUpEvent', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -341,7 +341,7 @@ encode(DTO = #funnel_stopped_event_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'FunnelAsn':encode('ServerDownEvent', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -363,7 +363,7 @@ encode(DTO = #funnel_client_online_event_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'FunnelAsn':encode('ConnectionUpEvent', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -393,7 +393,7 @@ encode(DTO = #funnel_client_offline_event_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'FunnelAsn':encode('ConnectionDownEvent', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -407,7 +407,7 @@ encode(DTO = #funnel_incoming_sms_dto{}) ->
         messages = incoming_messages_to_asn(Messages)
     },
     case 'FunnelAsn':encode('OutgoingBatch', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -421,7 +421,7 @@ encode(DTO = #funnel_delivery_receipt_dto{}) ->
         receipts = receipts_to_asn(Receipts)
     },
     case 'FunnelAsn':encode('ReceiptBatch', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -433,14 +433,14 @@ encode(DTO = #funnel_ack_dto{}) ->
         batchId = binary_to_list(ID)
     },
     case 'FunnelAsn':encode('BatchAck', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
 encode(_DTO = #funnel_connections_request_dto{}) ->
     Asn = #'ConnectionsRequest'{},
     case 'FunnelAsn':encode('ConnectionsRequest', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -476,7 +476,7 @@ encode(DTO = #funnel_connections_response_dto{}) ->
         connections = lists:map(ConvertConnection, Connections)
     },
     case 'FunnelAsn':encode('ConnectionsResponse', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 

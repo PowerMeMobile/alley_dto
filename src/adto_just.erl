@@ -45,7 +45,7 @@ encode(DTO = #just_sms_request_dto{}) ->
         messageIds = add_client_type(MessageIDs, ClientType)
     },
     case 'JustAsn':encode('SmsRequest', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -66,7 +66,7 @@ encode(DTO = #just_sms_response_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'JustAsn':encode('SmsResponse', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -94,7 +94,7 @@ encode(DTO = #just_incoming_sms_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'JustAsn':encode('IncomingSm', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 
@@ -110,7 +110,7 @@ encode(DTO = #just_delivery_receipt_dto{}) ->
         timestamp = binary_to_list(Timestamp)
     },
     case 'JustAsn':encode('ReceiptBatch', Asn) of
-        {ok, DeepList} -> {ok, list_to_binary(DeepList)};
+        {ok, DeepList} -> {ok, DeepList};
         {error, Error} -> {error, Error}
     end;
 

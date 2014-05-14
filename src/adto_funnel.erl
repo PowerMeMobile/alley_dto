@@ -2,7 +2,8 @@
 
 -export([
     encode/1,
-    decode/2
+    decode/2,
+    networks_to_dto/1
 ]).
 
 -include("adto.hrl").

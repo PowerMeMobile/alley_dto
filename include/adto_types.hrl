@@ -38,4 +38,11 @@
 }).
 -type provider_dto()    :: #provider_dto{}.
 
+-record(blacklist_entry_dto, {
+    id                  :: uuid_dto(),
+    dst_addr            :: addr(),
+    src_addr            :: undefined | addr()
+}).
+-type blacklist_entry_dto() :: #blacklist_entry_dto{}.
+
 -endif. % adto_types_hrl

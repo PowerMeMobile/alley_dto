@@ -33,7 +33,9 @@ k1api_dto_test_()-> [
     ?_test(incoming_sms_request()),
 
     ?_test(coverage_request()),
-    ?_test(coverage_response())
+    ?_test(coverage_response()),
+    ?_test(blacklist_request()),
+    ?_test(blacklist_response())
 ].
 
 %% ===================================================================
@@ -362,6 +364,35 @@ coverage_response() ->
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_coverage_response_dto{}, Bin).
+
+blacklist_request() ->
+    DTO = #k1api_blacklist_request_dto{
+        id = uuid:generate(),
+        customer_id = <<"0">>,
+        user_id = <<"user">>,
+        version = <<"1.0">>
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_blacklist_request_dto{}, Bin).
+
+blacklist_response() ->
+    Entry1 = #blacklist_entry_dto{
+        id = uuid:generate(),
+        dst_addr = #addr{addr = <<"375291112233">>, ton = 1, npi = 1},
+        src_addr = #addr{addr = <<"Hello">>, ton = 5, npi = 0}
+    },
+    Entry2 = #blacklist_entry_dto{
+        id = uuid:generate(),
+        dst_addr = #addr{addr = <<"375291112233">>, ton = 1, npi = 1},
+        src_addr = undefined
+    },
+    DTO = #k1api_blacklist_response_dto{
+        id = uuid:generate(),
+        entries = [Entry1, Entry2]
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_blacklist_response_dto{}, Bin).
+
 
 %% ===================================================================
 %% Bad Type Request

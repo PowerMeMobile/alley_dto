@@ -212,6 +212,18 @@ message CoverageResp {
     repeated Network networks = 2;
 }
 
+message BlacklistReq {
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required bytes user_id = 3;
+    required bytes version = 4;
+}
+
+message BlacklistResp {
+    required bytes id = 1;
+    repeated BlacklistEntry entries = 2;
+}
+
 //
 // Misc
 //
@@ -234,4 +246,10 @@ enum SmsStatuses {
     UNKNOWN = 11;
     REJECTED = 12;
     UNRECOGNIZED = 13;
+}
+
+message BlacklistEntry {
+    required bytes id = 1;
+    required FullAddr dst_addr = 2;
+    optional FullAddr src_addr = 3;
 }

@@ -347,6 +347,35 @@ decode(#k1api_coverage_response_dto{}, Bin) ->
     },
     {ok, DTO};
 
+decode(#k1api_blacklist_request_dto{}, Bin) ->
+    PB = k1api_pb:decode_blacklistreq(Bin),
+    #blacklistreq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    } = PB,
+    DTO = #k1api_blacklist_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    },
+    {ok, DTO};
+
+decode(#k1api_blacklist_response_dto{}, Bin) ->
+    PB = k1api_pb:decode_blacklistresp(Bin),
+    #blacklistresp{
+        id = Id,
+        entries = Entries
+    } = PB,
+    DTO = #k1api_blacklist_response_dto{
+        id = Id,
+        entries = blacklist_entry_pb_to_dto(Entries)
+    },
+    {ok, DTO};
+
+
 decode(Type, _Message) ->
     erlang:error({k1api_decode_not_supported, Type}).
 
@@ -692,6 +721,34 @@ encode(DTO = #k1api_coverage_response_dto{}) ->
     Bin = k1api_pb:encode_coverageresp(PB),
     {ok, Bin};
 
+encode(DTO = #k1api_blacklist_request_dto{}) ->
+    #k1api_blacklist_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    } = DTO,
+    PB = #blacklistreq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        version = Version
+    },
+    Bin = k1api_pb:encode_blacklistreq(PB),
+    {ok, Bin};
+
+encode(DTO = #k1api_blacklist_response_dto{}) ->
+    #k1api_blacklist_response_dto{
+        id = Id,
+        entries = Entries
+    } = DTO,
+    PB = #blacklistresp{
+        id = Id,
+        entries = blacklist_entry_dto_to_pb(Entries)
+    },
+    Bin = k1api_pb:encode_blacklistresp(PB),
+    {ok, Bin};
+
 encode(Message) ->
     erlang:error({k1api_encode_not_supported, Message}).
 
@@ -918,6 +975,10 @@ provider_pb_to_dto(Provider = #provider{}) ->
 provider_pb_to_dto(List) ->
     [provider_pb_to_dto(Item) || Item <- List].
 
+%% ===================================================================
+%% Date
+%% ===================================================================
+
 date_to_pb(TimeStamp) ->
     {{YY, MM, DD}, {H, M, S}} = calendar:now_to_universal_time(TimeStamp),
     ReferenceDate = {{1970,1,1},{0,0,0}},
@@ -928,3 +989,36 @@ date_to_dto(UTCUnixEpoch) ->
     MegaSecs = trunc(UTCUnixEpoch / 1000000),
     Secs = (UTCUnixEpoch - MegaSecs * 1000000),
     {MegaSecs, Secs, 0}.
+
+%% ===================================================================
+%% Blacklist
+%% ===================================================================
+
+blacklist_entry_dto_to_pb(BlacklistEntry = #blacklist_entry_dto{}) ->
+    #blacklist_entry_dto{
+        id = ID,
+        dst_addr = DstAddr,
+        src_addr = SrcAddr
+    } = BlacklistEntry,
+    #blacklistentry{
+        id = ID,
+        dst_addr = addr_to_pb(DstAddr),
+        src_addr = addr_to_pb(SrcAddr)
+    };
+
+blacklist_entry_dto_to_pb(List) ->
+    [blacklist_entry_dto_to_pb(Item) || Item <- List].
+
+blacklist_entry_pb_to_dto(BlacklistEntry = #blacklistentry{}) ->
+    #blacklistentry{
+        id = ID,
+        dst_addr = DstAddr,
+        src_addr = SrcAddr
+    } = BlacklistEntry,
+    #blacklist_entry_dto{
+        id = ID,
+        dst_addr = addr_pb_to_dto(DstAddr),
+        src_addr = addr_pb_to_dto(SrcAddr)
+    };
+blacklist_entry_pb_to_dto(List) ->
+    [blacklist_entry_pb_to_dto(Item) || Item <- List].

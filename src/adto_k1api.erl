@@ -339,11 +339,15 @@ decode(#k1api_coverage_response_dto{}, Bin) ->
     PB = k1api_pb:decode_coverageresp(Bin),
     #coverageresp{
         id = Id,
-        networks = Networks
+        networks = Networks,
+        providers = Providers,
+        default_provider_id = DefaultProviderId
     } = PB,
     DTO = #k1api_coverage_response_dto{
         id = Id,
-        networks = network_pb_to_dto(Networks)
+        networks = network_pb_to_dto(Networks),
+        providers = provider_pb_to_dto(Providers),
+        default_provider_id = DefaultProviderId
     },
     {ok, DTO};
 
@@ -712,11 +716,15 @@ encode(DTO = #k1api_coverage_request_dto{}) ->
 encode(DTO = #k1api_coverage_response_dto{}) ->
     #k1api_coverage_response_dto{
         id = Id,
-        networks = Networks
+        networks = Networks,
+        providers = Providers,
+        default_provider_id = DefaultProviderId
     } = DTO,
     PB = #coverageresp{
         id = Id,
-        networks = network_dto_to_pb(Networks)
+        networks = network_dto_to_pb(Networks),
+        providers = provider_dto_to_pb(Providers),
+        default_provider_id = DefaultProviderId
     },
     Bin = k1api_pb:encode_coverageresp(PB),
     {ok, Bin};
@@ -894,7 +902,8 @@ network_dto_to_pb(Network = #network_dto{}) ->
         country = Country,
         gmt_diff = GMTDiff,
         dst = DST,
-        sms_cost = SmsCost
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints
     } = Network,
     #network{
         id = ID,
@@ -906,7 +915,8 @@ network_dto_to_pb(Network = #network_dto{}) ->
         country = Country,
         gmt_diff = GMTDiff,
         dst = DST,
-        sms_cost = SmsCost
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints
     };
 network_dto_to_pb(List) ->
     [network_dto_to_pb(Item) || Item <- List].
@@ -922,7 +932,8 @@ network_pb_to_dto(Network = #network{}) ->
         country = Country,
         gmt_diff = GMTDiff,
         dst = DST,
-        sms_cost = SmsCost
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints
     } = Network,
     #network_dto{
         id = ID,
@@ -934,7 +945,8 @@ network_pb_to_dto(Network = #network{}) ->
         country = Country,
         gmt_diff = GMTDiff,
         dst = DST,
-        sms_cost = SmsCost
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints
     };
 network_pb_to_dto(List) ->
     [network_pb_to_dto(Item) || Item <- List].
@@ -948,13 +960,15 @@ provider_dto_to_pb(Provider = #provider_dto{}) ->
         id = ID,
         gateway_id = GtwID,
         bulk_gateway_id = BulkGtwID,
-        receipts_supported = Receipts
+        receipts_supported = Receipts,
+        sms_add_points = SmsAddPoints
     } = Provider,
     #provider{
         id = ID,
         gateway_id = GtwID,
         bulk_gateway_id = BulkGtwID,
-        receipts_supported = Receipts
+        receipts_supported = Receipts,
+        sms_add_points = SmsAddPoints
     };
 provider_dto_to_pb(List) ->
     [provider_dto_to_pb(Item) || Item <- List].
@@ -964,13 +978,15 @@ provider_pb_to_dto(Provider = #provider{}) ->
         id = ID,
         gateway_id = GtwID,
         bulk_gateway_id = BulkGtwID,
-        receipts_supported = Receipts
+        receipts_supported = Receipts,
+        sms_add_points = SmsAddPoints
     } = Provider,
     #provider_dto{
         id = ID,
         gateway_id = GtwID,
         bulk_gateway_id = BulkGtwID,
-        receipts_supported = Receipts
+        receipts_supported = Receipts,
+        sms_add_points = SmsAddPoints
     };
 provider_pb_to_dto(List) ->
     [provider_pb_to_dto(Item) || Item <- List].

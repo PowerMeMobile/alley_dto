@@ -21,12 +21,13 @@
     number_len          :: pos_integer(),
     prefixes            :: [binary()], %% [<<"44">>, <<"33">>]
     provider_id         :: uuid_dto(),
+    sms_points          :: float(),
+    sms_mult_points     :: float(),
 
     name                :: binary(),
     country             :: binary(),
     gmt_diff            :: binary(),
-    dst                 :: binary(),
-    sms_cost            :: float()
+    dst                 :: binary()
 }).
 -type network_dto()     :: #network_dto{}.
 
@@ -34,7 +35,8 @@
     id                  :: uuid_dto(),
     gateway_id          :: uuid_dto(),
     bulk_gateway_id     :: uuid_dto(),
-    receipts_supported  :: boolean()
+    receipts_supported  :: boolean(),
+    sms_add_points      :: float()
 }).
 -type provider_dto()    :: #provider_dto{}.
 

@@ -57,6 +57,7 @@ message Provider {
     required bytes gateway_id = 2;          // gateway uuid <<12,34..
     required bytes bulk_gateway_id = 3;     // --||--
     required bool receipts_supported = 4;
+    required float sms_add_points = 5;
 }
 
 message Network {
@@ -65,12 +66,13 @@ message Network {
     required uint32 number_len = 3;
     repeated bytes prefixes = 4;         // <<"29">>
     required bytes provider_id = 5;      // provider uuid <<12,34...
+    required float sms_points = 6;
+    required float sms_mult_points = 7;
 
-    optional bytes name = 6;
-    optional bytes country = 7;
-    optional bytes gmt_diff = 8;
-    optional bytes dst = 9;
-    optional float sms_cost = 10;
+    optional bytes name = 8;
+    optional bytes country = 9;
+    optional bytes gmt_diff = 10;
+    optional bytes dst = 11;
 }
 
 message FullAddr {
@@ -210,6 +212,8 @@ message CoverageReq {
 message CoverageResp {
     required bytes id = 1;
     repeated Network networks = 2;
+    repeated Provider providers = 3;
+    optional bytes default_provider_id = 4;
 }
 
 message BlacklistReq {

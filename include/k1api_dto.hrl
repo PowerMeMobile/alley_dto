@@ -217,7 +217,9 @@
 
 -record(k1api_coverage_response_dto, {
     id              :: uuid_dto(),
-    networks        :: [network_dto()]
+    networks        :: [network_dto()],
+    providers       :: [provider_dto()],
+    default_provider_id :: uuid_dto() | undefined
 }).
 
 -record(k1api_blacklist_request_dto, {

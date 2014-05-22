@@ -129,14 +129,17 @@ auth_customer_response() ->
         id = uuid:generate(),
         gateway_id = uuid:generate(),
         bulk_gateway_id = uuid:generate(),
-        receipts_supported = true
+        receipts_supported = true,
+        sms_add_points = 0.0
     },
     Network = #network_dto{
         id = uuid:generate(),
         country_code = <<"375">>,
         number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
-        provider_id = uuid:generate()
+        provider_id = uuid:generate(),
+        sms_points = 2.0,
+        sms_mult_points = 1.0
     },
     Customer = #k1api_auth_response_customer_dto{
         id = <<"system-id">>,
@@ -351,16 +354,28 @@ coverage_request() ->
     {ok, DTO} = adto:decode(#k1api_coverage_request_dto{}, Bin).
 
 coverage_response() ->
+    ProviderId = uuid:generate(),
     Network = #network_dto{
         id = uuid:generate(),
         country_code = <<"375">>,
         number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
-        provider_id = uuid:generate()
+        provider_id = ProviderId,
+        sms_points = 2.0,
+        sms_mult_points = 1.0
+    },
+    Provider = #provider_dto{
+        id = ProviderId,
+        gateway_id = uuid:generate(),
+        bulk_gateway_id = uuid:generate(),
+        receipts_supported = true,
+        sms_add_points = 0.0
     },
     DTO = #k1api_coverage_response_dto{
         id = uuid:generate(),
-        networks = [Network]
+        networks = [Network],
+        providers = [Provider],
+        default_provider_id = ProviderId
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_coverage_response_dto{}, Bin).

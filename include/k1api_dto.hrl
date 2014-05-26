@@ -234,6 +234,18 @@
     entries         :: [blacklist_entry_dto()]
 }).
 
+-record(k1api_request_credit_request_dto, {
+    id              :: uuid_dto(),
+    customer_id     :: binary(),
+    credit          :: float()
+}).
+
+-record(k1api_request_credit_response_dto, {
+    id              :: uuid_dto(),
+    result          :: allowed | denied,
+    credit_left     :: float()
+}).
+
 -type k1api_dto() ::
     %% k1api auth
     #k1api_auth_request_dto{}                       |
@@ -266,6 +278,8 @@
     #k1api_coverage_request_dto{}                   |
     #k1api_coverage_response_dto{}                  |
     #k1api_blacklist_request_dto{}                  |
-    #k1api_blacklist_response_dto{}.
+    #k1api_blacklist_response_dto{}                 |
+    #k1api_request_credit_request_dto{}             |
+    #k1api_request_credit_response_dto{}.
 
 -endif. % k1api_dto_hrl

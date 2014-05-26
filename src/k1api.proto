@@ -228,6 +228,23 @@ message BlacklistResp {
     repeated BlacklistEntry entries = 2;
 }
 
+message RequestCreditReq {
+    required bytes id = 1;
+    required bytes customer_id = 2;
+    required float credit = 3;
+}
+
+message RequestCreditResp {
+    enum Result {
+        allowed = 1;
+        denied = 2;
+    }
+
+    required bytes id = 1;
+    required Result result = 2;
+    required float credit_left = 3;
+}
+
 //
 // Misc
 //

@@ -379,6 +379,33 @@ decode(#k1api_blacklist_response_dto{}, Bin) ->
     },
     {ok, DTO};
 
+decode(#k1api_request_credit_request_dto{}, Bin) ->
+    PB = k1api_pb:decode_requestcreditreq(Bin),
+    #requestcreditreq{
+        id = Id,
+        customer_id = CustomerId,
+        credit = Credit
+    } = PB,
+    DTO = #k1api_request_credit_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        credit = Credit
+    },
+    {ok, DTO};
+
+decode(#k1api_request_credit_response_dto{}, Bin) ->
+    PB = k1api_pb:decode_requestcreditresp(Bin),
+    #requestcreditresp{
+        id = Id,
+        result = Result,
+        credit_left = CreditLeft
+    } = PB,
+    DTO = #k1api_request_credit_response_dto{
+        id = Id,
+        result = Result,
+        credit_left = CreditLeft
+    },
+    {ok, DTO};
 
 decode(Type, _Message) ->
     erlang:error({k1api_decode_not_supported, Type}).
@@ -755,6 +782,34 @@ encode(DTO = #k1api_blacklist_response_dto{}) ->
         entries = blacklist_entry_dto_to_pb(Entries)
     },
     Bin = k1api_pb:encode_blacklistresp(PB),
+    {ok, Bin};
+
+encode(DTO = #k1api_request_credit_request_dto{}) ->
+    #k1api_request_credit_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        credit = Credit
+    } = DTO,
+    PB = #requestcreditreq{
+        id = Id,
+        customer_id = CustomerId,
+        credit = Credit
+    },
+    Bin = k1api_pb:encode_requestcreditreq(PB),
+    {ok, Bin};
+
+encode(DTO = #k1api_request_credit_response_dto{}) ->
+    #k1api_request_credit_response_dto{
+        id = Id,
+        result = Result,
+        credit_left = CreditLeft
+    } = DTO,
+    PB = #requestcreditresp{
+        id = Id,
+        result = Result,
+        credit_left = CreditLeft
+    },
+    Bin = k1api_pb:encode_requestcreditresp(PB),
     {ok, Bin};
 
 encode(Message) ->

@@ -35,7 +35,9 @@ k1api_dto_test_()-> [
     ?_test(coverage_request()),
     ?_test(coverage_response()),
     ?_test(blacklist_request()),
-    ?_test(blacklist_response())
+    ?_test(blacklist_response()),
+    ?_test(request_credit_request()),
+    ?_test(request_credit_response())
 ].
 
 %% ===================================================================
@@ -408,6 +410,23 @@ blacklist_response() ->
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_blacklist_response_dto{}, Bin).
 
+request_credit_request() ->
+    DTO = #k1api_request_credit_request_dto{
+        id = uuid:generate(),
+        customer_id = <<"0">>,
+        credit = 100.0
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_request_credit_request_dto{}, Bin).
+
+request_credit_response() ->
+    DTO = #k1api_request_credit_response_dto{
+        id = uuid:generate(),
+        result = allowed,
+        credit_left = 10.0
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_request_credit_response_dto{}, Bin).
 
 %% ===================================================================
 %% Bad Type Request

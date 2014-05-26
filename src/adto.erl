@@ -78,7 +78,9 @@ module(K1apiDTO) when
     orelse is_record(K1apiDTO, k1api_coverage_request_dto)
     orelse is_record(K1apiDTO, k1api_coverage_response_dto)
     orelse is_record(K1apiDTO, k1api_blacklist_request_dto)
-    orelse is_record(K1apiDTO, k1api_blacklist_response_dto) ->
+    orelse is_record(K1apiDTO, k1api_blacklist_response_dto)
+    orelse is_record(K1apiDTO, k1api_request_credit_request_dto)
+    orelse is_record(K1apiDTO, k1api_request_credit_response_dto) ->
     k1api();
 
 module(Type) ->

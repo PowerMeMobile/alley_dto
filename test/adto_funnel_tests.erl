@@ -75,18 +75,22 @@ auth_req(PList) ->
 %% ===================================================================
 
 success_auth_response() ->
+    ProviderId = uuid:generate(),
     Provider = #provider_dto{
-        id = uuid:generate(),
+        id = ProviderId,
         gateway_id = uuid:generate(),
         bulk_gateway_id = uuid:generate(),
-        receipts_supported = true
+        receipts_supported = true,
+        sms_add_points = 1.0
     },
     Network = #network_dto{
         id = uuid:generate(),
         country_code = <<"375">>,
         number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
-        provider_id = uuid:generate()
+        provider_id = ProviderId,
+        sms_points = 2.0,
+        sms_mult_points = 1.0
     },
     CustomerDTO = #funnel_auth_response_customer_dto{
         id = <<"system-id">>,
@@ -97,7 +101,7 @@ success_auth_response() ->
         default_source = #addr{addr = <<"375259090909">>, ton = 1, npi = 1},
         networks = [Network],
         providers = [Provider],
-        default_provider_id = uuid:generate(),
+        default_provider_id = ProviderId,
         receipts_allowed = true,
         no_retry = true,
         default_validity = <<"000003000000000R">>,

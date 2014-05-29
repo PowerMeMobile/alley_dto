@@ -45,15 +45,18 @@ Provider ::= SEQUENCE {
     id                [0] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
     gatewayId         [1] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
     bulkGatewayId     [2] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    receiptsSupported [3] BOOLEAN
+    receiptsSupported [3] BOOLEAN,
+    smsAddPoints      [4] IA5String
 }
 
 Network ::= SEQUENCE {
-    id          [0] IA5String, -- "920a009a-5270-11e1-b961-001d0947ec73"
-    countryCode [1] IA5String, -- "375"
-    numberLen   [2] INTEGER,   -- including country code and prefixes.
-    prefixes    [3] SEQUENCE OF IA5String, -- ["44","33","29"]
-    providerId  [4] IA5String  -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    id            [0] IA5String, -- "920a009a-5270-11e1-b961-001d0947ec73"
+    countryCode   [1] IA5String, -- "375"
+    numberLen     [2] INTEGER,   -- including country code and prefixes.
+    prefixes      [3] SEQUENCE OF IA5String, -- ["44","33","29"]
+    providerId    [4] IA5String,  -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    smsPoints     [5] IA5String,
+    smsMultPoints [6] IA5String
 }
 
 DisconnectRequest ::= SEQUENCE {

@@ -11,6 +11,8 @@
 -include("FunnelAsn.hrl").
 -include("helpers.hrl").
 
+-compile({no_auto_import, [float_to_list/1]}).
+
 %% ===================================================================
 %% Decode Functions
 %% ===================================================================
@@ -573,14 +575,18 @@ networks_to_asn(Network = #network_dto{}) ->
         country_code = CountryCode,
         number_len = NumberLen,
         prefixes = Prefixes,
-        provider_id = ProviderID
+        provider_id = ProviderID,
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints
     } = Network,
     #'Network'{
         id = binary_to_list(ID),
         countryCode = binary_to_list(CountryCode),
         numberLen = NumberLen,
         prefixes = [binary_to_list(Prefix) || Prefix <- Prefixes],
-        providerId = binary_to_list(ProviderID)
+        providerId = binary_to_list(ProviderID),
+        smsPoints = float_to_list(SmsPoints),
+        smsMultPoints = float_to_list(SmsMultPoints)
     };
 networks_to_asn(Networks) ->
     [networks_to_asn(Network) || Network <- Networks].
@@ -591,14 +597,18 @@ networks_to_dto(Network = #'Network'{}) ->
         countryCode = CountryCode,
         numberLen = NumberLen,
         prefixes = Prefixes,
-        providerId = ProviderID
+        providerId = ProviderID,
+        smsPoints = SmsPoints,
+        smsMultPoints = SmsMultPoints
     } = Network,
     #network_dto{
         id = list_to_binary(ID),
         country_code = list_to_binary(CountryCode),
         number_len = NumberLen,
         prefixes = [list_to_binary(Prefix) || Prefix <- Prefixes],
-        provider_id = list_to_binary(ProviderID)
+        provider_id = list_to_binary(ProviderID),
+        sms_points = list_to_float(SmsPoints),
+        sms_mult_points = list_to_float(SmsMultPoints)
     };
 networks_to_dto(Networks) ->
     [networks_to_dto(Network) || Network <- Networks].
@@ -610,13 +620,15 @@ providers_to_asn(Provider = #provider_dto{}) ->
         id = ID,
         gateway_id = GtwID,
         bulk_gateway_id = BulkGtwID,
-        receipts_supported = ReceiptsSupported
+        receipts_supported = ReceiptsSupported,
+        sms_add_points = SmsAddPoints
     } = Provider,
     #'Provider'{
         id = binary_to_list(ID),
         gatewayId = binary_to_list(GtwID),
         bulkGatewayId = binary_to_list(BulkGtwID),
-        receiptsSupported = ReceiptsSupported
+        receiptsSupported = ReceiptsSupported,
+        smsAddPoints = float_to_list(SmsAddPoints)
     };
 providers_to_asn(Providers) ->
     [providers_to_asn(Provider) || Provider <- Providers].
@@ -626,13 +638,15 @@ providers_to_dto(Provider = #'Provider'{}) ->
         id = ID,
         gatewayId = GtwID,
         bulkGatewayId = BulkGtwID,
-        receiptsSupported = ReceiptsSupported
+        receiptsSupported = ReceiptsSupported,
+        smsAddPoints = SmsAddPoints
     } = Provider,
     #provider_dto{
         id = list_to_binary(ID),
         gateway_id = list_to_binary(GtwID),
         bulk_gateway_id = list_to_binary(BulkGtwID),
-        receipts_supported = ReceiptsSupported
+        receipts_supported = ReceiptsSupported,
+        sms_add_points = list_to_float(SmsAddPoints)
     };
 providers_to_dto(Providers) ->
     [providers_to_dto(Provider) || Provider <- Providers].
@@ -785,3 +799,6 @@ message_encoding_to_asn(Encoding) when is_integer(Encoding) ->
     {other, Encoding};
 message_encoding_to_asn(_) ->
     erlang:error(badarg).
+
+float_to_list(Float) ->
+    erlang:float_to_list(Float, [{decimals,2}, compact]).

@@ -21,6 +21,7 @@
     number_len          :: pos_integer(),
     prefixes            :: [binary()], %% [<<"44">>, <<"33">>]
     provider_id         :: uuid_dto(),
+    is_home             :: boolean(),
     sms_points          :: float(),
     sms_mult_points     :: float(),
 

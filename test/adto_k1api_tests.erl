@@ -140,6 +140,7 @@ auth_customer_response() ->
         number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
         provider_id = uuid:generate(),
+        is_home = true,
         sms_points = 2.0,
         sms_mult_points = 1.0
     },
@@ -363,6 +364,7 @@ coverage_response() ->
         number_len = 12,
         prefixes = [<<"33">>, <<"44">>],
         provider_id = ProviderId,
+        is_home = false,
         sms_points = 2.0,
         sms_mult_points = 1.0
     },

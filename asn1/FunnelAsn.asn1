@@ -55,8 +55,9 @@ Network ::= SEQUENCE {
     numberLen     [2] INTEGER,   -- including country code and prefixes.
     prefixes      [3] SEQUENCE OF IA5String, -- ["44","33","29"]
     providerId    [4] IA5String,  -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    smsPoints     [5] IA5String,
-    smsMultPoints [6] IA5String
+    isHome        [5] BOOLEAN,
+    smsPoints     [6] IA5String,
+    smsMultPoints [7] IA5String
 }
 
 DisconnectRequest ::= SEQUENCE {

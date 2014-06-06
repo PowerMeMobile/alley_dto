@@ -954,11 +954,12 @@ network_dto_to_pb(Network = #network_dto{}) ->
         number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID,
+        is_home = IsHome,
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints,
         country = Country,
         gmt_diff = GMTDiff,
-        dst = DST,
-        sms_points = SmsPoints,
-        sms_mult_points = SmsMultPoints
+        dst = DST
     } = Network,
     #network{
         id = ID,
@@ -967,11 +968,12 @@ network_dto_to_pb(Network = #network_dto{}) ->
         number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID,
+        is_home = IsHome,
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints,
         country = Country,
         gmt_diff = GMTDiff,
-        dst = DST,
-        sms_points = SmsPoints,
-        sms_mult_points = SmsMultPoints
+        dst = DST
     };
 network_dto_to_pb(List) ->
     [network_dto_to_pb(Item) || Item <- List].
@@ -984,11 +986,12 @@ network_pb_to_dto(Network = #network{}) ->
         number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID,
+        is_home = IsHome,
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints,
         country = Country,
         gmt_diff = GMTDiff,
-        dst = DST,
-        sms_points = SmsPoints,
-        sms_mult_points = SmsMultPoints
+        dst = DST
     } = Network,
     #network_dto{
         id = ID,
@@ -997,11 +1000,12 @@ network_pb_to_dto(Network = #network{}) ->
         number_len = NumberLen,
         prefixes = Prefixes,
         provider_id = ProviderID,
+        is_home = IsHome,
+        sms_points = SmsPoints,
+        sms_mult_points = SmsMultPoints,
         country = Country,
         gmt_diff = GMTDiff,
-        dst = DST,
-        sms_points = SmsPoints,
-        sms_mult_points = SmsMultPoints
+        dst = DST
     };
 network_pb_to_dto(List) ->
     [network_pb_to_dto(Item) || Item <- List].

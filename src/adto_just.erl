@@ -517,4 +517,4 @@ inc_sms_enc_to_asn(Encoding) when
         Integer -> Integer
     end;
 inc_sms_enc_to_asn(_) ->
-    erlagn:error(badarg).
+    erlang:error(badarg).

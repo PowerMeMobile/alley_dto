@@ -209,10 +209,13 @@ statuses() ->
     ].
 
 sms_delivery_status_response() ->
-    StatusesDTO = [#k1api_sms_status_dto{
-        address = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
-        status = Status
-    } || Status <- statuses()],
+    StatusesDTO = [
+        #k1api_sms_status_dto{
+            address = #addr{addr = <<"375269090909">>, ton = 1, npi = 1},
+            status = Status,
+            timestamp = 1405598755
+        } || Status <- statuses()
+    ],
     DTO = #k1api_sms_delivery_status_response_dto{
         id = uuid:generate(),
         statuses = StatusesDTO

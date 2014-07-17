@@ -249,11 +249,6 @@ message RequestCreditResp {
 //
 // Misc
 //
-message SmsStatus {
-    required FullAddr address = 1;
-    required SmsStatuses status = 2;
-}
-
 enum SmsStatuses {
     SUBMITTED = 1;                   // Kelly handled sms request
     SUCCESS_WAITING_DELIVERY = 2;    // just sms response (success + registered_delivery true)
@@ -268,6 +263,12 @@ enum SmsStatuses {
     UNKNOWN = 11;
     REJECTED = 12;
     UNRECOGNIZED = 13;
+}
+
+message SmsStatus {
+    required FullAddr address = 1;
+    required SmsStatuses status = 2;
+    required uint32 timestamp = 3;       // utc unixtime
 }
 
 message BlacklistEntry {

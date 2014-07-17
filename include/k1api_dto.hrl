@@ -36,7 +36,8 @@
 
 -record(k1api_sms_status_dto, {
     address     :: addr(),
-    status      :: k1api_sms_status()
+    status      :: k1api_sms_status(),
+    timestamp   :: pos_integer()  %% utc unixtime
 }).
 
 -record(k1api_sms_delivery_status_response_dto, {
@@ -61,7 +62,7 @@
 %% ===================================================================
 
 -record(k1api_retrieved_sms_dto, {
-    datetime    :: integer(), %% unix epoch seconds
+    datetime    :: pos_integer(), %% utc unixtime
     sender_addr :: addr(),
     message_id  :: binary(), %% <<"123">>
     message     :: binary() %% <<"message">>
@@ -124,7 +125,7 @@
 
 -record(k1api_sms_notification_request_dto, {
     callback_data       :: binary(),
-    datetime            :: integer(), %% unix epoch seconds
+    datetime            :: pos_integer(), %% utc unixtime
     dest_addr           :: addr(),
     message_id          :: binary(),
     message             :: binary(),

@@ -854,11 +854,13 @@ addr_pb_to_dto(List) ->
 sms_statuses_dto_to_pb(StatusDTO = #k1api_sms_status_dto{}) ->
     #k1api_sms_status_dto{
         address = Addr,
-        status = Status
+        status = Status,
+        timestamp = Timestamp
     } = StatusDTO,
     #smsstatus{
         address = addr_to_pb(Addr),
-        status = status_name_dto_to_pb(Status)
+        status = status_name_dto_to_pb(Status),
+        timestamp = Timestamp
     };
 sms_statuses_dto_to_pb(Statuses) ->
     [sms_statuses_dto_to_pb(Status) || Status <- Statuses].
@@ -866,11 +868,13 @@ sms_statuses_dto_to_pb(Statuses) ->
 sms_statuses_pb_to_dto(StatusesPB = #smsstatus{}) ->
     #smsstatus{
         address = Addr,
-        status = Status
+        status = Status,
+        timestamp = Timestamp
     } = StatusesPB,
     #k1api_sms_status_dto{
         address = addr_pb_to_dto(Addr),
-        status = status_name_pb_to_dto(Status)
+        status = status_name_pb_to_dto(Status),
+        timestamp = Timestamp
     };
 sms_statuses_pb_to_dto(Statuses) ->
     [sms_statuses_pb_to_dto(Status) || Status <- Statuses].

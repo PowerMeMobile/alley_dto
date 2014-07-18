@@ -247,6 +247,36 @@
     credit_left     :: float()
 }).
 
+-record(k1api_process_inbox_request_dto, {
+    id              :: uuid_dto(),
+    customer_id     :: binary(),
+    user_id         :: binary(),
+    operation       :: list_all | list_new
+                     | fetch_all | fetch_new | fetch_id
+                     | kill_all | kill_old | kill_id,
+    message_ids     :: [binary()]
+}).
+
+-record(k1api_process_inbox_response_message_dto, {
+    id                  :: uuid_dto(),
+    new                 :: boolean(),
+    from                :: addr(),
+    to                  :: addr(),
+    timestamp           :: pos_integer(),
+    size                :: non_neg_integer(),
+    text                :: undefined | binary()
+}).
+
+-type k1api_process_inbox_response_result() ::
+    {messages, [#k1api_process_inbox_response_message_dto{}]} |
+    {deleted, non_neg_integer()} |
+    {error, binary()}.
+
+-record(k1api_process_inbox_response_dto, {
+    id              :: uuid_dto(),
+    result          :: k1api_process_inbox_response_result()
+}).
+
 -type k1api_dto() ::
     %% k1api auth
     #k1api_auth_request_dto{}                       |
@@ -281,6 +311,8 @@
     #k1api_blacklist_request_dto{}                  |
     #k1api_blacklist_response_dto{}                 |
     #k1api_request_credit_request_dto{}             |
-    #k1api_request_credit_response_dto{}.
+    #k1api_request_credit_response_dto{}            |
+    #k1api_process_inbox_request_dto{}              |
+    #k1api_process_inbox_response_dto{}.
 
 -endif. % k1api_dto_hrl

@@ -37,7 +37,11 @@ k1api_dto_test_()-> [
     ?_test(blacklist_request()),
     ?_test(blacklist_response()),
     ?_test(request_credit_request()),
-    ?_test(request_credit_response())
+    ?_test(request_credit_response()),
+    ?_test(process_inbox_request()),
+    ?_test(process_inbox_response_messages()),
+    ?_test(process_inbox_response_deleted()),
+    ?_test(process_inbox_response_error())
 ].
 
 %% ===================================================================
@@ -432,6 +436,50 @@ request_credit_response() ->
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_request_credit_response_dto{}, Bin).
+
+process_inbox_request() ->
+    DTO = #k1api_process_inbox_request_dto{
+        id = uuid:generate(),
+        customer_id = <<"0">>,
+        user_id = <<"user">>,
+        operation = fetch_id,
+        message_ids = [uuid:generate(), uuid:generate()]
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_process_inbox_request_dto{}, Bin).
+
+process_inbox_response_messages() ->
+    Msg = #k1api_process_inbox_response_message_dto{
+        id = uuid:generate(),
+        new = true,
+        from = #addr{addr = <<"1234567890">>, ton = 1, npi = 1},
+        to = #addr{addr = <<"0987654321">>, ton = 1, npi = 1},
+        timestamp = {1355,224026, 0},
+        size = 5,
+        text = <<"Hello">>
+    },
+    DTO = #k1api_process_inbox_response_dto{
+        id = uuid:generate(),
+        result = {messages, [Msg]}
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_process_inbox_response_dto{}, Bin).
+
+process_inbox_response_deleted() ->
+    DTO = #k1api_process_inbox_response_dto{
+        id = uuid:generate(),
+        result = {deleted, 10}
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_process_inbox_response_dto{}, Bin).
+
+process_inbox_response_error() ->
+    DTO = #k1api_process_inbox_response_dto{
+        id = uuid:generate(),
+        result = {error, <<"Fix me!">>}
+    },
+    {ok, Bin} = adto:encode(DTO),
+    {ok, DTO} = adto:decode(#k1api_process_inbox_response_dto{}, Bin).
 
 %% ===================================================================
 %% Bad Type Request

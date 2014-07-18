@@ -407,6 +407,55 @@ decode(#k1api_request_credit_response_dto{}, Bin) ->
     },
     {ok, DTO};
 
+decode(#k1api_process_inbox_request_dto{}, Bin) ->
+    PB = k1api_pb:decode_processinboxreq(Bin),
+    #processinboxreq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        operation = Operation,
+        message_ids = MessageIds
+    } = PB,
+    DTO = #k1api_process_inbox_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        operation = Operation,
+        message_ids = MessageIds
+    },
+    {ok, DTO};
+
+decode(#k1api_process_inbox_response_dto{}, Bin) ->
+    PB = k1api_pb:decode_processinboxresp(Bin),
+    #processinboxresp{
+        id = Id,
+        result = Result,
+        messages = Messages,
+        deleted = Deleted,
+        error = Error
+    } = PB,
+    DTO = case Result of
+        messages ->
+            #k1api_process_inbox_response_dto{
+                id = Id,
+                result = {messages, [inbox_message_pb_to_dto(M) || M <- Messages]}
+            };
+        deleted ->
+            #k1api_process_inbox_response_dto{
+                id = Id,
+                result = {deleted, Deleted}
+            };
+        error ->
+            #processinboxresp_error{
+                message = Message
+            } = Error,
+            #k1api_process_inbox_response_dto{
+                id = Id,
+                result = {error, Message}
+            }
+    end,
+    {ok, DTO};
+
 decode(Type, _Message) ->
     erlang:error({k1api_decode_not_supported, Type}).
 
@@ -812,6 +861,54 @@ encode(DTO = #k1api_request_credit_response_dto{}) ->
     Bin = k1api_pb:encode_requestcreditresp(PB),
     {ok, Bin};
 
+encode(DTO = #k1api_process_inbox_request_dto{}) ->
+    #k1api_process_inbox_request_dto{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        operation = Operation,
+        message_ids = MessageIds
+    } = DTO,
+    PB = #processinboxreq{
+        id = Id,
+        customer_id = CustomerId,
+        user_id = UserId,
+        operation = Operation,
+        message_ids = MessageIds
+    },
+    Bin = k1api_pb:encode_processinboxreq(PB),
+    {ok, Bin};
+
+encode(DTO = #k1api_process_inbox_response_dto{}) ->
+    #k1api_process_inbox_response_dto{
+        id = Id,
+        result = Result
+    } = DTO,
+    PB = case Result of
+        {messages, Messages} ->
+            #processinboxresp{
+                id = Id,
+                result = messages,
+                messages = [inbox_message_dto_to_pb(M) || M <- Messages]
+            };
+        {deleted, Deleted} ->
+            #processinboxresp{
+                id = Id,
+                result = deleted,
+                deleted = Deleted
+            };
+        {error, Error} ->
+            #processinboxresp{
+                id = Id,
+                result = error,
+                error = #processinboxresp_error{
+                    message = Error
+                }
+            }
+    end,
+    Bin = k1api_pb:encode_processinboxresp(PB),
+    {ok, Bin};
+
 encode(Message) ->
     erlang:error({k1api_encode_not_supported, Message}).
 
@@ -1101,3 +1198,47 @@ blacklist_entry_pb_to_dto(BlacklistEntry = #blacklistentry{}) ->
     };
 blacklist_entry_pb_to_dto(List) ->
     [blacklist_entry_pb_to_dto(Item) || Item <- List].
+
+%% ===================================================================
+%% Inbox
+%% ===================================================================
+
+inbox_message_pb_to_dto(Msg = #processinboxresp_message{}) ->
+    #processinboxresp_message{
+        id = Id,
+        new = New,
+        from = From,
+        to = To,
+        timestamp = Timestamp,
+        size = Size,
+        text = Text
+    } = Msg,
+    #k1api_process_inbox_response_message_dto{
+        id = Id,
+        new = New,
+        from = addr_pb_to_dto(From),
+        to = addr_pb_to_dto(To),
+        timestamp = date_to_dto(Timestamp),
+        size = Size,
+        text = Text
+    }.
+
+inbox_message_dto_to_pb(Msg = #k1api_process_inbox_response_message_dto{}) ->
+    #k1api_process_inbox_response_message_dto{
+        id = Id,
+        new = New,
+        from = From,
+        to = To,
+        timestamp = Timestamp,
+        size = Size,
+        text = Text
+    } = Msg,
+    #processinboxresp_message{
+        id = Id,
+        new = New,
+        from = addr_dto_to_pb(From),
+        to = addr_dto_to_pb(To),
+        timestamp = date_to_pb(Timestamp),
+        size = Size,
+        text = Text
+    }.

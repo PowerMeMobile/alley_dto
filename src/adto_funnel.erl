@@ -138,7 +138,7 @@ decode(#funnel_client_offline_event_dto{}, Bin) ->
                 connected_at = list_to_binary(ConnectedAt),
                 msgs_received = MsgsReceived,
                 msgs_sent = MsgsSent,
-                errors = [errors_to_dto(Error) || Error <- Errors],
+                errors = [errors_to_dto(E) || E <- Errors],
                 reason = Reason,
                 timestamp = list_to_binary(Timestamp)
             },
@@ -291,7 +291,7 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         uuid = binary_to_list(UUID),
         priority = Priority,
         rps = to_optional_asn(RPS),
-        allowedSources = [addr_to_asn(Source) || Source <- AllowedSources],
+        allowedSources = [addr_to_asn(S) || S <- AllowedSources],
         defaultSource = to_optional_asn(DefaultSource, fun addr_to_asn/1),
         networks = networks_to_asn(Networks),
         providers = providers_to_asn(Providers),
@@ -392,7 +392,7 @@ encode(DTO = #funnel_client_offline_event_dto{}) ->
         connectedAt = binary_to_list(ConnectedAt),
         msgsReceived = MsgsReceived,
         msgsSent = MsgsSent,
-        errors = [errors_to_asn(Error) || Error <- Errors],
+        errors = [errors_to_asn(E) || E <- Errors],
         reason = Reason,
         timestamp = binary_to_list(Timestamp)
     },
@@ -551,7 +551,7 @@ addr_to_asn(FullAddr = #addr{}) ->
         npi = NPI
     };
 addr_to_asn(Addrs) ->
-    [addr_to_asn(Addr) || Addr <- Addrs].
+    [addr_to_asn(A) || A <- Addrs].
 
 addr_to_dto(FullAddr = #'Addr'{}) ->
     #'Addr'{
@@ -565,7 +565,7 @@ addr_to_dto(FullAddr = #'Addr'{}) ->
         npi = NPI
     };
 addr_to_dto(Addrs) ->
-    [addr_to_dto(Addr) || Addr <- Addrs].
+    [addr_to_dto(A) || A <- Addrs].
 
 %% Networks
 
@@ -584,14 +584,14 @@ networks_to_asn(Network = #network_dto{}) ->
         id = binary_to_list(ID),
         countryCode = binary_to_list(CountryCode),
         numberLen = NumberLen,
-        prefixes = [binary_to_list(Prefix) || Prefix <- Prefixes],
+        prefixes = [binary_to_list(P) || P <- Prefixes],
         providerId = binary_to_list(ProviderID),
         isHome = IsHome,
         smsPoints = float_to_list(SmsPoints),
         smsMultPoints = float_to_list(SmsMultPoints)
     };
 networks_to_asn(Networks) ->
-    [networks_to_asn(Network) || Network <- Networks].
+    [networks_to_asn(N) || N <- Networks].
 
 networks_to_dto(Network = #'Network'{}) ->
     #'Network'{
@@ -608,14 +608,14 @@ networks_to_dto(Network = #'Network'{}) ->
         id = list_to_binary(ID),
         country_code = list_to_binary(CountryCode),
         number_len = NumberLen,
-        prefixes = [list_to_binary(Prefix) || Prefix <- Prefixes],
+        prefixes = [list_to_binary(P) || P <- Prefixes],
         provider_id = list_to_binary(ProviderID),
         is_home = IsHome,
         sms_points = list_to_float(SmsPoints),
         sms_mult_points = list_to_float(SmsMultPoints)
     };
 networks_to_dto(Networks) ->
-    [networks_to_dto(Network) || Network <- Networks].
+    [networks_to_dto(N) || N <- Networks].
 
 %% Providers
 
@@ -635,7 +635,7 @@ providers_to_asn(Provider = #provider_dto{}) ->
         smsAddPoints = float_to_list(SmsAddPoints)
     };
 providers_to_asn(Providers) ->
-    [providers_to_asn(Provider) || Provider <- Providers].
+    [providers_to_asn(P) || P <- Providers].
 
 providers_to_dto(Provider = #'Provider'{}) ->
     #'Provider'{
@@ -653,7 +653,7 @@ providers_to_dto(Provider = #'Provider'{}) ->
         sms_add_points = list_to_float(SmsAddPoints)
     };
 providers_to_dto(Providers) ->
-    [providers_to_dto(Provider) || Provider <- Providers].
+    [providers_to_dto(P) || P <- Providers].
 
 %% Funnel Auth Result
 
@@ -679,7 +679,7 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
         uuid = list_to_binary(UUID),
         priority = Priority,
         rps = from_optional_asn(RPS),
-        allowed_sources = [addr_to_dto(Source) || Source <- AllowedSources],
+        allowed_sources = [addr_to_dto(S) || S <- AllowedSources],
         default_source = from_optional_asn(DefaultSource, fun addr_to_dto/1),
         networks = networks_to_dto(Networks),
         providers = providers_to_dto(Providers),
@@ -733,7 +733,7 @@ incoming_messages_to_asn(Message = #funnel_incoming_sms_message_dto{}) ->
         dataCoding = message_encoding_to_asn(DataCoding)
     };
 incoming_messages_to_asn(Messages) ->
-    [incoming_messages_to_asn(Message) || Message <- Messages].
+    [incoming_messages_to_asn(M) || M <- Messages].
 
 incoming_messages_to_dto(Message = #'OutgoingMessage'{}) ->
     #'OutgoingMessage'{
@@ -749,7 +749,7 @@ incoming_messages_to_dto(Message = #'OutgoingMessage'{}) ->
         data_coding = message_encoding_to_dto(DataCoding)
     };
 incoming_messages_to_dto(Messages) ->
-    [incoming_messages_to_dto(Message) || Message <- Messages].
+    [incoming_messages_to_dto(M) || M <- Messages].
 
 %% Receipts
 
@@ -771,7 +771,7 @@ receipts_to_asn(Receipt = #funnel_delivery_receipt_container_dto{}) ->
         dest = addr_to_asn(DestAddr)
     };
 receipts_to_asn(Receipts) ->
-    [receipts_to_asn(Receipt) || Receipt <- Receipts].
+    [receipts_to_asn(R) || R <- Receipts].
 
 receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
     #'DeliveryReceipt'{
@@ -788,10 +788,10 @@ receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
         done_date = list_to_binary(DoneDate),
         message_state = MessageState,
         source = addr_to_dto(SourceAddr),
-        dest  = addr_to_dto(DestAddr)
+        dest = addr_to_dto(DestAddr)
     };
 receipts_to_dto(Receipts) ->
-    [receipts_to_dto(Receipt) || Receipt <- Receipts].
+    [receipts_to_dto(R) || R <- Receipts].
 
 message_encoding_to_dto({_, Encoding}) ->
     Encoding.

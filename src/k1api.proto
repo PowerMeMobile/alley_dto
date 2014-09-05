@@ -39,6 +39,7 @@ message AuthResp {
         required bool no_retry = 10;
         required uint32 default_validity = 11;  // seconds
         required uint32 max_validity = 12;      // seconds
+        repeated Feature features = 13;
     }
 
     message Error {
@@ -80,6 +81,11 @@ message FullAddr {
     required bytes addr = 1;
     required uint32 ton = 2;
     required uint32 npi = 3;
+}
+
+message Feature {
+    required bytes name = 1;
+    required bytes value= 2;
 }
 
 //

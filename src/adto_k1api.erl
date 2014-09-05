@@ -215,7 +215,8 @@ decode(#k1api_auth_response_dto{}, Bin) ->
                 receipts_allowed = ReceiptsAllowed,
                 no_retry = NoRetry,
                 default_validity = DefValidity,
-                max_validity = MaxValidity
+                max_validity = MaxValidity,
+                features = Features
             } = Customer,
             #k1api_auth_response_dto{
                 id = ID,
@@ -231,7 +232,8 @@ decode(#k1api_auth_response_dto{}, Bin) ->
                     receipts_allowed = ReceiptsAllowed,
                     no_retry = NoRetry,
                     default_validity = DefValidity,
-                    max_validity = MaxValidity
+                    max_validity = MaxValidity,
+                    features = [feature_pb_to_dto(F) || F <- Features]
                 }}
             };
         error ->
@@ -661,7 +663,8 @@ encode(#k1api_auth_response_dto{
         receipts_allowed = ReceiptsAllowed,
         no_retry = NoRetry,
         default_validity = DefValidity,
-        max_validity = MaxValidity
+        max_validity = MaxValidity,
+        features = Features
     } = CustomerDTO,
     CustomerPB = #authresp_customer{
         id = SystemID,
@@ -675,7 +678,8 @@ encode(#k1api_auth_response_dto{
         receipts_allowed = ReceiptsAllowed,
         no_retry = NoRetry,
         default_validity = DefValidity,
-        max_validity = MaxValidity
+        max_validity = MaxValidity,
+        features = [feature_dto_to_pb(F) || F <- Features]
     },
     PB = #authresp{
         id = ID,
@@ -1241,4 +1245,28 @@ inbox_message_dto_to_pb(Msg = #k1api_process_inbox_response_message_dto{}) ->
         timestamp = date_to_pb(Timestamp),
         size = Size,
         text = Text
+    }.
+
+%% ===================================================================
+%% Feature
+%% ===================================================================
+
+feature_pb_to_dto(Feature) ->
+    #feature{
+        name = Name,
+        value = Value
+    } = Feature,
+    #feature_dto{
+        name = Name,
+        value = Value
+    }.
+
+feature_dto_to_pb(Feature) ->
+    #feature_dto{
+        name = Name,
+        value = Value
+    } = Feature,
+    #feature{
+        name = Name,
+        value = Value
     }.

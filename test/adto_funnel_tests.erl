@@ -93,6 +93,10 @@ success_auth_response() ->
         sms_points = 2.0,
         sms_mult_points = 1.0
     },
+    Feature = #feature_dto{
+        name = <<"inbox">>,
+        value = <<"false">>
+    },
     CustomerDTO = #funnel_auth_response_customer_dto{
         id = <<"system-id">>,
         uuid = uuid:generate(),
@@ -107,7 +111,8 @@ success_auth_response() ->
         no_retry = true,
         default_validity = <<"000003000000000R">>,
         max_validity = 1234567,
-        pay_type = prepaid
+        pay_type = prepaid,
+        features = [Feature]
     },
     DTO = #funnel_auth_response_dto{
         connection_id = uuid:generate(),

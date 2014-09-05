@@ -284,7 +284,8 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         no_retry = NoRetry,
         default_validity = DefaultValidity,
         max_validity = MaxValidity,
-        pay_type = PayType
+        pay_type = PayType,
+        features = Features
     } = CustomerDTO,
     CustomerAsn = #'Customer'{
         id = binary_to_list(SystemID),
@@ -300,7 +301,8 @@ encode(DTO = #funnel_auth_response_dto{result = {customer, _}}) ->
         noRetry = NoRetry,
         defaultValidity = binary_to_list(DefaultValidity),
         maxValidity = MaxValidity,
-        payType = PayType
+        payType = PayType,
+        features = [feature_to_asn(F) || F <- Features]
     },
     Asn = #'BindResponse'{
         connectionId = binary_to_list(ConnectionID),
@@ -672,7 +674,8 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
         noRetry = NoRetry,
         defaultValidity = DefaultValidity,
         maxValidity = MaxValidity,
-        payType = PayType
+        payType = PayType,
+        features = Features
     } = CustomerAsn,
     CustomerDTO = #funnel_auth_response_customer_dto{
         id = list_to_binary(SystemID),
@@ -688,7 +691,8 @@ funnel_auth_response_result_to_dto({customer, CustomerAsn}) ->
         no_retry = NoRetry,
         default_validity = list_to_binary(DefaultValidity),
         max_validity = MaxValidity,
-        pay_type = PayType
+        pay_type = PayType,
+        features = [feature_to_dto(F) || F <- Features]
     },
     {customer, CustomerDTO};
 
@@ -806,3 +810,23 @@ message_encoding_to_asn(_) ->
 
 float_to_list(Float) ->
     erlang:float_to_list(Float, [{decimals,2}, compact]).
+
+feature_to_dto(Feature) ->
+    #'Feature'{
+        name = Name,
+        value = Value
+    } = Feature,
+    #feature_dto{
+        name = list_to_binary(Name),
+        value = list_to_binary(Value)
+    }.
+
+feature_to_asn(Feature) ->
+    #feature_dto{
+        name = Name,
+        value = Value
+    } = Feature,
+    #'Feature'{
+        name = binary_to_list(Name),
+        value = binary_to_list(Value)
+    }.

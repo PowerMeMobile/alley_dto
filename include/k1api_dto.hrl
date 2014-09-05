@@ -157,7 +157,8 @@
     receipts_allowed    :: boolean(),
     no_retry            :: boolean(),
     default_validity    :: integer(), %% seconds
-    max_validity        :: integer() %% seconds
+    max_validity        :: integer(), %% seconds
+    features            :: [feature_dto()]
 }).
 
 -type k1api_auth_response_result() ::

@@ -48,4 +48,10 @@
 }).
 -type blacklist_entry_dto() :: #blacklist_entry_dto{}.
 
+-record(feature_dto, {
+    name                :: binary(),
+    value               :: binary()
+}).
+-type feature_dto()     :: #feature_dto{}.
+
 -endif. % adto_types_hrl

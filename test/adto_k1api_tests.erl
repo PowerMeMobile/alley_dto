@@ -148,6 +148,10 @@ auth_customer_response() ->
         sms_points = 2.0,
         sms_mult_points = 1.0
     },
+    Feature = #feature_dto{
+        name = <<"inbox">>,
+        value = <<"false">>
+    },
     Customer = #k1api_auth_response_customer_dto{
         id = <<"system-id">>,
         uuid = uuid:generate(),
@@ -160,7 +164,8 @@ auth_customer_response() ->
         receipts_allowed = true,
         no_retry = true,
         default_validity = 12345,
-        max_validity = 1234567
+        max_validity = 1234567,
+        features = [Feature]
     },
     DTO = #k1api_auth_response_dto{
         id = uuid:generate(),

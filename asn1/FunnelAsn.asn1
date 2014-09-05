@@ -38,7 +38,8 @@ Customer ::= SEQUENCE {
     noRetry           [10] BOOLEAN,
     defaultValidity   [11] IA5String, -- "000003000000000R"
     maxValidity       [12] INTEGER, -- in seconds (relative)
-    payType           [13] ENUMERATED { prepaid(0), postpaid(1) }
+    payType           [13] ENUMERATED { prepaid(0), postpaid(1) },
+    features          [14] SEQUENCE OF Feature
 }
 
 Provider ::= SEQUENCE {
@@ -58,6 +59,11 @@ Network ::= SEQUENCE {
     isHome        [5] BOOLEAN,
     smsPoints     [6] IA5String,
     smsMultPoints [7] IA5String
+}
+
+Feature ::= SEQUENCE {
+    name  [0] IA5String,
+    value [1] IA5String
 }
 
 DisconnectRequest ::= SEQUENCE {

@@ -169,15 +169,24 @@ DeliveryReceipt ::= SEQUENCE {
     messageId    [0] IA5String, -- "614"
     submitDate   [1] UTCTime, -- "120827114232"
     doneDate     [2] UTCTime,
-    messageState [3] ENUMERATED { delivered(2),
+    messageState [3] ENUMERATED { enroute(1),
+                                  delivered(2),
                                   expired(3),
                                   deleted(4),
                                   undeliverable(5),
                                   accepted(6),
                                   unknown(7),
-                                  rejected(8) },
+                                  rejected(8),
+                                  unrecognized(9) },
     source       [4] Addr,
     dest         [5] Addr
+--
+-- Future extension
+--
+--    error        [6] INTEGER,
+--    messageText  [7] OCTET STRING,
+--    dataCoding   [8] CHOICE { text  [0] ENUMERATED { gsm0338(0), ucs2(8) },
+--                              other [1] INTEGER }
 }
 
 BatchAck ::= SEQUENCE {

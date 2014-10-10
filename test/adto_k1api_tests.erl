@@ -202,10 +202,13 @@ sms_delivery_status_request() ->
 
 statuses() ->
     [
+        <<"pending">>,
         <<"submitted">>,
-        <<"success_waiting_delivery">>,
-        <<"success_no_delivery">>,
-        <<"failure">>,
+        <<"failed">>,
+        <<"sent">>,                     %% deprecated
+        <<"success_waiting_delivery">>, %% deprecated
+        <<"success_no_delivery">>,      %% deprecated
+        <<"failure">>,                  %% deprecated
         <<"enroute">>,
         <<"delivered">>,
         <<"expired">>,

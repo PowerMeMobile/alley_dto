@@ -315,7 +315,7 @@ decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin) ->
     DTO = #k1api_sms_delivery_receipt_notification_dto{
         id = ID,
         dest_addr = addr_pb_to_dto(DestAddr),
-        status = status_name_pb_to_dto(Status),
+        status = Status,
         callback_data = CallbackData,
         url = Url
     },
@@ -770,7 +770,7 @@ encode(DTO = #k1api_sms_delivery_receipt_notification_dto{}) ->
     PB = #smsdeliveryreceiptnotification{
         id = ID,
         dest_addr = addr_dto_to_pb(DestAddr),
-        status = status_name_dto_to_pb(Status),
+        status = Status,
         callback_data = CallbackData,
         url = Url
     },
@@ -960,7 +960,7 @@ sms_statuses_dto_to_pb(StatusDTO = #k1api_sms_status_dto{}) ->
     } = StatusDTO,
     #smsstatus{
         address = addr_dto_to_pb(Addr),
-        status = status_name_dto_to_pb(Status),
+        status = Status,
         timestamp = Timestamp
     };
 sms_statuses_dto_to_pb(Statuses) ->
@@ -974,46 +974,11 @@ sms_statuses_pb_to_dto(StatusesPB = #smsstatus{}) ->
     } = StatusesPB,
     #k1api_sms_status_dto{
         address = addr_pb_to_dto(Addr),
-        status = status_name_pb_to_dto(Status),
+        status = Status,
         timestamp = Timestamp
     };
 sms_statuses_pb_to_dto(Statuses) ->
     [sms_statuses_pb_to_dto(Status) || Status <- Statuses].
-
-
-status_name_dto_to_pb(AtomStateName) when is_atom(AtomStateName) ->
-    status_name_dto_to_pb(atom_to_binary(AtomStateName, utf8));
-status_name_dto_to_pb(<<"sent">>) ->                        'SUBMITTED';
-status_name_dto_to_pb(<<"pending">>) ->                     'PENDING';
-status_name_dto_to_pb(<<"submitted">>) ->                   'SUBMITTED';
-status_name_dto_to_pb(<<"success_waiting_delivery">>) ->    'SUCCESS_WAITING_DELIVERY';
-status_name_dto_to_pb(<<"success_no_delivery">>) ->         'SUCCESS_NO_DELIVERY';
-status_name_dto_to_pb(<<"failure">>) ->                     'FAILURE';
-status_name_dto_to_pb(<<"enroute">>) ->                     'ENROUTE';
-status_name_dto_to_pb(<<"delivered">>) ->                   'DELIVERED';
-status_name_dto_to_pb(<<"expired">>) ->                     'EXPIRED';
-status_name_dto_to_pb(<<"deleted">>) ->                     'DELETED';
-status_name_dto_to_pb(<<"undeliverable">>) ->               'UNDELIVERABLE';
-status_name_dto_to_pb(<<"accepted">>) ->                    'ACCEPTED';
-status_name_dto_to_pb(<<"unknown">>) ->                     'UNKNOWN';
-status_name_dto_to_pb(<<"rejected">>) ->                    'REJECTED';
-status_name_dto_to_pb(<<"unrecognized">>) ->                'UNRECOGNIZED'.
-
-status_name_pb_to_dto('PENDING') ->                     <<"pending">>;
-status_name_pb_to_dto('SUBMITTED') ->                   <<"submitted">>;
-status_name_pb_to_dto('SUCCESS_WAITING_DELIVERY') ->    <<"success_waiting_delivery">>;
-status_name_pb_to_dto('SUCCESS_NO_DELIVERY') ->         <<"success_no_delivery">>;
-status_name_pb_to_dto('FAILURE') ->                     <<"failure">>;
-status_name_pb_to_dto('ENROUTE') ->                     <<"enroute">>;
-status_name_pb_to_dto('DELIVERED') ->                   <<"delivered">>;
-status_name_pb_to_dto('EXPIRED') ->                     <<"expired">>;
-status_name_pb_to_dto('DELETED') ->                     <<"deleted">>;
-status_name_pb_to_dto('UNDELIVERABLE') ->               <<"undeliverable">>;
-status_name_pb_to_dto('ACCEPTED') ->                    <<"accepted">>;
-status_name_pb_to_dto('UNKNOWN') ->                     <<"unknown">>;
-status_name_pb_to_dto('REJECTED') ->                    <<"rejected">>;
-status_name_pb_to_dto('UNRECOGNIZED') ->                <<"unrecognized">>.
-
 
 retrieved_messages_to_pb(DTO = #k1api_retrieved_sms_dto{}) ->
     #k1api_retrieved_sms_dto{

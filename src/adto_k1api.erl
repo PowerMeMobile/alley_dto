@@ -984,7 +984,7 @@ sms_statuses_pb_to_dto(Statuses) ->
 status_name_dto_to_pb(AtomStateName) when is_atom(AtomStateName) ->
     status_name_dto_to_pb(atom_to_binary(AtomStateName, utf8));
 status_name_dto_to_pb(<<"sent">>) ->                        'SUBMITTED';
-status_name_dto_to_pb(<<"pending">>) ->                     'SUCCESS_NO_DELIVERY';
+status_name_dto_to_pb(<<"pending">>) ->                     'PENDING';
 status_name_dto_to_pb(<<"submitted">>) ->                   'SUBMITTED';
 status_name_dto_to_pb(<<"success_waiting_delivery">>) ->    'SUCCESS_WAITING_DELIVERY';
 status_name_dto_to_pb(<<"success_no_delivery">>) ->         'SUCCESS_NO_DELIVERY';
@@ -999,7 +999,7 @@ status_name_dto_to_pb(<<"unknown">>) ->                     'UNKNOWN';
 status_name_dto_to_pb(<<"rejected">>) ->                    'REJECTED';
 status_name_dto_to_pb(<<"unrecognized">>) ->                'UNRECOGNIZED'.
 
-
+status_name_pb_to_dto('PENDING') ->                     <<"pending">>;
 status_name_pb_to_dto('SUBMITTED') ->                   <<"submitted">>;
 status_name_pb_to_dto('SUCCESS_WAITING_DELIVERY') ->    <<"success_waiting_delivery">>;
 status_name_pb_to_dto('SUCCESS_NO_DELIVERY') ->         <<"success_no_delivery">>;

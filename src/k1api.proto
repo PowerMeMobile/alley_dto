@@ -317,6 +317,7 @@ enum SmsStatuses {
     UNKNOWN = 11;
     REJECTED = 12;
     UNRECOGNIZED = 13;
+    PENDING = 14;
 }
 
 message SmsStatus {

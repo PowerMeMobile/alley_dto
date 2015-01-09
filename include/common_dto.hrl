@@ -20,6 +20,7 @@
     customer_id         :: binary(),
     user_id             :: binary(),
     pay_type            :: pay_type(),
+    credit              :: float(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [network_dto()],
@@ -29,8 +30,7 @@
     no_retry            :: boolean(),
     default_validity    :: integer(), %% seconds
     max_validity        :: integer(), %% seconds
-    features            :: [feature_dto()],
-    credits             :: float()
+    features            :: [feature_dto()]
 }).
 
 -record(auth_error_v1, {

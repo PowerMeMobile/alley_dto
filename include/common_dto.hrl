@@ -4,6 +4,39 @@
 -include("adto_types.hrl").
 
 %% ===================================================================
+%% Shared
+%% ===================================================================
+
+-record(network_v1, {
+    id                  :: uuid(),
+    country_code        :: binary(),
+    number_len          :: pos_integer(),
+    prefixes            :: [binary()],
+    provider_id         :: uuid(),
+    is_home             :: boolean(),
+    sms_points          :: float(),
+    sms_mult_points     :: float(),
+
+    name                :: binary(),
+    country             :: binary(),
+    gmt_diff            :: binary(),
+    dst                 :: binary()
+}).
+
+-record(provider_v1, {
+    id                  :: uuid(),
+    gateway_id          :: uuid(),
+    bulk_gateway_id     :: uuid(),
+    receipts_supported  :: boolean(),
+    sms_add_points      :: float()
+}).
+
+-record(feature_v1, {
+    name                :: binary(),
+    value               :: binary()
+}).
+
+%% ===================================================================
 %% Authentication
 %% ===================================================================
 
@@ -23,14 +56,14 @@
     credit              :: float(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
-    networks            :: [network_dto()],
-    providers           :: [provider_dto()],
+    networks            :: [#network_v1{}],
+    providers           :: [#provider_v1{}],
     default_provider_id :: uuid() | undefined,
     receipts_allowed    :: boolean(),
     no_retry            :: boolean(),
     default_validity    :: integer(), %% seconds
     max_validity        :: integer(), %% seconds
-    features            :: [feature_dto()]
+    features            :: [#feature_v1{}]
 }).
 
 -record(auth_error_v1, {

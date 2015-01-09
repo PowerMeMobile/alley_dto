@@ -94,8 +94,8 @@ module(K1apiDTO) when
 module(DTO) when
            is_record(DTO, auth_req_v1)
     orelse is_record(DTO, auth_resp_v1)
-    orelse is_record(DTO, sms_delivery_status_req_v1)
-    orelse is_record(DTO, sms_delivery_status_resp_v1) ->
+    orelse is_record(DTO, sms_status_req_v1)
+    orelse is_record(DTO, sms_status_resp_v1) ->
     common();
 
 module(Type) ->

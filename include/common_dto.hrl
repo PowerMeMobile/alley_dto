@@ -44,39 +44,36 @@
 }).
 
 %% ===================================================================
-%% Sms Delivery Status
+%% Sms Status
 %% ===================================================================
 
--record(sms_delivery_status_req_v1, {
-    req_id         :: uuid_dto(),
-    customer_id    :: uuid_dto(),
-    user_id        :: binary(),
-    sms_request_id :: uuid_dto(),
-    address        :: addr()
+-record(sms_status_req_v1, {
+    req_id      :: uuid_dto(),
+    customer_id :: uuid_dto(),
+    user_id     :: binary(),
+    sms_req_id  :: uuid_dto()
 }).
 
--type common_sms_status() ::
-    submitted                   |
-    success_waiting_delivery    |
-    success_no_delivery         |
-    failure                     |
-    enroute                     |
-    delivered                   |
-    expired                     |
-    deleted                     |
-    undeliverable               |
-    accepted                    |
-    unknown                     |
-    rejected                    |
+-type sms_status() ::
+    submitted     |
+    failure       |
+    enroute       |
+    delivered     |
+    expired       |
+    deleted       |
+    undeliverable |
+    accepted      |
+    unknown       |
+    rejected      |
     unrecognized.
 
 -record(sms_status_v1, {
     address   :: addr(),
-    status    :: common_sms_status(),
+    status    :: sms_status(),
     timestamp :: pos_integer()  %% utc unixtime
 }).
 
--record(sms_delivery_status_resp_v1, {
+-record(sms_status_resp_v1, {
     req_id   :: uuid_dto(),
     statuses :: [#sms_status_v1{}]
 }).
@@ -87,11 +84,11 @@
 
 -type common_dto() ::
     %% authentication
-    #auth_req_v1{}                       |
-    #auth_resp_v1{}                      |
+    #auth_req_v1{}              |
+    #auth_resp_v1{}             |
 
     %% sms delivery status
-    #sms_delivery_status_req_v1{}        |
-    #sms_delivery_status_resp_v1{}.
+    #sms_status_req_v1{}        |
+    #sms_status_resp_v1{}.
 
 -endif. % common_dto_hrl

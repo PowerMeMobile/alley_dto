@@ -23,11 +23,11 @@ decode(#auth_resp_v1{}, Bin) ->
     DTO = binary_to_term(Bin),
     {ok, DTO};
 
-decode(#sms_delivery_status_req_v1{}, Bin) ->
+decode(#sms_status_req_v1{}, Bin) ->
     DTO = binary_to_term(Bin),
     {ok, DTO};
 
-decode(#sms_delivery_status_resp_v1{}, Bin) ->
+decode(#sms_status_resp_v1{}, Bin) ->
     DTO = binary_to_term(Bin),
     {ok, DTO};
 
@@ -50,11 +50,11 @@ encode(DTO = #auth_resp_v1{}) ->
     Bin = term_to_binary(DTO),
     {ok, Bin};
 
-encode(DTO = #sms_delivery_status_req_v1{}) ->
+encode(DTO = #sms_status_req_v1{}) ->
     Bin = term_to_binary(DTO),
     {ok, Bin};
 
-encode(DTO = #sms_delivery_status_resp_v1{}) ->
+encode(DTO = #sms_status_resp_v1{}) ->
     Bin = term_to_binary(DTO),
     {ok, Bin};
 

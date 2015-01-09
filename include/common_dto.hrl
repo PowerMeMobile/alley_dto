@@ -8,7 +8,7 @@
 %% ===================================================================
 
 -record(auth_req_v1, {
-    req_id          :: uuid_dto(),
+    req_id          :: uuid(),
     customer_id     :: binary(),
     user_id         :: binary(),
     password        :: binary(),
@@ -16,15 +16,15 @@
 }).
 
 -record(auth_customer_v1, {
-    customer_uuid       :: uuid_dto(),
+    customer_uuid       :: uuid(),
     customer_id         :: binary(),
     user_id             :: binary(),
-    pay_type            :: pay_type_dto(),
+    pay_type            :: pay_type(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [network_dto()],
     providers           :: [provider_dto()],
-    default_provider_id :: uuid_dto() | undefined,
+    default_provider_id :: uuid() | undefined,
     receipts_allowed    :: boolean(),
     no_retry            :: boolean(),
     default_validity    :: integer(), %% seconds
@@ -39,7 +39,7 @@
 }).
 
 -record(auth_resp_v1, {
-    req_id :: uuid_dto(),
+    req_id :: uuid(),
     result :: #auth_customer_v1{} |
               #auth_error_v1{}
 }).
@@ -49,10 +49,10 @@
 %% ===================================================================
 
 -record(sms_status_req_v1, {
-    req_id      :: uuid_dto(),
-    customer_id :: uuid_dto(),
+    req_id      :: uuid(),
+    customer_id :: uuid(),
     user_id     :: binary(),
-    sms_req_id  :: uuid_dto()
+    sms_req_id  :: uuid()
 }).
 
 -type sms_status() ::
@@ -75,7 +75,7 @@
 }).
 
 -record(sms_status_resp_v1, {
-    req_id   :: uuid_dto(),
+    req_id   :: uuid(),
     statuses :: [#sms_status_v1{}]
 }).
 

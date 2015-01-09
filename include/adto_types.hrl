@@ -2,12 +2,7 @@
 -define(adto_types_hrl, included).
 
 -include("addr.hrl").
-
--type client_type_dto()  :: funnel | oneapi | soap | mm.
--type pay_type_dto()     :: prepaid | postpaid.
--type uuid_dto()         :: binary(). %% <<"12fd794d-9e32-4cf6...
--type utc_time()         :: binary(). %% <<"120827114232">>
--type smpp_type_dto()    :: receiver | transceiver | transmitter.
+-include("common_types.hrl").
 
 -record(error_dto, {
     error_code          :: integer(),
@@ -16,11 +11,11 @@
 -type error_dto()       :: #error_dto{}.
 
 -record(network_dto, {
-    id                  :: uuid_dto(),
+    id                  :: uuid(),
     country_code        :: binary(), %% <<"375">>
     number_len          :: pos_integer(),
     prefixes            :: [binary()], %% [<<"44">>, <<"33">>]
-    provider_id         :: uuid_dto(),
+    provider_id         :: uuid(),
     is_home             :: boolean(),
     sms_points          :: float(),
     sms_mult_points     :: float(),
@@ -33,16 +28,16 @@
 -type network_dto()     :: #network_dto{}.
 
 -record(provider_dto, {
-    id                  :: uuid_dto(),
-    gateway_id          :: uuid_dto(),
-    bulk_gateway_id     :: uuid_dto(),
+    id                  :: uuid(),
+    gateway_id          :: uuid(),
+    bulk_gateway_id     :: uuid(),
     receipts_supported  :: boolean(),
     sms_add_points      :: float()
 }).
 -type provider_dto()    :: #provider_dto{}.
 
 -record(blacklist_entry_dto, {
-    id                  :: uuid_dto(),
+    id                  :: uuid(),
     dst_addr            :: addr(),
     src_addr            :: undefined | addr()
 }).

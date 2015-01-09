@@ -28,11 +28,11 @@
 -type jsms_req_params() :: [#just_sms_request_param_dto{}].
 
 -record(just_sms_request_dto, {
-    id              :: uuid_dto(),
-    gateway_id      :: uuid_dto(),
-    customer_id     :: uuid_dto(),
+    id              :: uuid(),
+    gateway_id      :: uuid(),
+    customer_id     :: uuid(),
     user_id         :: binary(),
-    client_type     :: client_type_dto(),
+    client_type     :: client_type(),
     type            :: regular | part,
     message         :: binary(),
     encoding        :: jsms_req_encoding(),
@@ -57,10 +57,10 @@
 }).
 
 -record(just_sms_response_dto, {
-    id              :: uuid_dto(),
-    gateway_id      :: uuid_dto(),
-    customer_id     :: uuid_dto(),
-    client_type     :: client_type_dto(),
+    id              :: uuid(),
+    gateway_id      :: uuid(),
+    customer_id     :: uuid(),
+    client_type     :: client_type(),
     statuses        :: [#just_sms_status_dto{}],
     timestamp       :: utc_time()
 }).
@@ -70,7 +70,7 @@
 %% ===================================================================
 
 -record(just_incoming_sms_dto, {
-    gateway_id      :: uuid_dto(),
+    gateway_id      :: uuid(),
     source          :: addr(),
     dest            :: addr(),
     message         :: binary(),
@@ -102,7 +102,7 @@
 }).
 
 -record(just_delivery_receipt_dto, {
-    gateway_id      :: uuid_dto(),
+    gateway_id      :: uuid(),
     receipts        :: [#just_receipt_dto{}],
     timestamp       :: utc_time()
 }).

@@ -56,6 +56,11 @@ module(JustDTO) when
     orelse is_record(JustDTO, just_delivery_receipt_dto) ->
     just();
 
+%%
+%% Deprecated.
+%% Use common module instead.
+%%
+
 %% k1api dto
 module(K1apiDTO) when
            is_record(K1apiDTO, k1api_auth_request_dto)
@@ -85,10 +90,19 @@ module(K1apiDTO) when
     orelse is_record(K1apiDTO, k1api_process_inbox_response_dto) ->
     k1api();
 
+%% common dto
+module(DTO) when
+           is_record(DTO, auth_req_v1)
+    orelse is_record(DTO, auth_resp_v1)
+    orelse is_record(DTO, sms_delivery_status_req_v1)
+    orelse is_record(DTO, sms_delivery_status_resp_v1) ->
+    common();
+
 module(Type) ->
-    erlang:error({adto_unsupported_type, Type}).
+    erlang:error({unknown_adto_type, Type}).
 
 %% codec modules
 funnel() -> adto_funnel.
 just()   -> adto_just.
 k1api()  -> adto_k1api.
+common() -> adto_common.

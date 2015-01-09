@@ -34,6 +34,7 @@
 }).
 
 -record(auth_error_v1, {
+    code    :: term(), %% reserved for future extension
     message :: binary()
 }).
 

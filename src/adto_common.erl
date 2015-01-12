@@ -31,6 +31,14 @@ decode(#sms_status_resp_v1{}, Bin) ->
     DTO = binary_to_term(Bin),
     {ok, DTO};
 
+decode(#credit_req_v1{}, Bin) ->
+    DTO = binary_to_term(Bin),
+    {ok, DTO};
+
+decode(#credit_resp_v1{}, Bin) ->
+    DTO = binary_to_term(Bin),
+    {ok, DTO};
+
 decode(Type, _Message) ->
     erlang:error({unknown_decode_common_type, Type}).
 
@@ -55,6 +63,14 @@ encode(DTO = #sms_status_req_v1{}) ->
     {ok, Bin};
 
 encode(DTO = #sms_status_resp_v1{}) ->
+    Bin = term_to_binary(DTO),
+    {ok, Bin};
+
+encode(DTO = #credit_req_v1{}) ->
+    Bin = term_to_binary(DTO),
+    {ok, Bin};
+
+encode(DTO = #credit_resp_v1{}) ->
     Bin = term_to_binary(DTO),
     {ok, Bin};
 

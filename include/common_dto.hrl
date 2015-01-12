@@ -113,7 +113,23 @@
 }).
 
 %% ===================================================================
-%% Authentication
+%% Credit request
+%% ===================================================================
+
+-record(credit_req_v1, {
+    req_id      :: uuid(),
+    customer_id :: binary(),
+    credit      :: float()
+}).
+
+-record(credit_resp_v1, {
+    req_id      :: uuid(),
+    result      :: allowed | denied,
+    credit_left :: float()
+}).
+
+%% ===================================================================
+%% Types
 %% ===================================================================
 
 -type common_dto() ::
@@ -121,8 +137,12 @@
     #auth_req_v1{}              |
     #auth_resp_v1{}             |
 
-    %% sms delivery status
+    %% sms status
     #sms_status_req_v1{}        |
-    #sms_status_resp_v1{}.
+    #sms_status_resp_v1{}       |
+
+    %% credit
+    #credit_req_v1{}            |
+    #credit_resp_v1{}.
 
 -endif. % common_dto_hrl

@@ -148,6 +148,22 @@
 }).
 
 %% ===================================================================
+%% Coverage
+%% ===================================================================
+
+-record(coverage_req_v1, {
+    req_id      :: uuid(),
+    customer_id :: binary()
+}).
+
+-record(coverage_resp_v1, {
+    req_id              :: uuid(),
+    networks            :: [#network_v1{}],
+    providers           :: [#provider_v1{}],
+    default_provider_id :: uuid() | undefined
+}).
+
+%% ===================================================================
 %% Types
 %% ===================================================================
 
@@ -166,6 +182,10 @@
 
     %% blacklist
     #blacklist_req_v1{}         |
-    #blacklist_resp_v1{}.
+    #blacklist_resp_v1{}        |
+
+    %% coverage
+    #coverage_req_v1{}          |
+    #coverage_resp_v1{}.
 
 -endif. % common_dto_hrl

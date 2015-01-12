@@ -99,7 +99,9 @@ module(DTO) when
     orelse is_record(DTO, credit_req_v1)
     orelse is_record(DTO, credit_resp_v1)
     orelse is_record(DTO, blacklist_req_v1)
-    orelse is_record(DTO, blacklist_resp_v1) ->
+    orelse is_record(DTO, blacklist_resp_v1)
+    orelse is_record(DTO, coverage_req_v1)
+    orelse is_record(DTO, coverage_resp_v1) ->
     common();
 
 module(Type) ->

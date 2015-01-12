@@ -47,6 +47,14 @@ decode(#blacklist_resp_v1{}, Bin) ->
     DTO = binary_to_term(Bin),
     {ok, DTO};
 
+decode(#coverage_req_v1{}, Bin) ->
+    DTO = binary_to_term(Bin),
+    {ok, DTO};
+
+decode(#coverage_resp_v1{}, Bin) ->
+    DTO = binary_to_term(Bin),
+    {ok, DTO};
+
 decode(Type, _Message) ->
     erlang:error({unknown_decode_common_type, Type}).
 
@@ -87,6 +95,14 @@ encode(DTO = #blacklist_req_v1{}) ->
     {ok, Bin};
 
 encode(DTO = #blacklist_resp_v1{}) ->
+    Bin = term_to_binary(DTO),
+    {ok, Bin};
+
+encode(DTO = #coverage_req_v1{}) ->
+    Bin = term_to_binary(DTO),
+    {ok, Bin};
+
+encode(DTO = #coverage_resp_v1{}) ->
     Bin = term_to_binary(DTO),
     {ok, Bin};
 

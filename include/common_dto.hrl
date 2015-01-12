@@ -113,7 +113,7 @@
 }).
 
 %% ===================================================================
-%% Credit request
+%% Credit
 %% ===================================================================
 
 -record(credit_req_v1, {
@@ -126,6 +126,25 @@
     req_id      :: uuid(),
     result      :: allowed | denied,
     credit_left :: float()
+}).
+
+%% ===================================================================
+%% Blacklist
+%% ===================================================================
+
+-record(blacklist_req_v1, {
+    req_id :: uuid()
+}).
+
+-record(blacklist_entry_v1, {
+    id       :: uuid(),
+    dst_addr :: addr(),
+    src_addr :: undefined | addr()
+}).
+
+-record(blacklist_resp_v1, {
+    req_id  :: uuid(),
+    entries :: [#blacklist_entry_v1{}]
 }).
 
 %% ===================================================================
@@ -143,6 +162,10 @@
 
     %% credit
     #credit_req_v1{}            |
-    #credit_resp_v1{}.
+    #credit_resp_v1{}           |
+
+    %% blacklist
+    #blacklist_req_v1{}         |
+    #blacklist_resp_v1{}.
 
 -endif. % common_dto_hrl

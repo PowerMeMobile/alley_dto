@@ -97,7 +97,9 @@ module(DTO) when
     orelse is_record(DTO, sms_status_req_v1)
     orelse is_record(DTO, sms_status_resp_v1)
     orelse is_record(DTO, credit_req_v1)
-    orelse is_record(DTO, credit_resp_v1) ->
+    orelse is_record(DTO, credit_resp_v1)
+    orelse is_record(DTO, blacklist_req_v1)
+    orelse is_record(DTO, blacklist_resp_v1) ->
     common();
 
 module(Type) ->

@@ -8,32 +8,32 @@
 %% ===================================================================
 
 -record(network_v1, {
-    id                  :: uuid(),
-    country_code        :: binary(),
-    number_len          :: pos_integer(),
-    prefixes            :: [binary()],
-    provider_id         :: uuid(),
-    is_home             :: boolean(),
-    sms_points          :: float(),
-    sms_mult_points     :: float(),
+    id              :: uuid(),
+    country_code    :: binary(),
+    number_len      :: pos_integer(),
+    prefixes        :: [binary()],
+    provider_id     :: uuid(),
+    is_home         :: boolean(),
+    sms_points      :: float(),
+    sms_mult_points :: float(),
 
-    name                :: binary(),
-    country             :: binary(),
-    gmt_diff            :: binary(),
-    dst                 :: binary()
+    name            :: binary(),
+    country         :: binary(),
+    gmt_diff        :: binary(),
+    dst             :: binary()
 }).
 
 -record(provider_v1, {
-    id                  :: uuid(),
-    gateway_id          :: uuid(),
-    bulk_gateway_id     :: uuid(),
-    receipts_supported  :: boolean(),
-    sms_add_points      :: float()
+    id                 :: uuid(),
+    gateway_id         :: uuid(),
+    bulk_gateway_id    :: uuid(),
+    receipts_supported :: boolean(),
+    sms_add_points     :: float()
 }).
 
 -record(feature_v1, {
-    name                :: binary(),
-    value               :: binary()
+    name  :: binary(),
+    value :: binary()
 }).
 
 %% ===================================================================

@@ -15,48 +15,8 @@
     {ok, message_type_dto()} |
     {error, Reason::any()}.
 
-decode(#auth_req_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#auth_resp_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#sms_status_req_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#sms_status_resp_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#credit_req_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#credit_resp_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#blacklist_req_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#blacklist_resp_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#coverage_req_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(#coverage_resp_v1{}, Bin) ->
-    DTO = binary_to_term(Bin),
-    {ok, DTO};
-
-decode(Type, _Message) ->
-    erlang:error({unknown_decode_common_type, Type}).
+decode(Type, Bin) ->
+    bin_to_term(Type, Bin).
 
 %% ===================================================================
 %% Encode Functions
@@ -66,45 +26,25 @@ decode(Type, _Message) ->
     {ok, Payload::binary()} |
     {error, Reason::any()}.
 
-encode(DTO = #auth_req_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #auth_resp_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #sms_status_req_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #sms_status_resp_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #credit_req_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #credit_resp_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #blacklist_req_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #blacklist_resp_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #coverage_req_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
-encode(DTO = #coverage_resp_v1{}) ->
-    Bin = term_to_binary(DTO),
-    {ok, Bin};
-
 encode(DTO) ->
-    erlang:error({unknown_encode_common_type, DTO}).
+    Bin = term_to_binary(DTO),
+    {ok, Bin}.
+
+%% ===================================================================
+%% Internal
+%% ===================================================================
+
+bin_to_term(Rec, Bin) ->
+    RecName = element(1, Rec),
+    RecSize = size(Rec),
+    try binary_to_term(Bin) of
+        DTO when is_tuple(DTO) andalso
+                 element(1, DTO) =:= RecName andalso
+                 size(DTO) =:= RecSize ->
+            {ok, DTO};
+        BadDTO ->
+            {error, {incorrect_rec, BadDTO}}
+    catch
+        error:badarg ->
+            {error, {invalid_bin, Bin}}
+    end.

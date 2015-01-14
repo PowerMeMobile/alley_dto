@@ -45,7 +45,7 @@
     customer_id :: binary(),
     user_id     :: binary(),
     password    :: binary(),
-    interface   :: binary()
+    interface   :: atom()
 }).
 
 -record(auth_customer_v1, {

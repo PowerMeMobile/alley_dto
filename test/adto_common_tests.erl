@@ -33,7 +33,7 @@ auth_req() ->
         customer_id = <<"test-sys-id">>,
         user_id = <<"user">>,
         password = <<"password">>,
-        connection_type = oneapi
+        interface = oneapi
     },
     ?assertEqual(DTO, decode(#auth_req_v1{}, encode(DTO))).
 

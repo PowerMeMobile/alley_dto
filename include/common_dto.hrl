@@ -41,11 +41,11 @@
 %% ===================================================================
 
 -record(auth_req_v1, {
-    req_id          :: uuid(),
-    customer_id     :: binary(),
-    user_id         :: binary(),
-    password        :: binary(),
-    connection_type :: binary()
+    req_id      :: uuid(),
+    customer_id :: binary(),
+    user_id     :: binary(),
+    password    :: binary(),
+    interface   :: binary()
 }).
 
 -record(auth_customer_v1, {

@@ -2,54 +2,54 @@ JustAsn DEFINITIONS IMPLICIT TAGS ::=
 BEGIN
 
 SmsRequest ::= SEQUENCE {
-    id         [0] IA5String, -- "12fd794d-9e32-4cf6-b421-b797196b60e3"
-    gatewayId  [1] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
-    customerId [2] IA5String, -- "feda5822-5271-11e1-bd27-001d0947ec73"
-	userId     [3] IA5String, -- "user1"
-    type       [4] ENUMERATED { regular(0), part(1) }, -- atom
+    id         [0] IA5String,
+    gatewayId  [1] IA5String,
+    customerId [2] IA5String,
+	userId     [3] IA5String,
+    type       [4] ENUMERATED { regular(0), part(1) },
     message    [5] OCTET STRING,
-    encoding   [6] CHOICE { text  [0] ENUMERATED { default(-1), -- {text, default}
+    encoding   [6] CHOICE { text  [0] ENUMERATED { default(-1),
                                                    gsm0338(0),
                                                    ascii(1),
                                                    latin1(3),
                                                    ucs2(8)},
-                            other [1] INTEGER }, -- {other, integer()}
-    params     [7] SEQUENCE OF Param, -- [{'Param',"registered_delivery",{boolean,true}},{'Param',"service_type",{string,[]}},{'Param',"no_retry",{boolean,false}},{'Param',"validity_period",{string,"000003000000000R"}},{'Param',"priority_flag",{integer,0}},{'Param',"esm_class",{integer,3}},{'Param',"protocol_id",{integer,0}}]
-    sourceAddr [8] FullAddr, -- {'FullAddr',"375296662323",1,1}
-    destAddrs  [9] CHOICE { regular [0] SEQUENCE OF FullAddr, -- {regular,[{'FullAddr',"375253723886",1,1}]}
+                            other [1] INTEGER },
+    params     [7] SEQUENCE OF Param,
+    sourceAddr [8] FullAddr,
+    destAddrs  [9] CHOICE { regular [0] SEQUENCE OF FullAddr,
                             part    [1] SEQUENCE OF FullAddrAndRefNum },
-    messageIds [10] SEQUENCE OF IA5String -- ["634"]
+    messageIds [10] SEQUENCE OF IA5String
 }
 
 SmsResponse ::= SEQUENCE {
-    id         [0] IA5String, -- "12fd794d-9e32-4cf6-b421-b797196b60e3"
-    gatewayId  [1] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
-    customerId [2] IA5String, -- "feda5822-5271-11e1-bd27-001d0947ec7"
-    statuses   [3] SEQUENCE OF SmStatus, -- [{'SmStatus',"634",{'FullAddr',"375253723886",1,1},success,1,asn1_NOVALUE,"614",asn1_NOVALUE}]
-    timestamp  [4] UTCTime -- "120827114305"
+    id         [0] IA5String,
+    gatewayId  [1] IA5String,
+    customerId [2] IA5String,
+    statuses   [3] SEQUENCE OF SmStatus,
+    timestamp  [4] UTCTime
 }
 
 IncomingSm ::= SEQUENCE {
-    gatewayId   [0] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
-    source      [1] FullAddr, -- {'FullAddr',"375255419362",1,0}
-    dest        [2] FullAddr, -- {'FullAddr',"375296662323",1,0}
+    gatewayId   [0] IA5String,
+    source      [1] FullAddr,
+    dest        [2] FullAddr,
     message     [3] OCTET STRING,
     dataCoding  [4] INTEGER,
     partsRefNum [5] INTEGER OPTIONAL,
     partsCount  [6] INTEGER OPTIONAL,
     partIndex   [7] INTEGER OPTIONAL,
-    timestamp   [8] UTCTime -- "120827114337"
+    timestamp   [8] UTCTime
 }
 
 ReceiptBatch ::= SEQUENCE {
-    gatewayId [0] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
+    gatewayId [0] IA5String,
     receipts  [1] SEQUENCE OF DeliveryReceipt,
-    timestamp [2] UTCTime -- "120827114337"
+    timestamp [2] UTCTime
 }
 
 DeliveryReceipt ::= SEQUENCE {
-    messageId    [0] IA5String, -- "614"
-    messageState [1] ENUMERATED { enroute(1), -- atom
+    messageId    [0] IA5String,
+    messageState [1] ENUMERATED { enroute(1),
                                   delivered(2),
                                   expired(3),
                                   deleted(4),
@@ -58,7 +58,7 @@ DeliveryReceipt ::= SEQUENCE {
                                   unknown(7),
                                   rejected(8),
                                   unrecognized(9) },
-    source       [2] FullAddr -- {'FullAddr',"375253723886",1,1}
+    source       [2] FullAddr
 }
 
 FullAddr ::= SEQUENCE {
@@ -73,22 +73,21 @@ FullAddrAndRefNum ::= SEQUENCE {
 }
 
 SmStatus ::= SEQUENCE {
-    originalId [0] IA5String,				-- "634"
-    destAddr   [1] FullAddr, 				-- {'FullAddr',"375253723886",1,1}
-    status     [2] ENUMERATED { success(0), failure(1) }, -- atom
+    originalId [0] IA5String,
+    destAddr   [1] FullAddr,
+    status     [2] ENUMERATED { success(0), failure(1) },
     partsTotal [3] INTEGER,
     partIndex  [4] INTEGER   OPTIONAL,
-    messageId  [5] IA5String OPTIONAL,		-- "614"
+    messageId  [5] IA5String OPTIONAL,
     errorCode  [6] INTEGER   OPTIONAL
 }
 
-Param ::= SEQUENCE {						-- {'Param',"registered_delivery",{boolean,true}}
-    name  [0] IA5String,					-- "registered_delivery"
-    value [1] CHOICE { integer [0] INTEGER, -- {boolean, true}
+Param ::= SEQUENCE {
+    name  [0] IA5String,
+    value [1] CHOICE { integer [0] INTEGER,
                        string  [1] IA5String,
                        boolean [2] BOOLEAN }
 }
-
 
 ThroughputRequest ::= SEQUENCE {
 }

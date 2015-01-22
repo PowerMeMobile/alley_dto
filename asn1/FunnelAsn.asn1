@@ -2,60 +2,60 @@ FunnelAsn DEFINITIONS IMPLICIT TAGS ::=
 BEGIN
 
 BindRequest ::= SEQUENCE {
-    connectionId [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
-    remoteIp     [1] IA5String, -- "127.0.0.1"
-    customerId   [2] IA5String, -- "test-sys-id"
-    userId       [3] IA5String, -- "user"
-    password     [4] IA5String, -- "password"
-    type         [5] ENUMERATED { transmitter(0), receiver(1), transceiver(2) }, -- transceiver
+    connectionId [0] IA5String,
+    remoteIp     [1] IA5String,
+    customerId   [2] IA5String,
+    userId       [3] IA5String,
+    password     [4] IA5String,
+    type         [5] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
     isCached     [6] BOOLEAN,
     timestamp    [7] PreciseTime,
     expiration   [8] PreciseTime
 }
 
 PreciseTime ::= SEQUENCE {
-    time         [0] UTCTime, -- "120827114232"
+    time         [0] UTCTime,
     milliseconds [1] INTEGER
 }
 
 BindResponse ::= SEQUENCE {
-    connectionId [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
+    connectionId [0] IA5String,
     result       [1] CHOICE { customer [0] Customer,
                               error    [1] IA5String }
 }
 
 Customer ::= SEQUENCE {
-    id                [0]  IA5String, -- "test-sys-id"
-    uuid              [1]  IA5String, -- "feda5822-5271-11e1-bd27-001d0947ec73"
+    id                [0]  IA5String,
+    uuid              [1]  IA5String,
     priority          [2]  INTEGER,
     rps               [3]  INTEGER OPTIONAL,
-    allowedSources    [4]  SEQUENCE OF Addr, -- [{'Addr',"375296662323",1,0}]
-    defaultSource     [5]  Addr OPTIONAL, -- {'Addr',"375296662323",1,0}
+    allowedSources    [4]  SEQUENCE OF Addr,
+    defaultSource     [5]  Addr OPTIONAL,
     networks          [6]  SEQUENCE OF Network,
     providers         [7]  SEQUENCE OF Provider,
-    defaultProviderId [8]  IA5String OPTIONAL, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    defaultProviderId [8]  IA5String OPTIONAL,
     receiptsAllowed   [9]  BOOLEAN,
     noRetry           [10] BOOLEAN,
-    defaultValidity   [11] IA5String, -- "000003000000000R"
-    maxValidity       [12] INTEGER, -- in seconds (relative)
+    defaultValidity   [11] IA5String,
+    maxValidity       [12] INTEGER,
     payType           [13] ENUMERATED { prepaid(0), postpaid(1) },
     features          [14] SEQUENCE OF Feature
 }
 
 Provider ::= SEQUENCE {
-    id                [0] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    gatewayId         [1] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
-    bulkGatewayId     [2] IA5String, -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    id                [0] IA5String,
+    gatewayId         [1] IA5String,
+    bulkGatewayId     [2] IA5String,
     receiptsSupported [3] BOOLEAN,
     smsAddPoints      [4] IA5String
 }
 
 Network ::= SEQUENCE {
-    id            [0] IA5String, -- "920a009a-5270-11e1-b961-001d0947ec73"
-    countryCode   [1] IA5String, -- "375"
+    id            [0] IA5String,
+    countryCode   [1] IA5String,
     numberLen     [2] INTEGER,   -- including country code and prefixes.
-    prefixes      [3] SEQUENCE OF IA5String, -- ["44","33","29"]
-    providerId    [4] IA5String,  -- "0a89542c-5270-11e1-bf27-001d0947ec73"
+    prefixes      [3] SEQUENCE OF IA5String,
+    providerId    [4] IA5String,
     isHome        [5] BOOLEAN,
     smsPoints     [6] IA5String,
     smsMultPoints [7] IA5String
@@ -113,38 +113,38 @@ Connection ::= SEQUENCE {
 }
 
 ServerUpEvent ::= SEQUENCE {
-    timestamp [0] UTCTime -- "120827114232"
+    timestamp [0] UTCTime
 }
 
 ServerDownEvent ::= SEQUENCE {
-    timestamp [0] UTCTime -- "120827114232"
+    timestamp [0] UTCTime
 }
 
 ConnectionUpEvent ::= SEQUENCE {
-    connectionId [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
-    customerId   [1] IA5String, -- "system_id"
-    userId       [2] IA5String, -- "user_id"
+    connectionId [0] IA5String,
+    customerId   [1] IA5String,
+    userId       [2] IA5String,
     type         [3] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
-    connectedAt  [4] UTCTime, -- "120827114232"
-    timestamp    [5] UTCTime -- "120827114232"
+    connectedAt  [4] UTCTime,
+    timestamp    [5] UTCTime
 }
 
 ConnectionDownEvent ::= SEQUENCE {
-    connectionId     [0] IA5String, -- "837dfc50-ad1c-4da2-8fa5-2929ee3e811c"
-    customerId       [1] IA5String, -- "system_id"
-    userId           [2] IA5String, -- "user_id"
+    connectionId     [0] IA5String,
+    customerId       [1] IA5String,
+    userId           [2] IA5String,
     type             [3] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
-    connectedAt      [4] UTCTime, -- "120827114232"
+    connectedAt      [4] UTCTime,
     msgsReceived     [5] INTEGER,
     msgsSent         [6] INTEGER,
     errors           [7] SEQUENCE OF Error,
     reason           [8] ENUMERATED { normal(0), closed(1), unbound(2), other(3) },
-    timestamp        [9] UTCTime -- "120827114232"
+    timestamp        [9] UTCTime
 }
 
 Error ::= SEQUENCE {
     errorCode [0] INTEGER,
-    timestamp [1] UTCTime -- "120827114232"
+    timestamp [1] UTCTime
 }
 
 OutgoingBatch ::= SEQUENCE {
@@ -161,13 +161,13 @@ OutgoingMessage ::= SEQUENCE {
 }
 
 ReceiptBatch ::= SEQUENCE {
-    id       [0] IA5String, -- "7dc235d0-c938-4b66-8f8c-c9037c7eace7"
+    id       [0] IA5String,
     receipts [1] SEQUENCE OF DeliveryReceipt
 }
 
 DeliveryReceipt ::= SEQUENCE {
-    messageId    [0] IA5String, -- "614"
-    submitDate   [1] UTCTime, -- "120827114232"
+    messageId    [0] IA5String,
+    submitDate   [1] UTCTime,
     doneDate     [2] UTCTime,
     messageState [3] ENUMERATED { enroute(1),
                                   delivered(2),

@@ -10,18 +10,21 @@ BindRequest ::= SEQUENCE {
     type         [5] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
     isCached     [6] BOOLEAN,
     timestamp    [7] PreciseTime,
-    expiration   [8] PreciseTime
+    expiration   [8] PreciseTime,
+    ...
 }
 
 PreciseTime ::= SEQUENCE {
     time         [0] UTCTime,
-    milliseconds [1] INTEGER
+    milliseconds [1] INTEGER,
+    ...
 }
 
 BindResponse ::= SEQUENCE {
     connectionId [0] IA5String,
     result       [1] CHOICE { customer [0] Customer,
-                              error    [1] IA5String }
+                              error    [1] IA5String },
+    ...
 }
 
 Customer ::= SEQUENCE {
@@ -39,7 +42,8 @@ Customer ::= SEQUENCE {
     defaultValidity   [11] IA5String,
     maxValidity       [12] INTEGER,
     payType           [13] ENUMERATED { prepaid(0), postpaid(1) },
-    features          [14] SEQUENCE OF Feature
+    features          [14] SEQUENCE OF Feature,
+    ...
 }
 
 Provider ::= SEQUENCE {
@@ -47,7 +51,8 @@ Provider ::= SEQUENCE {
     gatewayId         [1] IA5String,
     bulkGatewayId     [2] IA5String,
     receiptsSupported [3] BOOLEAN,
-    smsAddPoints      [4] IA5String
+    smsAddPoints      [4] IA5String,
+    ...
 }
 
 Network ::= SEQUENCE {
@@ -58,46 +63,56 @@ Network ::= SEQUENCE {
     providerId    [4] IA5String,
     isHome        [5] BOOLEAN,
     smsPoints     [6] IA5String,
-    smsMultPoints [7] IA5String
+    smsMultPoints [7] IA5String,
+    ...
 }
 
 Feature ::= SEQUENCE {
     name  [0] IA5String,
-    value [1] IA5String
+    value [1] IA5String,
+    ...
 }
 
 DisconnectRequest ::= SEQUENCE {
     customerId   [0] IA5String,
     userId       [1] IA5String,
-    connectionId [2] IA5String OPTIONAL
+    connectionId [2] IA5String OPTIONAL,
+    ...
 }
 
 DisconnectResponse ::= SEQUENCE {
+    ...
 }
 
 ConnectionsRequest ::= SEQUENCE {
+    ...
 }
 
 ConnectionsResponse ::= SEQUENCE {
-    connections [0] SEQUENCE OF Connection
+    connections [0] SEQUENCE OF Connection,
+    ...
 }
 
 ThroughputRequest ::= SEQUENCE {
+    ...
 }
 
 ThroughputResponse ::= SEQUENCE {
-    slices [0] SEQUENCE OF Slice
+    slices [0] SEQUENCE OF Slice,
+    ...
 }
 
 Slice ::= SEQUENCE {
     periodStart [0] UTCTime,
-    counters    [1] SEQUENCE OF Counter
+    counters    [1] SEQUENCE OF Counter,
+    ...
 }
 
 Counter ::= SEQUENCE {
     connectionId [0] IA5String,
     direction    [1] ENUMERATED { in(0), out(1) },
-    count        [2] INTEGER
+    count        [2] INTEGER,
+    ...
 }
 
 Connection ::= SEQUENCE {
@@ -109,15 +124,18 @@ Connection ::= SEQUENCE {
     type             [5] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
     msgsReceived     [6] INTEGER,
     msgsSent         [7] INTEGER,
-    errors           [8] SEQUENCE OF Error
+    errors           [8] SEQUENCE OF Error,
+    ...
 }
 
 ServerUpEvent ::= SEQUENCE {
-    timestamp [0] UTCTime
+    timestamp [0] UTCTime,
+    ...
 }
 
 ServerDownEvent ::= SEQUENCE {
-    timestamp [0] UTCTime
+    timestamp [0] UTCTime,
+    ...
 }
 
 ConnectionUpEvent ::= SEQUENCE {
@@ -126,7 +144,8 @@ ConnectionUpEvent ::= SEQUENCE {
     userId       [2] IA5String,
     type         [3] ENUMERATED { transmitter(0), receiver(1), transceiver(2) },
     connectedAt  [4] UTCTime,
-    timestamp    [5] UTCTime
+    timestamp    [5] UTCTime,
+    ...
 }
 
 ConnectionDownEvent ::= SEQUENCE {
@@ -139,17 +158,20 @@ ConnectionDownEvent ::= SEQUENCE {
     msgsSent         [6] INTEGER,
     errors           [7] SEQUENCE OF Error,
     reason           [8] ENUMERATED { normal(0), closed(1), unbound(2), other(3) },
-    timestamp        [9] UTCTime
+    timestamp        [9] UTCTime,
+    ...
 }
 
 Error ::= SEQUENCE {
     errorCode [0] INTEGER,
-    timestamp [1] UTCTime
+    timestamp [1] UTCTime,
+    ...
 }
 
 OutgoingBatch ::= SEQUENCE {
     id       [0] IA5String,
-    messages [1] SEQUENCE OF OutgoingMessage
+    messages [1] SEQUENCE OF OutgoingMessage,
+    ...
 }
 
 OutgoingMessage ::= SEQUENCE {
@@ -157,12 +179,14 @@ OutgoingMessage ::= SEQUENCE {
     dest       [1] Addr,
     message    [2] OCTET STRING,
     dataCoding [3] CHOICE { text  [0] ENUMERATED { gsm0338(0), ucs2(8) },
-                            other [1] INTEGER }
+                            other [1] INTEGER },
+    ...
 }
 
 ReceiptBatch ::= SEQUENCE {
     id       [0] IA5String,
-    receipts [1] SEQUENCE OF DeliveryReceipt
+    receipts [1] SEQUENCE OF DeliveryReceipt,
+    ...
 }
 
 DeliveryReceipt ::= SEQUENCE {
@@ -179,7 +203,8 @@ DeliveryReceipt ::= SEQUENCE {
                                   rejected(8),
                                   unrecognized(9) },
     source       [4] Addr,
-    dest         [5] Addr
+    dest         [5] Addr,
+    ...
 --
 -- Future extension
 --
@@ -190,13 +215,15 @@ DeliveryReceipt ::= SEQUENCE {
 }
 
 BatchAck ::= SEQUENCE {
-    batchId [0] IA5String
+    batchId [0] IA5String,
+    ...
 }
 
 Addr ::= SEQUENCE {
     addr [0] IA5String,
     ton  [1] INTEGER,
-    npi  [2] INTEGER
+    npi  [2] INTEGER,
+    ...
 }
 
 END

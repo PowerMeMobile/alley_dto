@@ -5,7 +5,7 @@ SmsRequest ::= SEQUENCE {
     id         [0] IA5String,
     gatewayId  [1] IA5String,
     customerId [2] IA5String,
-	userId     [3] IA5String,
+    userId     [3] IA5String,
     type       [4] ENUMERATED { regular(0), part(1) },
     message    [5] OCTET STRING,
     encoding   [6] CHOICE { text  [0] ENUMERATED { default(-1),
@@ -18,7 +18,8 @@ SmsRequest ::= SEQUENCE {
     sourceAddr [8] FullAddr,
     destAddrs  [9] CHOICE { regular [0] SEQUENCE OF FullAddr,
                             part    [1] SEQUENCE OF FullAddrAndRefNum },
-    messageIds [10] SEQUENCE OF IA5String
+    messageIds [10] SEQUENCE OF IA5String,
+    ...
 }
 
 SmsResponse ::= SEQUENCE {
@@ -26,7 +27,8 @@ SmsResponse ::= SEQUENCE {
     gatewayId  [1] IA5String,
     customerId [2] IA5String,
     statuses   [3] SEQUENCE OF SmStatus,
-    timestamp  [4] UTCTime
+    timestamp  [4] UTCTime,
+    ...
 }
 
 IncomingSm ::= SEQUENCE {
@@ -38,13 +40,15 @@ IncomingSm ::= SEQUENCE {
     partsRefNum [5] INTEGER OPTIONAL,
     partsCount  [6] INTEGER OPTIONAL,
     partIndex   [7] INTEGER OPTIONAL,
-    timestamp   [8] UTCTime
+    timestamp   [8] UTCTime,
+    ...
 }
 
 ReceiptBatch ::= SEQUENCE {
     gatewayId [0] IA5String,
     receipts  [1] SEQUENCE OF DeliveryReceipt,
-    timestamp [2] UTCTime
+    timestamp [2] UTCTime,
+    ...
 }
 
 DeliveryReceipt ::= SEQUENCE {
@@ -58,18 +62,21 @@ DeliveryReceipt ::= SEQUENCE {
                                   unknown(7),
                                   rejected(8),
                                   unrecognized(9) },
-    source       [2] FullAddr
+    source       [2] FullAddr,
+    ...
 }
 
 FullAddr ::= SEQUENCE {
     addr [0] IA5String,
     ton  [1] INTEGER,
-    npi  [2] INTEGER
+    npi  [2] INTEGER,
+    ...
 }
 
 FullAddrAndRefNum ::= SEQUENCE {
     fullAddr [0] FullAddr,
-    refNum   [1] INTEGER
+    refNum   [1] INTEGER,
+    ...
 }
 
 SmStatus ::= SEQUENCE {
@@ -79,36 +86,43 @@ SmStatus ::= SEQUENCE {
     partsTotal [3] INTEGER,
     partIndex  [4] INTEGER   OPTIONAL,
     messageId  [5] IA5String OPTIONAL,
-    errorCode  [6] INTEGER   OPTIONAL
+    errorCode  [6] INTEGER   OPTIONAL,
+    ...
 }
 
 Param ::= SEQUENCE {
     name  [0] IA5String,
     value [1] CHOICE { integer [0] INTEGER,
                        string  [1] IA5String,
-                       boolean [2] BOOLEAN }
+                       boolean [2] BOOLEAN },
+    ...
 }
 
 ThroughputRequest ::= SEQUENCE {
+    ...
 }
 
 ThroughputResponse ::= SEQUENCE {
-    slices [0] SEQUENCE OF Slice
+    slices [0] SEQUENCE OF Slice,
+    ...
 }
 
 Slice ::= SEQUENCE {
     periodStart [0] UTCTime,
-    counters    [1] SEQUENCE OF Counter
+    counters    [1] SEQUENCE OF Counter,
+    ...
 }
 
 Counter ::= SEQUENCE {
     gatewayId      [0] IA5String,
-    gatewayName	   [1] IA5String,
+    gatewayName    [1] IA5String,
     type           [2] ENUMERATED { smsOut(1), smsIn(2) },
-    count          [3] INTEGER
+    count          [3] INTEGER,
+    ...
 }
 
 GenNack ::= SEQUENCE {
+   ...
 }
 
 END

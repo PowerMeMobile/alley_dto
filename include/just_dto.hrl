@@ -39,7 +39,9 @@
     params          :: jsms_req_params(),
     source_addr     :: addr(),
     dest_addrs      :: {regular, [addr()]} | {part, [addr()]},
-    message_ids     :: [binary()]
+    message_ids     :: [binary()],
+    network_ids     :: [uuid()],
+    prices          :: [float()]
 }).
 
 %% ===================================================================

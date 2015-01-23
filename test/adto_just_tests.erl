@@ -29,7 +29,9 @@ sms_request_by_encoding(Encoding) ->
         params = [#just_sms_request_param_dto{name = <<"registered_delivery">>, value = {boolean, true}}],
         source_addr = #addr{addr = <<"375296662323">>, ton = 1, npi = 1},
         dest_addrs = {regular, [#addr{addr = <<"375253723886">>, ton = 1, npi = 1}]},
-        message_ids = [<<"634">>]
+        message_ids = [<<"634">>],
+        network_ids = [<<"NID">>],
+        prices = [1.0]
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#just_sms_request_dto{}, Bin).

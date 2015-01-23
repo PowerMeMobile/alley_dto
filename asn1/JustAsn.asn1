@@ -19,7 +19,9 @@ SmsRequest ::= SEQUENCE {
     destAddrs  [9] CHOICE { regular [0] SEQUENCE OF FullAddr,
                             part    [1] SEQUENCE OF FullAddrAndRefNum },
     messageIds [10] SEQUENCE OF IA5String,
-    ...
+    ...,
+    networkIds [11] SEQUENCE OF IA5String,
+    prices     [12] SEQUENCE OF IA5String
 }
 
 SmsResponse ::= SEQUENCE {

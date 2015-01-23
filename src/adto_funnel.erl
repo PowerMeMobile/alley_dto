@@ -4,7 +4,10 @@
     encode/1,
     decode/2,
     networks_to_dto/1,
-    providers_to_dto/1
+    providers_to_dto/1,
+
+    networks_to_v1/1,
+    providers_to_v1/1
 ]).
 
 -include("adto.hrl").
@@ -619,6 +622,30 @@ networks_to_dto(Network = #'Network'{}) ->
 networks_to_dto(Networks) ->
     [networks_to_dto(N) || N <- Networks].
 
+networks_to_v1(Network = #'Network'{}) ->
+    #'Network'{
+        id = ID,
+        countryCode = CountryCode,
+        numberLen = NumberLen,
+        prefixes = Prefixes,
+        providerId = ProviderID,
+        isHome = IsHome,
+        smsPoints = SmsPoints,
+        smsMultPoints = SmsMultPoints
+    } = Network,
+    #network_v1{
+        id = list_to_binary(ID),
+        country_code = list_to_binary(CountryCode),
+        number_len = NumberLen,
+        prefixes = [list_to_binary(P) || P <- Prefixes],
+        provider_id = list_to_binary(ProviderID),
+        is_home = IsHome,
+        sms_points = list_to_float(SmsPoints),
+        sms_mult_points = list_to_float(SmsMultPoints)
+    };
+networks_to_v1(Networks) ->
+    [networks_to_v1(N) || N <- Networks].
+
 %% Providers
 
 providers_to_asn(Provider = #provider_dto{}) ->
@@ -656,6 +683,24 @@ providers_to_dto(Provider = #'Provider'{}) ->
     };
 providers_to_dto(Providers) ->
     [providers_to_dto(P) || P <- Providers].
+
+providers_to_v1(Provider = #'Provider'{}) ->
+    #'Provider'{
+        id = ID,
+        gatewayId = GtwID,
+        bulkGatewayId = BulkGtwID,
+        receiptsSupported = ReceiptsSupported,
+        smsAddPoints = SmsAddPoints
+    } = Provider,
+    #provider_v1{
+        id = list_to_binary(ID),
+        gateway_id = list_to_binary(GtwID),
+        bulk_gateway_id = list_to_binary(BulkGtwID),
+        receipts_supported = ReceiptsSupported,
+        sms_add_points = list_to_float(SmsAddPoints)
+    };
+providers_to_v1(Providers) ->
+    [providers_to_v1(P) || P <- Providers].
 
 %% Funnel Auth Result
 

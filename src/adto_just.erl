@@ -29,7 +29,9 @@ encode(DTO = #just_sms_request_dto{}) ->
         params = Params,
         source_addr = SourceAddr,
         dest_addrs = DestAddrs,
-        message_ids = MessageIDs
+        message_ids = MessageIDs,
+        network_ids = NetworkIDs,
+        prices = Prices
     } = DTO,
     Asn = #'SmsRequest'{
         id = binary_to_list(ID),
@@ -42,7 +44,9 @@ encode(DTO = #just_sms_request_dto{}) ->
         params = sms_req_params_to_asn(Params),
         sourceAddr = full_addr_to_asn(SourceAddr),
         destAddrs = dest_addrs_to_asn(DestAddrs),
-        messageIds = add_client_type(MessageIDs, ClientType)
+        messageIds = add_client_type(MessageIDs, ClientType),
+        networkIds = [binary_to_list(I) || I <- NetworkIDs],
+        prices = [float_to_binary(P, [{decimals,2}, compact]) || P <- Prices]
     },
     case 'JustAsn':encode('SmsRequest', Asn) of
         {ok, DeepList} -> {ok, DeepList};
@@ -138,7 +142,9 @@ decode(#just_sms_request_dto{}, Bin) ->
                 params = Params,
                 sourceAddr = SourceAddr,
                 destAddrs = DestAddrs,
-                messageIds = RawMessageIDs
+                messageIds = RawMessageIDs,
+                networkIds = NetworkIds,
+                prices = Prices
             } = SmsRequest,
         {MessageIDs, ClientType} = substract_client_type(RawMessageIDs),
         DTO = #just_sms_request_dto{
@@ -153,7 +159,9 @@ decode(#just_sms_request_dto{}, Bin) ->
             params = sms_req_params_to_dto(Params),
             source_addr = full_addr_to_dto(SourceAddr),
             dest_addrs = dest_addrs_to_dto(DestAddrs),
-            message_ids = MessageIDs
+            message_ids = MessageIDs,
+            network_ids = [list_to_binary(I) || I <- NetworkIds],
+            prices = [list_to_float(P) || P <- Prices]
         },
         {ok, DTO};
         {error, Error} -> {error, Error}

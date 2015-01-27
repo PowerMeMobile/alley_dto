@@ -113,6 +113,31 @@
 }).
 
 %% ===================================================================
+%% Retrieve sms
+%% ===================================================================
+
+-record(retrieve_sms_req_v1, {
+    req_id      :: uuid(),
+    customer_id :: uuid(),
+    user_id     :: binary(),
+    dst_addr    :: addr(),
+    batch_size  :: undefined | integer()
+}).
+
+-record(msg_info_v1, {
+    msg_id    :: binary(),
+    src_addr  :: addr(),
+    body      :: binary(),
+    recv_time :: calendar:datetime()
+}).
+
+-record(retrieve_sms_resp_v1, {
+    req_id   :: uuid(),
+    messages :: [#msg_info_v1{}],
+    pending  :: integer()
+}).
+
+%% ===================================================================
 %% Credit
 %% ===================================================================
 
@@ -175,6 +200,10 @@
     %% sms status
     #sms_status_req_v1{}        |
     #sms_status_resp_v1{}       |
+
+    %% retrieve sms
+    #retrieve_sms_req_v1{}      |
+    #retrieve_sms_resp_v1{}     |
 
     %% credit
     #credit_req_v1{}            |

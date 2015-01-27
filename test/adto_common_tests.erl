@@ -13,6 +13,9 @@ common_dto_test_()-> [
     ?_test(sms_status_req()),
     ?_test(sms_status_resp()),
 
+    ?_test(retrieve_sms_req()),
+    ?_test(retrieve_sms_resp()),
+
     ?_test(coverage_req()),
     ?_test(coverage_resp()),
 
@@ -141,6 +144,34 @@ sms_status_resp() ->
         statuses = StatusesDTO
     },
     ?assertEqual(DTO, decode(#sms_status_resp_v1{}, encode(DTO))).
+
+%% ===================================================================
+%% Retrieve sms
+%% ===================================================================
+
+retrieve_sms_req() ->
+    DTO = #retrieve_sms_req_v1{
+        req_id = <<"req_id">>,
+        customer_id = <<"1">>,
+        user_id = <<"2">>,
+        dst_addr = #addr{addr = <<"123">>},
+        batch_size = 10
+    },
+    ?assertEqual(DTO, decode(#retrieve_sms_req_v1{}, encode(DTO))).
+
+retrieve_sms_resp() ->
+    MsgInfo = #msg_info_v1{
+        msg_id = <<"msg_id">>,
+        src_addr = #addr{addr = <<"321">>},
+        body = <<"body">>,
+        recv_time = {{2000,01,02},{01,02,03}}
+    },
+    DTO = #retrieve_sms_resp_v1{
+        req_id = <<"req_id">>,
+        messages = [MsgInfo],
+        pending = 2
+    },
+    ?assertEqual(DTO, decode(#retrieve_sms_resp_v1{}, encode(DTO))).
 
 %% ===================================================================
 %% Kelly API

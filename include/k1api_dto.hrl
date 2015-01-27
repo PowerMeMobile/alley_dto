@@ -62,10 +62,10 @@
 %% ===================================================================
 
 -record(k1api_retrieved_sms_dto, {
-    datetime    :: pos_integer(), %% utc unixtime
+    datetime    :: erlang:timestamp(),
     sender_addr :: addr(),
-    message_id  :: binary(), %% <<"123">>
-    message     :: binary() %% <<"message">>
+    message_id  :: binary(),
+    message     :: binary()
 }).
 
 -record(k1api_retrieve_sms_response_dto, {

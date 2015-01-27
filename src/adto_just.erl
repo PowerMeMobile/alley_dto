@@ -146,6 +146,16 @@ decode(#just_sms_request_dto{}, Bin) ->
                 networkIds = NetworkIds,
                 prices = Prices
             } = SmsRequest,
+        %% handle absense of values coming from old clients
+        {NetworkIds2, Prices2}  =
+            case {NetworkIds, Prices} of
+                {'asn1_NOVALUE', _} ->
+                    {[], []};
+                {_, 'asn1_NOVALUE'} ->
+                    {[], []};
+                {_, _} ->
+                    {NetworkIds, Prices}
+            end,
         {MessageIDs, ClientType} = substract_client_type(RawMessageIDs),
         DTO = #just_sms_request_dto{
             id = list_to_binary(ID),
@@ -160,8 +170,8 @@ decode(#just_sms_request_dto{}, Bin) ->
             source_addr = full_addr_to_dto(SourceAddr),
             dest_addrs = dest_addrs_to_dto(DestAddrs),
             message_ids = MessageIDs,
-            network_ids = [list_to_binary(I) || I <- NetworkIds],
-            prices = [list_to_float(P) || P <- Prices]
+            network_ids = [list_to_binary(I) || I <- NetworkIds2],
+            prices = [list_to_float(P) || P <- Prices2]
         },
         {ok, DTO};
         {error, Error} -> {error, Error}

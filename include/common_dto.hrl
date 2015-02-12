@@ -4,6 +4,47 @@
 -include("adto_types.hrl").
 
 %% ===================================================================
+%% Sms Req
+%% ===================================================================
+
+-type sms_req_encoding() ::
+    default     |
+    gsm0338     |
+    ascii       |
+    latin1      |
+    ucs2        |
+    integer().
+
+-type sms_req_param_value() ::
+    {integer, integer()}    |
+    {string, binary()}      |
+    {boolean, boolean()}.
+
+-record(sms_req_param, {
+    name  :: binary(),
+    value :: sms_req_param_value()
+}).
+
+-type sms_req_params() :: [#sms_req_param{}].
+
+-record(sms_req_v1, {
+    req_id          :: uuid(),
+    gateway_id      :: uuid(),
+    customer_id     :: uuid(),
+    user_id         :: binary(),
+    interface       :: client_type(),
+    type            :: regular | part,
+    messages        :: [binary()],
+    encodings       :: [sms_req_encoding()],
+    paramss         :: [sms_req_params()],
+    source_addr     :: addr(),
+    dest_addrs      :: {regular, [addr()]} | {part, [addr()]},
+    message_ids     :: [binary()],
+    network_ids     :: [uuid()],
+    prices          :: [float()]
+}).
+
+%% ===================================================================
 %% Shared
 %% ===================================================================
 
@@ -193,6 +234,9 @@
 %% ===================================================================
 
 -type common_dto() ::
+    %% sms request
+    #sms_req_v1{}               |
+
     %% authentication
     #auth_req_v1{}              |
     #auth_resp_v1{}             |

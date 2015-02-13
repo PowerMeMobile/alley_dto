@@ -7,7 +7,7 @@
 %% Sms Req
 %% ===================================================================
 
--type sms_req_encoding() ::
+-type sms_req_enc() ::
     default     |
     gsm0338     |
     ascii       |
@@ -15,17 +15,7 @@
     ucs2        |
     integer().
 
--type sms_req_param_value() ::
-    {integer, integer()}    |
-    {string, binary()}      |
-    {boolean, boolean()}.
-
--record(sms_req_param, {
-    name  :: binary(),
-    value :: sms_req_param_value()
-}).
-
--type sms_req_params() :: [#sms_req_param{}].
+-type plist() :: [{atom(), term()}].
 
 -record(sms_req_v1, {
     req_id          :: uuid(),
@@ -33,14 +23,21 @@
     customer_id     :: uuid(),
     user_id         :: binary(),
     interface       :: client_type(),
+    src_addr        :: addr(),
     type            :: regular | part,
+
+    %reg_dlr         :: non_neg_integer(),
+    %esm_class       :: non_neg_integer(),
+    %validify        :: binary(),
+
+    %% ?
+    encodings       :: [sms_req_enc()],
+
+    dst_addrs       :: [addr()],
+    in_msg_ids      :: [binary()],
     messages        :: [binary()],
-    encodings       :: [sms_req_encoding()],
-    paramss         :: [sms_req_params()],
-    source_addr     :: addr(),
-    dest_addrs      :: {regular, [addr()]} | {part, [addr()]},
-    message_ids     :: [binary()],
-    network_ids     :: [uuid()],
+    paramss         :: [plist()],
+    net_ids         :: [uuid()],
     prices          :: [float()]
 }).
 

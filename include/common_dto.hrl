@@ -18,27 +18,20 @@
 -type plist() :: [{atom(), term()}].
 
 -record(sms_req_v1, {
-    req_id          :: uuid(),
-    gateway_id      :: uuid(),
-    customer_id     :: uuid(),
-    user_id         :: binary(),
-    interface       :: client_type(),
-    src_addr        :: addr(),
-    type            :: regular | part,
-
-    %reg_dlr         :: non_neg_integer(),
-    %esm_class       :: non_neg_integer(),
-    %validify        :: binary(),
-
-    %% ?
-    encodings       :: [sms_req_enc()],
-
-    dst_addrs       :: [addr()],
-    in_msg_ids      :: [binary()],
-    messages        :: [binary()],
-    paramss         :: [plist()],
-    net_ids         :: [uuid()],
-    prices          :: [float()]
+    req_id      :: uuid(),
+    gateway_id  :: uuid(),
+    customer_id :: uuid(),
+    user_id     :: binary(),
+    interface   :: client_type(),
+    type        :: regular | part | segment,
+    src_addr    :: addr(),
+    in_msg_ids  :: [binary()],
+    dst_addrs   :: [addr()],
+    encodings   :: [sms_req_enc()],
+    messages    :: [binary()],
+    params_s    :: [plist()],
+    net_ids     :: [uuid()],
+    prices      :: [float()]
 }).
 
 %% ===================================================================

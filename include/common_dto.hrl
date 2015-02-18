@@ -220,6 +220,30 @@
 }).
 
 %% ===================================================================
+%% Just specific
+%% ===================================================================
+
+-record(block_req_v1, {
+    req_id :: uuid(),
+    sms_req_id  :: uuid()
+}).
+
+-record(block_resp_v1, {
+    req_id :: uuid(),
+    result :: ok | {error, term()}
+}).
+
+-record(unblock_req_v1, {
+    req_id :: uuid(),
+    sms_req_id  :: uuid()
+}).
+
+-record(unblock_resp_v1, {
+    req_id :: uuid(),
+    result :: ok | {error, term()}
+}).
+
+%% ===================================================================
 %% Types
 %% ===================================================================
 
@@ -249,6 +273,14 @@
 
     %% coverage
     #coverage_req_v1{}          |
-    #coverage_resp_v1{}.
+    #coverage_resp_v1{}         |
+
+
+    %% just specific
+    #block_req_v1{}             |
+    #block_resp_v1{}            |
+    #unblock_req_v1{}           |
+    #unblock_resp_v1{}
+    .
 
 -endif. % common_dto_hrl

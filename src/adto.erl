@@ -104,7 +104,12 @@ module(DTO) when
     orelse is_record(DTO, blacklist_req_v1)
     orelse is_record(DTO, blacklist_resp_v1)
     orelse is_record(DTO, coverage_req_v1)
-    orelse is_record(DTO, coverage_resp_v1) ->
+    orelse is_record(DTO, coverage_resp_v1)
+    orelse is_record(DTO, block_req_v1)
+    orelse is_record(DTO, block_resp_v1)
+    orelse is_record(DTO, unblock_req_v1)
+    orelse is_record(DTO, unblock_resp_v1)
+     ->
     common();
 
 module(Type) ->

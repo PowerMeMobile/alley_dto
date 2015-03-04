@@ -25,12 +25,12 @@
     interface   :: client_type(),
     type        :: regular,
     src_addr    :: addr(),
+    message     :: binary(),
+    encoding    :: sms_req_enc(),
+    params      :: plist(),
     dst_addrs   :: [addr()],
     msg_ids     :: [binary()],
-    message     :: binary(),
-    messages    :: [binary()],    
-    encodings   :: [sms_req_enc()],
-    params_s    :: [plist()],
+    messages    :: undefined | [binary()],
     net_ids     :: [uuid()],
     prices      :: [float()]
 }).

@@ -3,6 +3,8 @@
 
 -include("adto_types.hrl").
 
+-type utc_unix_time() :: pos_integer().
+
 %% ===================================================================
 %% Sms Req
 %% ===================================================================
@@ -23,8 +25,9 @@
     customer_id :: uuid(),
     user_id     :: binary(),
     interface   :: client_type(),
-    type        :: regular,
+    def_time    :: undefined | utc_unix_time(),
     src_addr    :: addr(),
+    type        :: regular,
     message     :: binary(),
     encoding    :: sms_req_enc(),
     params      :: plist(),
@@ -136,7 +139,7 @@
 -record(sms_status_v1, {
     address   :: addr(),
     status    :: sms_status(),
-    timestamp :: pos_integer()  %% utc unixtime
+    timestamp :: utc_unix_time()
 }).
 
 -record(sms_status_resp_v1, {

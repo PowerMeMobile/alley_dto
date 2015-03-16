@@ -92,7 +92,7 @@ module(K1apiDTO) when
 
 %% common dto
 module(DTO) when
-           is_record(DTO, error_v1)
+           is_record(DTO, error_resp_v1)
     orelse is_record(DTO, sms_req_v1)
     orelse is_record(DTO, auth_req_v1)
     orelse is_record(DTO, auth_resp_v1)

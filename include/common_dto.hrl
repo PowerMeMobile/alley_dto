@@ -72,8 +72,9 @@
     value :: binary()
 }).
 
--record(error_v1, {
-    code :: term()
+-record(error_resp_v1, {
+    req_id :: uuid(),
+    code   :: term()
 }).
 
 %% ===================================================================
@@ -107,7 +108,8 @@
 }).
 
 -record(auth_error_v1, {
-    code    :: term(), %% reserved for future extension
+    code    :: term(),
+    %% deprecated, use `code'
     message :: binary()
 }).
 

@@ -23,9 +23,11 @@
 -record(sms_req_v1, {
     req_id      :: uuid(),
     gateway_id  :: uuid(),
+    %% rename to customer_uuid in v2
     customer_id :: uuid(),
     user_id     :: binary(),
     interface   :: client_type(),
+    req_time    :: utc_timestamp(),
     def_time    :: undefined | utc_timestamp(),
     src_addr    :: addr(),
     type        :: regular,

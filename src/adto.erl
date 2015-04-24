@@ -114,6 +114,8 @@ module(DTO) when
     orelse is_record(DTO, connections_resp_v1)
     orelse is_record(DTO, disconnect_req_v1)
     orelse is_record(DTO, disconnect_resp_v1)
+    orelse is_record(DTO, throughput_req_v1)
+    orelse is_record(DTO, throughput_resp_v1)
      ->
     common();
 

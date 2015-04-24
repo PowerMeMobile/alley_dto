@@ -291,11 +291,31 @@
     customer_id :: binary(),
     user_id :: binary(),
     bind_type :: transmitter | receiver | transceiver,
-    connection_id :: binary()
+    connection_id :: uuid()
 }).
 
 -record(disconnect_resp_v1, {
     req_id :: uuid()
+}).
+
+-record(throughput_req_v1, {
+    req_id :: uuid()
+}).
+
+-record(throughput_counter_v1, {
+    connection_id :: uuid(),
+    direction :: in | out,
+    count :: non_neg_integer()
+}).
+
+-record(throughput_slice_v1, {
+    period_start :: utc_timestamp(),
+    counters :: [#throughput_counter_v1{}]
+}).
+
+-record(throughput_resp_v1, {
+    req_id :: uuid(),
+    slices :: [#throughput_slice_v1{}]
 }).
 
 %% ===================================================================
@@ -341,7 +361,9 @@
     #connections_req_v1{}       |
     #connections_resp_v1{}      |
     #disconnect_req_v1{}        |
-    #disconnect_resp_v1{}
+    #disconnect_resp_v1{}       |
+    #throughput_req_v1{}        |
+    #throughput_resp_v1{}
     .
 
 -endif. % common_dto_hrl

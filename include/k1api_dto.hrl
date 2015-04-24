@@ -3,22 +3,6 @@
 
 -include("adto_types.hrl").
 
-%% ===================================================================
-%% k1api Sms Delivery Status Request
-%% ===================================================================
-
--record(k1api_sms_delivery_status_request_dto, {
-    id              :: uuid(),
-    customer_id     :: uuid(),
-    user_id         :: binary(),
-    sms_request_id  :: uuid(),
-    address         :: addr()
-}).
-
-%% ===================================================================
-%% k1api Sms Delivery Status Response
-%% ===================================================================
-
 -type k1api_sms_status() ::
     submitted                   |
     success_waiting_delivery    |
@@ -33,46 +17,6 @@
     unknown                     |
     rejected                    |
     unrecognized.
-
--record(k1api_sms_status_dto, {
-    address     :: addr(),
-    status      :: k1api_sms_status(),
-    timestamp   :: pos_integer()  %% utc unixtime
-}).
-
--record(k1api_sms_delivery_status_response_dto, {
-    id          :: uuid(),
-    statuses    :: [#k1api_sms_status_dto{}]
-}).
-
-%% ===================================================================
-%% k1api Retrieve Sms Request
-%% ===================================================================
-
--record(k1api_retrieve_sms_request_dto, {
-    id          :: uuid(),
-    customer_id :: uuid(),
-    user_id     :: binary(), %% <<"user_id">>
-    dest_addr   :: addr(),
-    batch_size  :: undefined | integer()
-}).
-
-%% ===================================================================
-%% k1api Retrieve Sms Response
-%% ===================================================================
-
--record(k1api_retrieved_sms_dto, {
-    datetime    :: erlang:timestamp(),
-    sender_addr :: addr(),
-    message_id  :: binary(),
-    message     :: binary()
-}).
-
--record(k1api_retrieve_sms_response_dto, {
-    id          :: uuid(),
-    messages    :: [#k1api_retrieved_sms_dto{}],
-    total       :: integer()
-}).
 
 %% ===================================================================
 %% k1api Remove Retrieved Sms Request
@@ -134,43 +78,6 @@
 }).
 
 %% ===================================================================
-%% k1api Auth
-%% ===================================================================
-
--record(k1api_auth_request_dto, {
-    id                  :: uuid(),
-    customer_id         :: binary(), %% <<"system_id">>
-    user_id             :: binary(),
-    password            :: binary(),
-    connection_type     :: binary()
-}).
-
--record(k1api_auth_response_customer_dto, {
-    id                  :: binary(), %% customer id
-    uuid                :: uuid(),
-    pay_type            :: pay_type(),
-    allowed_sources     :: [addr()],
-    default_source      :: addr() | undefined,
-    networks            :: [network_dto()],
-    providers           :: [provider_dto()],
-    default_provider_id :: uuid() | undefined,
-    receipts_allowed    :: boolean(),
-    no_retry            :: boolean(),
-    default_validity    :: integer(), %% seconds
-    max_validity        :: integer(), %% seconds
-    features            :: [feature_dto()]
-}).
-
--type k1api_auth_response_result() ::
-    {customer, #k1api_auth_response_customer_dto{}} |
-    {error, binary()}.
-
--record(k1api_auth_response_dto, {
-    id     :: uuid(),
-    result :: k1api_auth_response_result()
-}).
-
-%% ===================================================================
 %% k1api Sms Receipts Subscriptions
 %% ===================================================================
 
@@ -206,48 +113,6 @@
     url             :: binary()
 }).
 
-%% ===================================================================
-%% k1api Kelly API
-%% ===================================================================
-
--record(k1api_coverage_request_dto, {
-    id              :: uuid(),
-    customer_id     :: binary(),
-    user_id         :: binary(),
-    version         :: binary()
-}).
-
--record(k1api_coverage_response_dto, {
-    id              :: uuid(),
-    networks        :: [network_dto()],
-    providers       :: [provider_dto()],
-    default_provider_id :: uuid() | undefined
-}).
-
--record(k1api_blacklist_request_dto, {
-    id              :: uuid(),
-    customer_id     :: binary(),
-    user_id         :: binary(),
-    version         :: binary()
-}).
-
--record(k1api_blacklist_response_dto, {
-    id              :: uuid(),
-    entries         :: [blacklist_entry_dto()]
-}).
-
--record(k1api_request_credit_request_dto, {
-    id              :: uuid(),
-    customer_id     :: binary(),
-    credit          :: float()
-}).
-
--record(k1api_request_credit_response_dto, {
-    id              :: uuid(),
-    result          :: allowed | denied,
-    credit_left     :: float()
-}).
-
 -record(k1api_process_inbox_request_dto, {
     id              :: uuid(),
     customer_id     :: binary(),
@@ -279,17 +144,6 @@
 }).
 
 -type k1api_dto() ::
-    %% k1api auth
-    #k1api_auth_request_dto{}                       |
-    #k1api_auth_response_dto{}                      |
-
-    %% k1api sms delivery status
-    #k1api_sms_delivery_status_request_dto{}        |
-    #k1api_sms_delivery_status_response_dto{}       |
-
-    %% k1api retrieve sms
-    #k1api_retrieve_sms_request_dto{}               |
-    #k1api_retrieve_sms_response_dto{}              |
     #k1api_remove_retrieved_sms_request_dto{}       |
 
     %% k1api incoming sms subscription
@@ -307,12 +161,6 @@
     #k1api_sms_delivery_receipt_notification_dto{}  |
 
     %% k1api kelly api
-    #k1api_coverage_request_dto{}                   |
-    #k1api_coverage_response_dto{}                  |
-    #k1api_blacklist_request_dto{}                  |
-    #k1api_blacklist_response_dto{}                 |
-    #k1api_request_credit_request_dto{}             |
-    #k1api_request_credit_response_dto{}            |
     #k1api_process_inbox_request_dto{}              |
     #k1api_process_inbox_response_dto{}.
 

@@ -63,13 +63,7 @@ module(JustDTO) when
 
 %% k1api dto
 module(K1apiDTO) when
-           is_record(K1apiDTO, k1api_auth_request_dto)
-    orelse is_record(K1apiDTO, k1api_auth_response_dto)
-    orelse is_record(K1apiDTO, k1api_sms_delivery_status_request_dto)
-    orelse is_record(K1apiDTO, k1api_sms_delivery_status_response_dto)
-    orelse is_record(K1apiDTO, k1api_retrieve_sms_request_dto)
-    orelse is_record(K1apiDTO, k1api_retrieve_sms_response_dto)
-    orelse is_record(K1apiDTO, k1api_remove_retrieved_sms_request_dto)
+           is_record(K1apiDTO, k1api_remove_retrieved_sms_request_dto)
     orelse is_record(K1apiDTO, k1api_subscribe_incoming_sms_request_dto)
     orelse is_record(K1apiDTO, k1api_subscribe_incoming_sms_response_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_incoming_sms_request_dto)
@@ -80,12 +74,6 @@ module(K1apiDTO) when
     orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_request_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_response_dto)
     orelse is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto)
-    orelse is_record(K1apiDTO, k1api_coverage_request_dto)
-    orelse is_record(K1apiDTO, k1api_coverage_response_dto)
-    orelse is_record(K1apiDTO, k1api_blacklist_request_dto)
-    orelse is_record(K1apiDTO, k1api_blacklist_response_dto)
-    orelse is_record(K1apiDTO, k1api_request_credit_request_dto)
-    orelse is_record(K1apiDTO, k1api_request_credit_response_dto)
     orelse is_record(K1apiDTO, k1api_process_inbox_request_dto)
     orelse is_record(K1apiDTO, k1api_process_inbox_response_dto) ->
     k1api();

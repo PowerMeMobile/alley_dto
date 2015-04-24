@@ -286,6 +286,18 @@
     connections :: [#connection_v1{}]
 }).
 
+-record(disconnect_req_v1, {
+    req_id :: uuid(),
+    customer_id :: binary(),
+    user_id :: binary(),
+    bind_type :: transmitter | receiver | transceiver,
+    connection_id :: binary()
+}).
+
+-record(disconnect_resp_v1, {
+    req_id :: uuid()
+}).
+
 %% ===================================================================
 %% Types
 %% ===================================================================
@@ -327,7 +339,9 @@
 
     %% funnel specific
     #connections_req_v1{}       |
-    #connections_resp_v1{}
+    #connections_resp_v1{}      |
+    #disconnect_req_v1{}        |
+    #disconnect_resp_v1{}
     .
 
 -endif. % common_dto_hrl

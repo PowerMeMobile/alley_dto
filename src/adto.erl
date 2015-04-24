@@ -110,6 +110,8 @@ module(DTO) when
     orelse is_record(DTO, block_resp_v1)
     orelse is_record(DTO, unblock_req_v1)
     orelse is_record(DTO, unblock_resp_v1)
+    orelse is_record(DTO, connections_req_v1)
+    orelse is_record(DTO, connections_resp_v1)
      ->
     common();
 

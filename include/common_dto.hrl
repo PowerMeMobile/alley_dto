@@ -257,6 +257,36 @@
 }).
 
 %% ===================================================================
+%% Funnel specific
+%% ===================================================================
+
+-record(connections_req_v1, {
+    req_id :: uuid()
+}).
+
+-record(connection_error_v1, {
+    error_code :: pos_integer(),
+    timestamp  :: utc_timestamp()
+}).
+
+-record(connection_v1, {
+    connection_id :: uuid(),
+    remote_ip     :: inet:ip4_address(),
+    customer_id   :: binary(),
+    user_id       :: binary(),
+    connected_at  :: utc_timestamp(),
+    bind_type     :: transmitter | receiver | transceiver,
+    msgs_received :: non_neg_integer(),
+    msgs_sent     :: non_neg_integer(),
+    errors        :: [#connection_error_v1{}]
+}).
+
+-record(connections_resp_v1, {
+    req_id :: uuid(),
+    connections :: [#connection_v1{}]
+}).
+
+%% ===================================================================
 %% Types
 %% ===================================================================
 
@@ -293,7 +323,11 @@
     #block_req_v1{}             |
     #block_resp_v1{}            |
     #unblock_req_v1{}           |
-    #unblock_resp_v1{}
+    #unblock_resp_v1{}          |
+
+    %% funnel specific
+    #connections_req_v1{}       |
+    #connections_resp_v1{}
     .
 
 -endif. % common_dto_hrl

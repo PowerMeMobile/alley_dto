@@ -275,7 +275,7 @@
     customer_id   :: binary(),
     user_id       :: binary(),
     connected_at  :: utc_timestamp(),
-    bind_type     :: transmitter | receiver | transceiver,
+    bind_type     :: smpp_type(),
     msgs_received :: non_neg_integer(),
     msgs_sent     :: non_neg_integer(),
     errors        :: [#connection_error_v1{}]
@@ -290,7 +290,7 @@
     req_id :: uuid(),
     customer_id :: binary(),
     user_id :: binary(),
-    bind_type :: transmitter | receiver | transceiver,
+    bind_type :: smpp_type() | [smpp_type()],
     connection_id :: uuid()
 }).
 

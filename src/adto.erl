@@ -73,9 +73,7 @@ module(K1apiDTO) when
     orelse is_record(K1apiDTO, k1api_subscribe_sms_receipts_response_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_request_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_response_dto)
-    orelse is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto)
-    orelse is_record(K1apiDTO, k1api_process_inbox_request_dto)
-    orelse is_record(K1apiDTO, k1api_process_inbox_response_dto) ->
+    orelse is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto) ->
     k1api();
 
 %% common dto
@@ -98,6 +96,8 @@ module(DTO) when
     orelse is_record(DTO, block_resp_v1)
     orelse is_record(DTO, unblock_req_v1)
     orelse is_record(DTO, unblock_resp_v1)
+    orelse is_record(DTO, inbox_req_v1)
+    orelse is_record(DTO, inbox_resp_v1)
     orelse is_record(DTO, connections_req_v1)
     orelse is_record(DTO, connections_resp_v1)
     orelse is_record(DTO, disconnect_req_v1)

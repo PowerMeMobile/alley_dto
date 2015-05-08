@@ -233,6 +233,38 @@
 }).
 
 %% ===================================================================
+%% Inbox
+%% ===================================================================
+
+-record(inbox_req_v1, {
+    req_id        :: uuid(),
+    customer_uuid :: uuid(),
+    user_id       :: binary(),
+    operation     :: list_all | list_new
+                   | fetch_all | fetch_new | fetch_id
+                   | delete_all | delete_read | delete_id,
+    msg_ids       :: [binary()]
+}).
+
+%% see if possible to mix with msg_info_v1 from retrieve info
+-record(inbox_msg_info_v1, {
+    id        :: uuid(),
+    new       :: boolean(),
+    from      :: addr(),
+    to        :: addr(),
+    timestamp :: utc_timestamp(),
+    size      :: non_neg_integer(),
+    text      :: undefined | binary()
+}).
+
+-record(inbox_resp_v1, {
+    req_id :: uuid(),
+    result :: {messages, [#inbox_msg_info_v1{}]}
+            | {deleted, non_neg_integer()}
+            | {error, term()}
+}).
+
+%% ===================================================================
 %% Just specific
 %% ===================================================================
 
@@ -350,6 +382,9 @@
     #coverage_req_v1{}          |
     #coverage_resp_v1{}         |
 
+    %% inbox
+    #inbox_req_v1{}             |
+    #inbox_resp_v1{}            |
 
     %% just specific
     #block_req_v1{}             |

@@ -113,36 +113,6 @@
     url             :: binary()
 }).
 
--record(k1api_process_inbox_request_dto, {
-    id              :: uuid(),
-    customer_id     :: binary(),
-    user_id         :: binary(),
-    operation       :: list_all | list_new
-                     | fetch_all | fetch_new | fetch_id
-                     | kill_all | kill_old | kill_id,
-    message_ids     :: [binary()]
-}).
-
--record(k1api_process_inbox_response_message_dto, {
-    id                  :: uuid(),
-    new                 :: boolean(),
-    from                :: addr(),
-    to                  :: addr(),
-    timestamp           :: pos_integer(),
-    size                :: non_neg_integer(),
-    text                :: undefined | binary()
-}).
-
--type k1api_process_inbox_response_result() ::
-    {messages, [#k1api_process_inbox_response_message_dto{}]} |
-    {deleted, non_neg_integer()} |
-    {error, binary()}.
-
--record(k1api_process_inbox_response_dto, {
-    id              :: uuid(),
-    result          :: k1api_process_inbox_response_result()
-}).
-
 -type k1api_dto() ::
     #k1api_remove_retrieved_sms_request_dto{}       |
 
@@ -158,10 +128,6 @@
     #k1api_subscribe_sms_receipts_response_dto{}    |
     #k1api_unsubscribe_sms_receipts_request_dto{}   |
     #k1api_unsubscribe_sms_receipts_response_dto{}  |
-    #k1api_sms_delivery_receipt_notification_dto{}  |
-
-    %% k1api kelly api
-    #k1api_process_inbox_request_dto{}              |
-    #k1api_process_inbox_response_dto{}.
+    #k1api_sms_delivery_receipt_notification_dto{}.
 
 -endif. % k1api_dto_hrl

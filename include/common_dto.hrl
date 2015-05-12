@@ -240,13 +240,18 @@
     req_id        :: uuid(),
     customer_uuid :: uuid(),
     user_id       :: binary(),
-    operation     :: list_all | list_new
+    operation     :: get_info
+                   | list_all | list_new
                    | fetch_all | fetch_new | fetch_id
                    | delete_all | delete_read | delete_id,
     msg_ids       :: [binary()]
 }).
 
-%% see if possible to mix with msg_info_v1 from retrieve info
+-record(inbox_info_v1, {
+    new   :: non_neg_integer(),
+    total :: non_neg_integer()
+}).
+
 -record(inbox_msg_info_v1, {
     id        :: uuid(),
     new       :: boolean(),
@@ -259,7 +264,8 @@
 
 -record(inbox_resp_v1, {
     req_id :: uuid(),
-    result :: {messages, [#inbox_msg_info_v1{}]}
+    result :: {info, #inbox_info_v1{}}
+            | {messages, [#inbox_msg_info_v1{}]}
             | {deleted, non_neg_integer()}
             | {error, term()}
 }).

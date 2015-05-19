@@ -509,30 +509,22 @@ sms_req_enc_to_asn(Encoding) when
                 orelse  Encoding =:= ucs2  ->
     {text, Encoding};
 sms_req_enc_to_asn(Encoding) when is_integer(Encoding) ->
-    {other, Encoding};
-sms_req_enc_to_asn(_) ->
-    erlang:error(badarg).
+    {other, Encoding}.
 
 sms_req_enc_to_dto({_, Encoding}) ->
     Encoding.
 
-inc_sms_enc_to_dto(Encoding) when is_integer(Encoding) ->
-    case Encoding of
-        0 -> gsm0338;
-        8 -> ucs2;
-        _ -> Encoding
-    end;
-inc_sms_enc_to_dto(_) ->
-    erlang:error(badarg).
+inc_sms_enc_to_dto(Enc) when is_integer(Enc) ->
+    if
+        Enc =:= 0; Enc =:= 16; Enc =:= 240 -> gsm0338;
+        Enc =:= 1 -> ascii;
+        Enc =:= 3 -> latin1;
+        Enc =:= 8; Enc =:= 24 -> ucs2;
+        true -> Enc
+    end.
 
-inc_sms_enc_to_asn(Encoding) when
-                   Encoding =:= gsm0338
-            orelse Encoding =:= ucs2
-            orelse is_integer(Encoding) ->
-    case Encoding of
-        gsm0338 -> 0;
-        ucs2 -> 8;
-        Integer -> Integer
-    end;
-inc_sms_enc_to_asn(_) ->
-    erlang:error(badarg).
+inc_sms_enc_to_asn(gsm0338) -> 0;
+inc_sms_enc_to_asn(ascii)   -> 1;
+inc_sms_enc_to_asn(latin1)  -> 3;
+inc_sms_enc_to_asn(ucs2)    -> 8;
+inc_sms_enc_to_asn(Enc) when is_integer(Enc) -> Enc.

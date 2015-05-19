@@ -779,7 +779,7 @@ incoming_messages_to_asn(Message = #funnel_incoming_sms_message_dto{}) ->
         source = addr_to_asn(Source),
         dest = addr_to_asn(Dest),
         message = binary_to_list(MessageBody),
-        dataCoding = message_encoding_to_asn(DataCoding)
+        dataCoding = inc_sms_enc_to_asn(DataCoding)
     };
 incoming_messages_to_asn(Messages) ->
     [incoming_messages_to_asn(M) || M <- Messages].
@@ -795,7 +795,7 @@ incoming_messages_to_dto(Message = #'OutgoingMessage'{}) ->
         source  = addr_to_dto(Source),
         dest = addr_to_dto(Dest),
         message = list_to_binary(MessageBody),
-        data_coding = message_encoding_to_dto(DataCoding)
+        data_coding = inc_sms_enc_to_dto(DataCoding)
     };
 incoming_messages_to_dto(Messages) ->
     [incoming_messages_to_dto(M) || M <- Messages].
@@ -842,16 +842,19 @@ receipts_to_dto(Receipt = #'DeliveryReceipt'{}) ->
 receipts_to_dto(Receipts) ->
     [receipts_to_dto(R) || R <- Receipts].
 
-message_encoding_to_dto({_, Encoding}) ->
-    Encoding.
-message_encoding_to_asn(Encoding) when
-               Encoding =:= gsm0338
-        orelse Encoding =:= ucs2 ->
-    {text, Encoding};
-message_encoding_to_asn(Encoding) when is_integer(Encoding) ->
-    {other, Encoding};
-message_encoding_to_asn(_) ->
-    erlang:error(badarg).
+inc_sms_enc_to_dto({_, Enc}) ->
+    Enc.
+
+inc_sms_enc_to_asn(gsm0338) ->
+    {text, gsm0338};
+inc_sms_enc_to_asn(ucs2) ->
+    {text, ucs2};
+inc_sms_enc_to_asn(ascii) ->
+    {other, 1};
+inc_sms_enc_to_asn(latin1) ->
+    {other, 3};
+inc_sms_enc_to_asn(Enc) when is_integer(Enc) ->
+    {other, Enc}.
 
 float_to_list(Float) ->
     erlang:float_to_list(Float, [{decimals,2}, compact]).

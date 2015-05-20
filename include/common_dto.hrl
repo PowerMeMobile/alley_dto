@@ -161,11 +161,11 @@
 %% ===================================================================
 
 -record(retrieve_sms_req_v1, {
-    req_id      :: uuid(),
-    customer_id :: uuid(),
-    user_id     :: binary(),
-    dst_addr    :: addr(),
-    batch_size  :: undefined | integer()
+    req_id        :: uuid(),
+    customer_uuid :: uuid(),
+    user_id       :: binary(),
+    dst_addr      :: addr(),
+    batch_size    :: undefined | integer()
 }).
 
 -record(msg_info_v1, {

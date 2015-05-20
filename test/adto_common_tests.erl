@@ -152,7 +152,7 @@ sms_status_resp() ->
 retrieve_sms_req() ->
     DTO = #retrieve_sms_req_v1{
         req_id = <<"req_id">>,
-        customer_id = <<"1">>,
+        customer_uuid = <<"1">>,
         user_id = <<"2">>,
         dst_addr = #addr{addr = <<"123">>},
         batch_size = 10

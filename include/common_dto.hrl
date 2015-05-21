@@ -157,31 +157,6 @@
 }).
 
 %% ===================================================================
-%% Retrieve sms
-%% ===================================================================
-
--record(retrieve_sms_req_v1, {
-    req_id        :: uuid(),
-    customer_uuid :: uuid(),
-    user_id       :: binary(),
-    dst_addr      :: addr(),
-    batch_size    :: undefined | integer()
-}).
-
--record(msg_info_v1, {
-    msg_id    :: binary(),
-    src_addr  :: addr(),
-    body      :: binary(),
-    recv_time :: utc_timestamp()
-}).
-
--record(retrieve_sms_resp_v1, {
-    req_id   :: uuid(),
-    messages :: [#msg_info_v1{}],
-    pending  :: integer()
-}).
-
-%% ===================================================================
 %% Credit
 %% ===================================================================
 
@@ -253,13 +228,13 @@
 }).
 
 -record(inbox_msg_info_v1, {
-    id        :: uuid(),
-    new       :: boolean(),
-    from      :: addr(),
-    to        :: addr(),
-    timestamp :: utc_timestamp(),
+    msg_id    :: uuid(),
+    src_addr  :: addr(),
+    dst_addr  :: addr(),
     size      :: non_neg_integer(),
-    text      :: undefined | binary()
+    body      :: undefined | binary(),
+    rcv_time  :: utc_timestamp(),
+    state     :: all | new | read
 }).
 
 -record(inbox_resp_v1, {
@@ -268,6 +243,24 @@
             | {messages, [#inbox_msg_info_v1{}]}
             | {deleted, non_neg_integer()}
             | {error, term()}
+}).
+
+%% ===================================================================
+%% Retrieve incoming
+%% ===================================================================
+
+-record(retrieve_incoming_req_v1, {
+    req_id        :: uuid(),
+    customer_uuid :: uuid(),
+    user_id       :: binary(),
+    dst_addr      :: addr(),
+    batch_size    :: undefined | integer()
+}).
+
+-record(retrieve_incoming_resp_v1, {
+    req_id   :: uuid(),
+    messages :: [#inbox_msg_info_v1{}],
+    pending  :: integer()
 }).
 
 %% ===================================================================
@@ -372,10 +365,6 @@
     #sms_status_req_v1{}        |
     #sms_status_resp_v1{}       |
 
-    %% retrieve sms
-    #retrieve_sms_req_v1{}      |
-    #retrieve_sms_resp_v1{}     |
-
     %% credit
     #credit_req_v1{}            |
     #credit_resp_v1{}           |
@@ -391,6 +380,10 @@
     %% inbox
     #inbox_req_v1{}             |
     #inbox_resp_v1{}            |
+
+    %% retrieve incoming
+    #retrieve_incoming_req_v1{}  |
+    #retrieve_incoming_resp_v1{} |
 
     %% just specific
     #block_req_v1{}             |

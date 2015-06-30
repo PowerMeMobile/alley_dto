@@ -90,6 +90,12 @@
     interface   :: atom()
 }).
 
+-record(auth_req_v2, {
+    req_id      :: uuid(),
+    email       :: binary(),
+    interface   :: atom()
+}).
+
 -record(auth_customer_v1, {
     customer_uuid       :: uuid(),
     customer_id         :: binary(),
@@ -114,10 +120,20 @@
     message :: binary()
 }).
 
+-record(auth_error_v2, {
+    code :: term()
+}).
+
 -record(auth_resp_v1, {
     req_id :: uuid(),
     result :: #auth_customer_v1{} |
               #auth_error_v1{}
+}).
+
+-record(auth_resp_v2, {
+    req_id :: uuid(),
+    result :: #auth_customer_v1{} |
+              #auth_error_v2{}
 }).
 
 %% ===================================================================

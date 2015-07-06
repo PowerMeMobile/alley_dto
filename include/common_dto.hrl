@@ -90,10 +90,26 @@
     interface   :: atom()
 }).
 
+-record(auth_credentials, {
+    customer_id :: binary(),
+    user_id     :: binary(),
+    password    :: binary()
+}).
+
+-record(auth_email, {
+    email :: binary()
+}).
+
+-record(auth_msisdn, {
+    msisdn :: #addr{}
+}).
+
 -record(auth_req_v2, {
-    req_id      :: uuid(),
-    email       :: binary(),
-    interface   :: atom()
+    req_id    :: uuid(),
+    auth_data :: #auth_credentials{}
+               | #auth_email{}
+               | #auth_msisdn{},
+    interface :: atom()
 }).
 
 -record(auth_customer_v1, {

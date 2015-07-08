@@ -353,7 +353,7 @@
     customer_id :: binary(),
     user_id :: binary(),
     bind_type :: smpp_type() | [smpp_type()],
-    connection_id :: uuid()
+    connection_id :: uuid() | [uuid()]
 }).
 
 -record(disconnect_resp_v1, {

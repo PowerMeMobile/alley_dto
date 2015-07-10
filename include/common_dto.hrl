@@ -130,6 +130,26 @@
     features            :: [#feature_v1{}]
 }).
 
+-record(auth_customer_v2, {
+    customer_uuid       :: uuid(),
+    customer_id         :: binary(),
+    user_id             :: binary(),
+    pay_type            :: pay_type(),
+    credit              :: float(),
+    allowed_sources     :: [addr()],
+    default_source      :: addr() | undefined,
+    networks            :: [#network_v1{}],
+    providers           :: [#provider_v1{}],
+    default_provider_id :: uuid() | undefined,
+    receipts_allowed    :: boolean(),
+    no_retry            :: boolean(),
+    default_validity    :: integer(), %% seconds
+    max_validity        :: integer(), %% seconds
+    features            :: [#feature_v1{}],
+    priority            :: integer(),
+    rps                 :: integer()
+}).
+
 -record(auth_error_v1, {
     code    :: term(),
     %% deprecated, use `code'
@@ -148,7 +168,7 @@
 
 -record(auth_resp_v2, {
     req_id :: uuid(),
-    result :: #auth_customer_v1{} |
+    result :: #auth_customer_v2{} |
               #auth_error_v2{}
 }).
 

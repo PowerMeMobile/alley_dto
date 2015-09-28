@@ -330,10 +330,58 @@
 
 -record(unblock_req_v1, {
     req_id :: uuid(),
-    sms_req_id  :: uuid()
+    sms_req_id :: uuid()
 }).
 
 -record(unblock_resp_v1, {
+    req_id :: uuid(),
+    result :: ok | {error, term()}
+}).
+
+-record(gateway_states_req_v1, {
+    req_id :: uuid()
+}).
+
+-record(connection_state_v1, {
+    id          :: integer(),
+    host        :: binary(),
+    port        :: 0..65535,
+    bind_type   :: smpp_type(),
+    system_id   :: binary(),
+    password    :: binary(),
+    system_type :: binary(),
+    state       :: connected | connecting
+}).
+
+-record(gateway_state_v1, {
+    id          :: binary(),
+    name        :: binary(),
+    host        :: binary(),
+    state       :: started | stopped,
+    connections :: [#connection_state_v1{}]
+}).
+
+-record(gateway_states_resp_v1, {
+    req_id :: uuid(),
+    result :: [#gateway_state_v1{}] | {error, term()}
+}).
+
+-record(start_gateway_req_v1, {
+    req_id :: uuid(),
+    gateway_id :: uuid()
+}).
+
+-record(start_gateway_resp_v1, {
+    req_id :: uuid(),
+    result :: ok | {error, term()}
+}).
+
+-record(stop_gateway_req_v1, {
+    req_id :: uuid(),
+    gateway_id :: uuid()
+}).
+
+-record(stop_gateway_resp_v1, {
     req_id :: uuid(),
     result :: ok | {error, term()}
 }).

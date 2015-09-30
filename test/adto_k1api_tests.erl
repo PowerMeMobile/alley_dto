@@ -7,7 +7,6 @@
 
 -spec k1api_dto_test_() -> ignore.
 k1api_dto_test_()-> [
-    ?_test(remove_retrieved_sms_request()),
     ?_test(bad_type_encode()),
     ?_test(bad_type_decode()),
 
@@ -91,18 +90,6 @@ sms_delivery_receipt_notification() ->
     },
     {ok, Bin} = adto:encode(DTO),
     {ok, DTO} = adto:decode(#k1api_sms_delivery_receipt_notification_dto{}, Bin).
-
-%% ===================================================================
-%% Remove Retrieved Sms Request Tests
-%% ===================================================================
-
-remove_retrieved_sms_request() ->
-    DTO = #k1api_remove_retrieved_sms_request_dto{
-        id = uuid:generate(),
-        message_ids = [<<"123">>, <<"456">>]
-    },
-    {ok, Bin} = adto:encode(DTO),
-    {ok, DTO} = adto:decode(#k1api_remove_retrieved_sms_request_dto{}, Bin).
 
 %% ===================================================================
 %% Subscribe Incoming Sms Request

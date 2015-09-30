@@ -12,18 +12,6 @@
 %% Decode Functions
 %% ===================================================================
 
-decode(#k1api_remove_retrieved_sms_request_dto{}, Bin) ->
-    PB = k1api_pb:decode_removeretrievedmessages(Bin),
-    #removeretrievedmessages{
-        id = ID,
-        message_ids = MessageIDs
-    } = PB,
-    DTO = #k1api_remove_retrieved_sms_request_dto{
-        id = ID,
-        message_ids = MessageIDs
-    },
-    {ok, DTO};
-
 decode(#k1api_subscribe_incoming_sms_request_dto{}, Bin) ->
     PB = k1api_pb:decode_subscribeincomingsmsreq(Bin),
     #subscribeincomingsmsreq{
@@ -194,18 +182,6 @@ decode(Type, _Message) ->
 -spec encode(message_type_dto()) ->
     {ok, Payload :: binary()} |
     {error, Reason :: any()}.
-
-encode(DTO = #k1api_remove_retrieved_sms_request_dto{}) ->
-    #k1api_remove_retrieved_sms_request_dto{
-        id = ID,
-        message_ids = MessageIDs
-    } = DTO,
-    PB = #removeretrievedmessages{
-        id = ID,
-        message_ids = MessageIDs
-    },
-    Bin = k1api_pb:encode_removeretrievedmessages(PB),
-    {ok, Bin};
 
 encode(DTO = #k1api_subscribe_incoming_sms_request_dto{}) ->
     #k1api_subscribe_incoming_sms_request_dto{

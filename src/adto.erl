@@ -63,8 +63,7 @@ module(JustDTO) when
 
 %% k1api dto
 module(K1apiDTO) when
-           is_record(K1apiDTO, k1api_remove_retrieved_sms_request_dto)
-    orelse is_record(K1apiDTO, k1api_subscribe_incoming_sms_request_dto)
+           is_record(K1apiDTO, k1api_subscribe_incoming_sms_request_dto)
     orelse is_record(K1apiDTO, k1api_subscribe_incoming_sms_response_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_incoming_sms_request_dto)
     orelse is_record(K1apiDTO, k1api_unsubscribe_incoming_sms_response_dto)

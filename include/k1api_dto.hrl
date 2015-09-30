@@ -19,15 +19,6 @@
     unrecognized.
 
 %% ===================================================================
-%% k1api Remove Retrieved Sms Request
-%% ===================================================================
-
--record(k1api_remove_retrieved_sms_request_dto, {
-    id          :: uuid(),
-    message_ids :: [binary()] %% [<<"123">>]
-}).
-
-%% ===================================================================
 %% k1api Subscribe Incoming Sms
 %% ===================================================================
 
@@ -114,8 +105,6 @@
 }).
 
 -type k1api_dto() ::
-    #k1api_remove_retrieved_sms_request_dto{}       |
-
     %% k1api incoming sms subscription
     #k1api_subscribe_incoming_sms_request_dto{}     |
     #k1api_subscribe_incoming_sms_response_dto{}    |

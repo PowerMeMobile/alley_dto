@@ -459,6 +459,8 @@
     %% authentication
     #auth_req_v1{}              |
     #auth_resp_v1{}             |
+    #auth_req_v2{}              |
+    #auth_resp_v2{}             |
 
     %% sms status
     #sms_status_req_v1{}        |
@@ -489,6 +491,12 @@
     #block_resp_v1{}            |
     #unblock_req_v1{}           |
     #unblock_resp_v1{}          |
+    #gateway_states_req_v1{}    |
+    #gateway_states_resp_v1{}   |
+    #start_gateway_req_v1{}     |
+    #start_gateway_resp_v1{}    |
+    #stop_gateway_req_v1{}      |
+    #stop_gateway_resp_v1{}     |
 
     %% funnel specific
     #connections_req_v1{}       |

@@ -98,7 +98,7 @@ auth_error_resp() ->
 sms_status_req() ->
     DTO = #sms_status_req_v1{
         req_id = uuid:generate(),
-        customer_id = uuid:generate(),
+        customer_uuid = uuid:generate(),
         user_id = <<"user">>,
         sms_req_id = uuid:generate()
     },

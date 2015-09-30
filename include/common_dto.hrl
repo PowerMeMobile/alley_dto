@@ -177,10 +177,10 @@
 %% ===================================================================
 
 -record(sms_status_req_v1, {
-    req_id      :: uuid(),
-    customer_id :: uuid(),
-    user_id     :: binary(),
-    sms_req_id  :: uuid()
+    req_id        :: uuid(),
+    customer_uuid :: uuid(),
+    user_id       :: binary(),
+    sms_req_id    :: uuid()
 }).
 
 -type sms_status() ::
@@ -454,7 +454,7 @@
 
 -record(sub_incoming_sms_req_v1, {
     req_id              :: uuid(),
-    customer_id         :: uuid(),
+    customer_uuid       :: uuid(),
     user_id             :: binary(),
     dest_addr           :: addr(),
     notify_url          :: binary(),
@@ -471,7 +471,7 @@
 
 -record(unsub_incoming_sms_req_v1, {
     req_id              :: uuid(),
-    customer_id         :: uuid(),
+    customer_uuid       :: uuid(),
     user_id             :: binary(),
     subscription_id     :: uuid()
 }).
@@ -492,7 +492,7 @@
 
 -record(sub_sms_receipts_req_v1, {
     req_id          :: uuid(),
-    customer_id     :: uuid(),
+    customer_uuid   :: uuid(),
     user_id         :: binary(), %% <<"user">>
     url             :: binary(),
     dest_addr       :: addr(),
@@ -505,7 +505,7 @@
 
 -record(unsub_sms_receipts_req_v1, {
     req_id          :: uuid(),
-    customer_id     :: uuid(),
+    customer_uuid   :: uuid(),
     user_id         :: binary(),
     subscription_id :: uuid()
 }).

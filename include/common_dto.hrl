@@ -456,7 +456,7 @@
     req_id              :: uuid(),
     customer_uuid       :: uuid(),
     user_id             :: binary(),
-    dest_addr           :: addr(),
+    dst_addr            :: addr(),
     notify_url          :: binary(),
     criteria            :: undefined | binary(),
     notification_format :: undefined | binary(), %% <<"json">>
@@ -483,7 +483,7 @@
 -record(incoming_sms_notification_v1, {
     callback_data       :: binary(),
     datetime            :: pos_integer(), %% TODO: fix utc unixtime
-    dest_addr           :: addr(),
+    dst_addr            :: addr(),
     message_id          :: binary(),
     message             :: binary(),
     sender_addr         :: addr(),
@@ -495,7 +495,7 @@
     customer_uuid   :: uuid(),
     user_id         :: binary(), %% <<"user">>
     url             :: binary(),
-    dest_addr       :: addr(),
+    src_addr        :: addr(),
     callback_data   :: binary() %% <<"callback">>
 }).
 
@@ -516,7 +516,7 @@
 
 -record(sms_receipt_notification_v1, {
     id              :: uuid(),
-    dest_addr       :: addr(),
+    dst_addr        :: addr(),
     status          :: sms_status(),
     callback_data   :: binary(),
     url             :: binary()

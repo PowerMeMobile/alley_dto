@@ -47,7 +47,7 @@ auth_req_test_() ->
     {user_id, <<"user_id">>},
     {password, <<"password">>},
     {is_cached, true}],
-    InvalidTypes = [k1api, eoneapi, oneapi, 1, "list", <<"bin">>],
+    InvalidTypes = [oneapi, 1, "list", <<"bin">>],
     InvSmppTypesTestsPlists =
         [ ?_assertError({badmatch, _}, auth_req([{type, T} | InvTypeTestPList])) || T <- InvalidTypes],
 

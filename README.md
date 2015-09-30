@@ -2,14 +2,14 @@
 
 # Alley DTO
 
-This app is a set of DTO records that used by OpenAlley app
-(kelly, funnel, just, soap_srv, k1api).
+This app is a set of DTO records that used by PowerAlley gateway
+(kelly, funnel, just, soap_srv, oneapi_srv, mm_srv, email2sms).
 
 The list of available DTO you can find in:
 
+- common_dto.hrl
 - funnel_dto.hrl
 - just_dto.hrl
-- k1api_dto.hrl
 
 ### Example
 

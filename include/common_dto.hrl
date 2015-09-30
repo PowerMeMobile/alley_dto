@@ -482,7 +482,7 @@
 
 -record(incoming_sms_notification_v1, {
     callback_data       :: binary(),
-    datetime            :: pos_integer(), %% TODO: fix utc unixtime
+    datetime            :: utc_timestamp(),
     dst_addr            :: addr(),
     message_id          :: binary(),
     message             :: binary(),

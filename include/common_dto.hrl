@@ -449,6 +449,80 @@
 }).
 
 %% ===================================================================
+%% OneAPI specific
+%% ===================================================================
+
+-record(sub_incoming_sms_req_v1, {
+    req_id              :: uuid(),
+    customer_id         :: uuid(),
+    user_id             :: binary(),
+    dest_addr           :: addr(),
+    notify_url          :: binary(),
+    criteria            :: undefined | binary(),
+    notification_format :: undefined | binary(), %% <<"json">>
+    correlator          :: undefined | binary(),
+    callback_data       :: undefined | binary()
+}).
+
+-record(sub_incoming_sms_resp_v1, {
+    req_id              :: uuid(),
+    subscription_id     :: uuid()
+}).
+
+-record(unsub_incoming_sms_req_v1, {
+    req_id              :: uuid(),
+    customer_id         :: uuid(),
+    user_id             :: binary(),
+    subscription_id     :: uuid()
+}).
+
+-record(unsub_incoming_sms_resp_v1, {
+    req_id              :: uuid()
+}).
+
+-record(incoming_sms_notification_v1, {
+    callback_data       :: binary(),
+    datetime            :: pos_integer(), %% TODO: fix utc unixtime
+    dest_addr           :: addr(),
+    message_id          :: binary(),
+    message             :: binary(),
+    sender_addr         :: addr(),
+    notify_url          :: binary()
+}).
+
+-record(sub_sms_receipts_req_v1, {
+    req_id          :: uuid(),
+    customer_id     :: uuid(),
+    user_id         :: binary(), %% <<"user">>
+    url             :: binary(),
+    dest_addr       :: addr(),
+    callback_data   :: binary() %% <<"callback">>
+}).
+
+-record(sub_sms_receipts_resp_v1, {
+    req_id          :: uuid()
+}).
+
+-record(unsub_sms_receipts_req_v1, {
+    req_id          :: uuid(),
+    customer_id     :: uuid(),
+    user_id         :: binary(),
+    subscription_id :: uuid()
+}).
+
+-record(unsub_sms_receipts_resp_v1, {
+    req_id          :: uuid()
+}).
+
+-record(sms_receipt_notification_v1, {
+    id              :: uuid(),
+    dest_addr       :: addr(),
+    status          :: sms_status(),
+    callback_data   :: binary(),
+    url             :: binary()
+}).
+
+%% ===================================================================
 %% Types
 %% ===================================================================
 
@@ -504,7 +578,19 @@
     #disconnect_req_v1{}        |
     #disconnect_resp_v1{}       |
     #throughput_req_v1{}        |
-    #throughput_resp_v1{}
+    #throughput_resp_v1{}       |
+
+    %% oneapi specific
+    #sub_incoming_sms_req_v1{}      |
+    #sub_incoming_sms_resp_v1{}     |
+    #unsub_incoming_sms_req_v1{}    |
+    #unsub_incoming_sms_resp_v1{}   |
+    #incoming_sms_notification_v1{} |
+    #sub_sms_receipts_req_v1{}      |
+    #sub_sms_receipts_resp_v1{}     |
+    #unsub_sms_receipts_req_v1{}    |
+    #unsub_sms_receipts_resp_v1{}   |
+    #sms_receipt_notification_v1{}
     .
 
 -endif. % common_dto_hrl

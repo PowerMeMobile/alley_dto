@@ -56,25 +56,6 @@ module(JustDTO) when
     orelse is_record(JustDTO, just_delivery_receipt_dto) ->
     just();
 
-%%
-%% Deprecated.
-%% Use common module instead.
-%%
-
-%% k1api dto
-module(K1apiDTO) when
-           is_record(K1apiDTO, k1api_subscribe_incoming_sms_request_dto)
-    orelse is_record(K1apiDTO, k1api_subscribe_incoming_sms_response_dto)
-    orelse is_record(K1apiDTO, k1api_unsubscribe_incoming_sms_request_dto)
-    orelse is_record(K1apiDTO, k1api_unsubscribe_incoming_sms_response_dto)
-    orelse is_record(K1apiDTO, k1api_sms_notification_request_dto)
-    orelse is_record(K1apiDTO, k1api_subscribe_sms_receipts_request_dto)
-    orelse is_record(K1apiDTO, k1api_subscribe_sms_receipts_response_dto)
-    orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_request_dto)
-    orelse is_record(K1apiDTO, k1api_unsubscribe_sms_receipts_response_dto)
-    orelse is_record(K1apiDTO, k1api_sms_delivery_receipt_notification_dto) ->
-    k1api();
-
 %% common dto
 module(DTO) when
            is_record(DTO, error_resp_v1)
@@ -111,6 +92,16 @@ module(DTO) when
     orelse is_record(DTO, start_gateway_resp_v1)
     orelse is_record(DTO, stop_gateway_req_v1)
     orelse is_record(DTO, stop_gateway_resp_v1)
+    orelse is_record(DTO, sub_incoming_sms_req_v1)
+    orelse is_record(DTO, sub_incoming_sms_resp_v1)
+    orelse is_record(DTO, unsub_incoming_sms_req_v1)
+    orelse is_record(DTO, unsub_incoming_sms_resp_v1)
+    orelse is_record(DTO, incoming_sms_notification_v1)
+    orelse is_record(DTO, sub_sms_receipts_req_v1)
+    orelse is_record(DTO, sub_sms_receipts_resp_v1)
+    orelse is_record(DTO, unsub_sms_receipts_req_v1)
+    orelse is_record(DTO, unsub_sms_receipts_resp_v1)
+    orelse is_record(DTO, sms_receipt_notification_v1)
      ->
     common();
 
@@ -120,5 +111,4 @@ module(Type) ->
 %% codec modules
 funnel() -> adto_funnel.
 just()   -> adto_just.
-k1api()  -> adto_k1api.
 common() -> adto_common.

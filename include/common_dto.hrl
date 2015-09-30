@@ -466,14 +466,14 @@
 
 -record(sub_incoming_sms_resp_v1, {
     req_id              :: uuid(),
-    subscription_id     :: uuid()
+    sub_id              :: uuid()
 }).
 
 -record(unsub_incoming_sms_req_v1, {
     req_id              :: uuid(),
     customer_uuid       :: uuid(),
     user_id             :: binary(),
-    subscription_id     :: uuid()
+    sub_id              :: uuid()
 }).
 
 -record(unsub_incoming_sms_resp_v1, {
@@ -507,7 +507,7 @@
     req_id          :: uuid(),
     customer_uuid   :: uuid(),
     user_id         :: binary(),
-    subscription_id :: uuid()
+    sub_id          :: uuid()
 }).
 
 -record(unsub_sms_receipts_resp_v1, {

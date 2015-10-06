@@ -16,6 +16,11 @@
 
 -compile({no_auto_import, [float_to_list/1]}).
 
+-deprecated({networks_to_dto,1}).
+-deprecated({providers_to_dto,1}).
+-deprecated({networks_to_v1,1}).
+-deprecated({networks_to_v1,1}).
+
 %% ===================================================================
 %% Decode Functions
 %% ===================================================================

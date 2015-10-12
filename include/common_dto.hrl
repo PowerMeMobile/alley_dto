@@ -134,6 +134,43 @@
               #auth_error_v2{}
 }).
 
+-record(auth_req_v3, {
+    req_id    :: uuid(),
+    auth_data :: #auth_credentials{}
+               | #auth_email{}
+               | #auth_msisdn{},
+    interface :: atom()
+}).
+
+-record(auth_customer_v3, {
+    customer_uuid       :: uuid(),
+    customer_id         :: binary(),
+    user_id             :: binary(),
+    pay_type            :: pay_type(),
+    credit              :: float(),
+    allowed_sources     :: [addr()],
+    default_source      :: addr() | undefined,
+    networks            :: [#network_v1{}],
+    providers           :: [#provider_v1{}],
+    receipts_allowed    :: boolean(),
+    no_retry            :: boolean(),
+    default_validity    :: integer(), %% seconds
+    max_validity        :: integer(), %% seconds
+    features            :: [#feature_v1{}],
+    priority            :: integer(),
+    rps                 :: integer()
+}).
+
+-record(auth_error_v3, {
+    code :: term()
+}).
+
+-record(auth_resp_v3, {
+    req_id :: uuid(),
+    result :: #auth_customer_v3{} |
+              #auth_error_v3{}
+}).
+
 %% ===================================================================
 %% Sms Status
 %% ===================================================================
@@ -495,6 +532,8 @@
     %% authentication
     #auth_req_v2{}              |
     #auth_resp_v2{}             |
+    #auth_req_v3{}              |
+    #auth_resp_v3{}             |
 
     %% sms status
     #sms_status_req_v1{}        |

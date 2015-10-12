@@ -82,14 +82,6 @@
 %% Authentication
 %% ===================================================================
 
--record(auth_req_v1, {
-    req_id      :: uuid(),
-    customer_id :: binary(),
-    user_id     :: binary(),
-    password    :: binary(),
-    interface   :: atom()
-}).
-
 -record(auth_credentials, {
     customer_id :: binary(),
     user_id     :: binary(),
@@ -112,24 +104,6 @@
     interface :: atom()
 }).
 
--record(auth_customer_v1, {
-    customer_uuid       :: uuid(),
-    customer_id         :: binary(),
-    user_id             :: binary(),
-    pay_type            :: pay_type(),
-    credit              :: float(),
-    allowed_sources     :: [addr()],
-    default_source      :: addr() | undefined,
-    networks            :: [#network_v1{}],
-    providers           :: [#provider_v1{}],
-    default_provider_id :: uuid() | undefined,
-    receipts_allowed    :: boolean(),
-    no_retry            :: boolean(),
-    default_validity    :: integer(), %% seconds
-    max_validity        :: integer(), %% seconds
-    features            :: [#feature_v1{}]
-}).
-
 -record(auth_customer_v2, {
     customer_uuid       :: uuid(),
     customer_id         :: binary(),
@@ -150,20 +124,8 @@
     rps                 :: integer()
 }).
 
--record(auth_error_v1, {
-    code    :: term(),
-    %% deprecated, use `code'
-    message :: binary()
-}).
-
 -record(auth_error_v2, {
     code :: term()
-}).
-
--record(auth_resp_v1, {
-    req_id :: uuid(),
-    result :: #auth_customer_v1{} |
-              #auth_error_v1{}
 }).
 
 -record(auth_resp_v2, {
@@ -531,8 +493,6 @@
     #sms_req_v1{}               |
 
     %% authentication
-    #auth_req_v1{}              |
-    #auth_resp_v1{}             |
     #auth_req_v2{}              |
     #auth_resp_v2{}             |
 

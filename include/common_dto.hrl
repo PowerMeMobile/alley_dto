@@ -147,7 +147,7 @@
     customer_id         :: binary(),
     user_id             :: binary(),
     pay_type            :: pay_type(),
-    credit              :: float(),
+    credits             :: float(),
     allowed_sources     :: [addr()],
     default_source      :: addr() | undefined,
     networks            :: [#network_v1{}],

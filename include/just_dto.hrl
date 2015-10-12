@@ -32,7 +32,7 @@
     gateway_id      :: uuid(),
     customer_id     :: uuid(),
     user_id         :: binary(),
-    client_type     :: client_type(),
+    client_type     :: interface(),
     type            :: regular | part,
     message         :: binary(),
     encoding        :: jsms_req_encoding(),
@@ -62,7 +62,7 @@
     id              :: uuid(),
     gateway_id      :: uuid(),
     customer_id     :: uuid(),
-    client_type     :: client_type(),
+    client_type     :: interface(),
     statuses        :: [#just_sms_status_dto{}],
     timestamp       :: utc_time()
 }).

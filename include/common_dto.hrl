@@ -25,7 +25,7 @@
     gateway_id    :: uuid(),
     customer_uuid :: uuid(),
     user_id       :: binary(),
-    interface     :: client_type(),
+    interface     :: interface(),
     req_time      :: utc_timestamp(),
     def_time      :: undefined | utc_timestamp(),
     src_addr      :: addr(),

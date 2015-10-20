@@ -88,6 +88,8 @@ module(DTO) when
     orelse is_record(DTO, throughput_resp_v1)
     orelse is_record(DTO, gateway_states_req_v1)
     orelse is_record(DTO, gateway_states_resp_v1)
+    orelse is_record(DTO, gateway_state_req_v1)
+    orelse is_record(DTO, gateway_state_resp_v1)
     orelse is_record(DTO, start_gateway_req_v1)
     orelse is_record(DTO, start_gateway_resp_v1)
     orelse is_record(DTO, stop_gateway_req_v1)

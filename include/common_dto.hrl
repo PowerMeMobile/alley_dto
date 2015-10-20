@@ -370,6 +370,16 @@
     result :: [#gateway_state_v1{}] | {error, term()}
 }).
 
+-record(gateway_state_req_v1, {
+    req_id :: uuid(),
+    gateway_id :: uuid()
+}).
+
+-record(gateway_state_resp_v1, {
+    req_id :: uuid(),
+    result :: #gateway_state_v1{} | {error, term()}
+}).
+
 -record(start_gateway_req_v1, {
     req_id :: uuid(),
     gateway_id :: uuid()
@@ -571,6 +581,8 @@
     #unblock_resp_v1{}          |
     #gateway_states_req_v1{}    |
     #gateway_states_resp_v1{}   |
+    #gateway_state_req_v1{}     |
+    #gateway_state_resp_v1{}    |
     #start_gateway_req_v1{}     |
     #start_gateway_resp_v1{}    |
     #stop_gateway_req_v1{}      |

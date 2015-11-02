@@ -22,7 +22,8 @@ sms_request_by_encoding(Encoding) ->
         gateway_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
         customer_id = <<18,253,121,77,158,50,76,246,180,33,183,151,25,107,96,227>>,
         user_id = <<"user">>,
-        client_type = oneapi,
+        % is NOT used any more
+        client_type = funnel,
         type = regular,
         message = <<"message">>,
         encoding = Encoding,
@@ -54,7 +55,8 @@ just_sms_response() ->
         id = uuid:generate(),
         gateway_id = uuid:generate(),
         customer_id = uuid:generate(),
-        client_type = oneapi,
+        % is NOT used any more
+        client_type = undefined,
         statuses = [StatusDTO],
         timestamp = <<"120827114305">>
     },

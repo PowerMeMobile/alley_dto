@@ -134,6 +134,7 @@
               #auth_error_v2{}
 }).
 
+%% deprecated from 2.13.0
 -record(auth_req_v3, {
     req_id    :: uuid(),
     auth_data :: #auth_credentials{}
@@ -148,6 +149,7 @@
     providers :: [#provider_v1{}]
 }).
 
+%% deprecated from 2.13.0
 -record(auth_customer_v3, {
     customer_uuid       :: uuid(),
     customer_id         :: binary(),
@@ -166,14 +168,57 @@
     rps                 :: integer()
 }).
 
+%% deprecated from 2.13.0
 -record(auth_error_v3, {
     code :: term()
 }).
 
+%% deprecated from 2.13.0
 -record(auth_resp_v3, {
     req_id :: uuid(),
     result :: #auth_customer_v3{} |
               #auth_error_v3{}
+}).
+
+%% ===================================================================
+%% Authentication v4
+%% ===================================================================
+
+-record(auth_req_v4, {
+    req_id    :: uuid(),
+    auth_data :: #auth_credentials{}
+               | #auth_email{}
+               | #auth_msisdn{},
+    interface :: atom()
+}).
+
+-record(auth_customer_v4, {
+    customer_uuid       :: uuid(),
+    customer_id         :: binary(),
+    user_id             :: binary(),
+    pay_type            :: pay_type(),
+    credits             :: float(),
+    originators         :: [addr()],
+    default_originator  :: addr() | undefined,
+    coverages           :: [#auth_coverage_v1{}],
+    receipts_allowed    :: boolean(),
+    no_retry            :: boolean(),
+    default_validity    :: integer(), %% seconds
+    max_validity        :: integer(), %% seconds
+    features            :: [#feature_v1{}],
+    priority            :: integer(),
+    rps                 :: integer(),
+    bypass_blacklist    :: boolean()
+}).
+
+-record(auth_error_v4, {
+    code :: term()
+}).
+
+-record(auth_resp_v4, {
+    req_id :: uuid(),
+    result :: #auth_customer_v4{} |
+              #auth_error_v4{}
 }).
 
 %% ===================================================================

@@ -62,8 +62,10 @@ module(DTO) when
     orelse is_record(DTO, sms_req_v1)
     orelse is_record(DTO, auth_req_v2)
     orelse is_record(DTO, auth_resp_v2)
-    orelse is_record(DTO, auth_req_v3)
-    orelse is_record(DTO, auth_resp_v3)
+    orelse is_record(DTO, auth_req_v3)  %% deprecated from 2.13.0
+    orelse is_record(DTO, auth_resp_v3) %% deprecated from 2.13.0
+    orelse is_record(DTO, auth_req_v4)
+    orelse is_record(DTO, auth_resp_v4)
     orelse is_record(DTO, sms_status_req_v1)
     orelse is_record(DTO, sms_status_resp_v1)
     orelse is_record(DTO, credit_req_v1)

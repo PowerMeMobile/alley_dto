@@ -7,6 +7,10 @@
 
 -spec common_dto_test_() -> ignore.
 common_dto_test_()-> [
+    ?_test(auth_req_v4()),
+    ?_test(ok_auth_resp_v4()),
+    ?_test(error_auth_resp_v4()),
+
     ?_test(sms_status_req()),
     ?_test(sms_status_resp()),
 
@@ -19,6 +23,31 @@ common_dto_test_()-> [
     ?_test(credit_req()),
     ?_test(credit_resp())
 ].
+
+%% ===================================================================
+%% Auth v4
+%% ===================================================================
+
+%% NOTE: there is not necessary to set fields with test values,
+%% because of field validation is not implemented
+
+auth_req_v4() ->
+    DTO = #auth_req_v4{},
+    ?assertEqual(DTO, decode(#auth_req_v4{}, encode(DTO))).
+
+ok_auth_resp_v4() ->
+    DTO = #auth_resp_v4{
+        req_id = uuid:generate(),
+        result = #auth_customer_v4{}
+    },
+    ?assertEqual(DTO, decode(#auth_resp_v4{}, encode(DTO))).
+
+error_auth_resp_v4() ->
+    DTO = #auth_resp_v4{
+        req_id = uuid:generate(),
+        result = #auth_error_v4{}
+    },
+    ?assertEqual(DTO, decode(#auth_resp_v4{}, encode(DTO))).
 
 %% ===================================================================
 %% Sms Status

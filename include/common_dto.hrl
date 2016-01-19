@@ -40,6 +40,11 @@
     prices        :: [float()]
 }).
 
+-record(blacklisted_v1, {
+    req_id  :: uuid(),
+    numbers :: [addr()]
+}).
+
 %% ===================================================================
 %% Shared
 %% ===================================================================
@@ -198,6 +203,7 @@
     accepted      |
     unknown       |
     rejected      |
+    blacklisted   |
     unrecognized.
 
 -record(sms_status_v1, {

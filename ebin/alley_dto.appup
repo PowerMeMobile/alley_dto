@@ -1,0 +1,11 @@
+{"2.13.0",
+    %% upgrade
+    [{"2.12.0", [
+        {load_module, adto}
+    ]}],
+
+    %% downgrade
+    [{"2.12.0", [
+        {load_module, adto}
+    ]}]
+}.
